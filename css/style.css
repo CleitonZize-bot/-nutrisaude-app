@@ -692,7 +692,17 @@ body {
 
 .refeicao-header:hover { background: #f8fafc; }
 
-.refeicao-icone { font-size: 1.6rem; }
+.refeicao-icone {
+  font-size: 1.6rem;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--cor-refeicao, var(--verde)) 12%, transparent);
+  border-radius: 12px;
+  flex-shrink: 0;
+}
 .refeicao-info { flex: 1; }
 .refeicao-nome { font-size: 0.95rem; font-weight: 700; color: var(--cinza-escuro); }
 .refeicao-horario { font-size: 0.75rem; color: var(--cinza-medio); font-weight: 500; }

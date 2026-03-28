@@ -542,6 +542,85 @@ function buscarReceitas() {
 }
 
 /* ============================================================
+   TELA DE CARREGAMENTO ANIMADA
+============================================================ */
+function mostrarTelaCalculando(cardapio) {
+  irPara('tela-calculando');
+  const fill = document.getElementById('calc-barra-fill');
+  const passos = ['cp1','cp2','cp3','cp4','cp5'];
+  const delays = [300, 650, 1050, 1450, 1850];
+  const percents = ['20%','40%','60%','80%','100%'];
+
+  passos.forEach((id, i) => {
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.add('ativo');
+        if (fill) fill.style.width = percents[i];
+      }
+    }, delays[i]);
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.remove('ativo');
+        el.classList.add('feito');
+        const icone = el.querySelector('.calc-passo-icone');
+        if (icone) icone.textContent = '✓';
+      }
+    }, delays[i] + 280);
+  });
+
+  setTimeout(() => {
+    irPara('tela-cardapio');
+  }, 2500);
+}
+
+/* ============================================================
+   CONFETE
+============================================================ */
+function dispararConfete() {
+  const container = document.getElementById('confete-container');
+  if (!container || container._disparado) return;
+  container._disparado = true;
+  container.innerHTML = '';
+  container.classList.remove('escondido');
+
+  const cores = ['#00c472','#3b82f6','#f97316','#8b5cf6','#fbbf24','#ef4444','#4ade80'];
+  for (let i = 0; i < 70; i++) {
+    const p = document.createElement('div');
+    p.className = 'confete-p';
+    p.style.cssText = `
+      left:${Math.random()*100}%;
+      background:${cores[Math.floor(Math.random()*cores.length)]};
+      width:${Math.random()*8+4}px;
+      height:${Math.random()*10+5}px;
+      animation-delay:${Math.random()*0.8}s;
+      animation-duration:${Math.random()*1.5+1.5}s;
+      border-radius:${Math.random()>0.5?'50%':'3px'};
+      transform:rotate(${Math.random()*360}deg);
+    `;
+    container.appendChild(p);
+  }
+  setTimeout(() => {
+    container.classList.add('escondido');
+    container._disparado = false;
+  }, 4000);
+}
+
+/* ============================================================
+   TOGGLE RECEITA
+============================================================ */
+function toggleReceita(id, event) {
+  event.stopPropagation();
+  const painel = document.getElementById(id);
+  if (!painel) return;
+  document.querySelectorAll('.painel-receita:not(.escondido)').forEach(p => {
+    if (p.id !== id) p.classList.add('escondido');
+  });
+  painel.classList.toggle('escondido');
+}
+
+/* ============================================================
    RECOMEÇAR
 ============================================================ */
 function recomecar() {

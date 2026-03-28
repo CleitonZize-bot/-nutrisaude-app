@@ -148,7 +148,7 @@ function gerarCardapio() {
   exibirAlertaSaude(usuario.condicoes);
   renderizarAgua();
   renderizarRefeicoes(cardapioAtual.refeicoes);
-  irPara('tela-cardapio');
+  mostrarTelaCalculando(cardapioAtual);
 }
 
 /* ============================================================

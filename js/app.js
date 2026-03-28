@@ -9,6 +9,15 @@ const usuario = {
 const ingredientesEmCasa = [];
 let cardapioAtual = null;
 
+const COR_REFEICAO = {
+  cafe:         '#f59e0b',
+  lanche_manha: '#f97316',
+  almoco:       '#10b981',
+  lanche_tarde: '#8b5cf6',
+  jantar:       '#3b82f6',
+  ceia:         '#6366f1'
+};
+
 /* ============================================================
    INICIALIZAÇÃO — verifica se há perfil salvo
 ============================================================ */

@@ -375,6 +375,195 @@
         <div id="resultado-receitas" class="resultado-receitas escondido"></div>
       </div>
 
+      <!-- Aba: Saúde -->
+      <div id="conteudo-saude" class="conteudo-aba escondido">
+        <!-- SEÇÃO: DIÁRIO DE SINTOMAS -->
+        <div class="saude-secao">
+          <div class="saude-secao-header">
+            <h3>📋 Diário de hoje</h3>
+            <span class="saude-data-hoje" id="diario-data"></span>
+          </div>
+
+          <div class="diario-grid">
+            <!-- Energia -->
+            <div class="diario-campo">
+              <label class="diario-label">⚡ Nível de energia</label>
+              <div class="emoji-scale" id="scale-energia">
+                <button class="emoji-btn" data-val="1" onclick="setEscala('energia',1,this)">😴</button>
+                <button class="emoji-btn" data-val="2" onclick="setEscala('energia',2,this)">😔</button>
+                <button class="emoji-btn" data-val="3" onclick="setEscala('energia',3,this)">😐</button>
+                <button class="emoji-btn" data-val="4" onclick="setEscala('energia',4,this)">😊</button>
+                <button class="emoji-btn" data-val="5" onclick="setEscala('energia',5,this)">🤩</button>
+              </div>
+            </div>
+            <!-- Desconforto hepático -->
+            <div class="diario-campo">
+              <label class="diario-label">🫀 Desconforto hepático</label>
+              <div class="emoji-scale" id="scale-figado">
+                <button class="emoji-btn" data-val="0" onclick="setEscala('figado',0,this)">✅ Nenhum</button>
+                <button class="emoji-btn" data-val="1" onclick="setEscala('figado',1,this)">😕 Leve</button>
+                <button class="emoji-btn" data-val="2" onclick="setEscala('figado',2,this)">😣 Moderado</button>
+                <button class="emoji-btn" data-val="3" onclick="setEscala('figado',3,this)">😫 Forte</button>
+              </div>
+            </div>
+            <!-- Inchaço/Digestão -->
+            <div class="diario-campo">
+              <label class="diario-label">🫃 Inchaço / Digestão</label>
+              <div class="emoji-scale" id="scale-inchaco">
+                <button class="emoji-btn" data-val="0" onclick="setEscala('inchaco',0,this)">✅ Ótima</button>
+                <button class="emoji-btn" data-val="1" onclick="setEscala('inchaco',1,this)">😕 Leve</button>
+                <button class="emoji-btn" data-val="2" onclick="setEscala('inchaco',2,this)">😣 Moderado</button>
+                <button class="emoji-btn" data-val="3" onclick="setEscala('inchaco',3,this)">😫 Forte</button>
+              </div>
+            </div>
+            <!-- Glicemia -->
+            <div class="diario-campo">
+              <label class="diario-label">🩸 Glicemia (opcional)</label>
+              <div class="diario-input-group">
+                <input type="number" id="diario-glicemia" placeholder="Ex: 95" min="40" max="600" />
+                <span class="diario-unidade">mg/dL</span>
+              </div>
+            </div>
+            <!-- Sono -->
+            <div class="diario-campo">
+              <label class="diario-label">😴 Qualidade do sono</label>
+              <div class="emoji-scale" id="scale-sono">
+                <button class="emoji-btn" data-val="1" onclick="setEscala('sono',1,this)">😫</button>
+                <button class="emoji-btn" data-val="2" onclick="setEscala('sono',2,this)">😔</button>
+                <button class="emoji-btn" data-val="3" onclick="setEscala('sono',3,this)">😐</button>
+                <button class="emoji-btn" data-val="4" onclick="setEscala('sono',4,this)">😊</button>
+                <button class="emoji-btn" data-val="5" onclick="setEscala('sono',5,this)">😍</button>
+              </div>
+            </div>
+            <!-- Notas -->
+            <div class="diario-campo diario-campo-full">
+              <label class="diario-label">📝 Observações do dia</label>
+              <textarea id="diario-notas" placeholder="Como foi seu dia? Algum alimento que comeu fora do plano? Sintomas específicos?" rows="3"></textarea>
+            </div>
+          </div>
+          <button class="btn-primario" onclick="salvarDiarioHoje()" style="margin-top:0.75rem">Salvar registro de hoje</button>
+
+          <!-- Histórico de sintomas -->
+          <div id="historico-diario-wrapper" class="historico-diario-wrapper escondido">
+            <h4>📈 Últimos 7 dias</h4>
+            <div id="historico-diario-lista"></div>
+          </div>
+        </div>
+
+        <!-- SEÇÃO: EXAMES -->
+        <div class="saude-secao">
+          <div class="saude-secao-header">
+            <h3>🔬 Meus Exames</h3>
+            <button class="btn-saude-add" onclick="abrirModalExame()">+ Adicionar</button>
+          </div>
+          <p class="saude-descricao">Registre seus resultados e acompanhe a evolução</p>
+
+          <div id="exames-lista" class="exames-lista">
+            <p class="saude-vazio">Nenhum exame registrado ainda.</p>
+          </div>
+
+          <!-- Modal de exame -->
+          <div id="modal-exame" class="modal-saude escondido">
+            <div class="modal-saude-content">
+              <div class="modal-saude-header">
+                <h4>Adicionar Exame</h4>
+                <button onclick="fecharModalExame()" class="modal-fechar">✕</button>
+              </div>
+              <div class="campo">
+                <label>Tipo de exame</label>
+                <select id="exame-tipo" onchange="preencherUnidade()">
+                  <option value="">Selecione...</option>
+                  <option value="ast">AST (TGO) - Enzima hepática</option>
+                  <option value="alt">ALT (TGP) - Enzima hepática</option>
+                  <option value="glicemia">Glicemia em jejum</option>
+                  <option value="hba1c">Hemoglobina Glicada (HbA1c)</option>
+                  <option value="colesterol_total">Colesterol Total</option>
+                  <option value="ldl">LDL Colesterol</option>
+                  <option value="hdl">HDL Colesterol</option>
+                  <option value="triglicerideos">Triglicerídeos</option>
+                  <option value="outro">Outro</option>
+                </select>
+              </div>
+              <div class="campo" id="exame-nome-custom-campo" style="display:none">
+                <label>Nome do exame</label>
+                <input type="text" id="exame-nome-custom" placeholder="Nome do exame" />
+              </div>
+              <div class="campos-lado-a-lado">
+                <div class="campo">
+                  <label>Resultado</label>
+                  <input type="number" id="exame-valor" step="0.1" placeholder="Ex: 35" />
+                </div>
+                <div class="campo">
+                  <label>Unidade</label>
+                  <input type="text" id="exame-unidade" placeholder="U/L" readonly />
+                </div>
+              </div>
+              <div class="campo">
+                <label>Data do exame</label>
+                <input type="date" id="exame-data" />
+              </div>
+              <button class="btn-primario" onclick="salvarExame()" style="margin-top:0.5rem">Salvar exame</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SEÇÃO: MEDICAMENTOS -->
+        <div class="saude-secao">
+          <div class="saude-secao-header">
+            <h3>💊 Meus Medicamentos</h3>
+            <button class="btn-saude-add" onclick="abrirModalRemedio()">+ Adicionar</button>
+          </div>
+          <p class="saude-descricao">Cadastre seus remédios e receba alertas no horário certo</p>
+
+          <div id="remedios-lista" class="remedios-lista">
+            <p class="saude-vazio">Nenhum medicamento cadastrado ainda.</p>
+          </div>
+
+          <!-- Modal de remédio -->
+          <div id="modal-remedio" class="modal-saude escondido">
+            <div class="modal-saude-content">
+              <div class="modal-saude-header">
+                <h4>💊 Adicionar Medicamento</h4>
+                <button onclick="fecharModalRemedio()" class="modal-fechar">✕</button>
+              </div>
+              <div class="campo">
+                <label>Nome do medicamento</label>
+                <input type="text" id="remedio-nome" placeholder="Ex: Metformina" />
+              </div>
+              <div class="campo">
+                <label>Dosagem</label>
+                <input type="text" id="remedio-dose" placeholder="Ex: 500mg, 1 comprimido" />
+              </div>
+              <div class="campo">
+                <label>Horários (adicione até 4)</label>
+                <div class="horarios-grid" id="horarios-grid">
+                  <input type="time" class="horario-input" id="h1" />
+                  <input type="time" class="horario-input" id="h2" />
+                  <input type="time" class="horario-input" id="h3" />
+                  <input type="time" class="horario-input" id="h4" />
+                </div>
+              </div>
+              <div class="campo">
+                <label>Observações</label>
+                <input type="text" id="remedio-obs" placeholder="Ex: tomar com alimento, em jejum..." />
+              </div>
+              <button class="btn-primario" onclick="salvarRemedio()" style="margin-top:0.5rem">Salvar medicamento</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOTÃO RELATÓRIO PDF -->
+        <div class="saude-secao">
+          <div class="saude-secao-header">
+            <h3>📄 Relatório para o Médico</h3>
+          </div>
+          <p class="saude-descricao">Gere um relatório completo com seu progresso, exames e sintomas para levar na consulta</p>
+          <button class="btn-relatorio" onclick="gerarRelatorio()">
+            📄 Gerar Relatório PDF
+          </button>
+        </div>
+      </div>
+
       <!-- Rodapé -->
       <div class="rodape-cardapio">
         <button class="btn-secundario" onclick="recomecar()">↩ Refazer meu perfil</button>

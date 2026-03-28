@@ -374,13 +374,24 @@ function desmarcarRefeicao(chave, event) {
 
 function atualizarContadorCheckins() {
   const checkins = carregarCheckins();
-  const total = Object.keys(REFEICOES_MODELO).length;
-  const feitas = Object.keys(checkins).length;
+  const refeicoes = cardapioAtual?.refeicoes || [];
+  const total = refeicoes.length;
+  const feitas = refeicoes.filter(r => checkins[r.chave]).length;
+
   const el = document.getElementById('contador-checkins');
-  if (el) {
-    el.textContent = `${feitas}/${total} refeições`;
-    el.style.color = feitas === total ? '#27ae60' : '#7f8c8d';
+  if (el) el.textContent = `${feitas}/${total}`;
+
+  const fillEl = document.getElementById('dia-progresso-fill');
+  if (fillEl) fillEl.style.width = total > 0 ? `${(feitas/total)*100}%` : '0%';
+
+  const dotsEl = document.getElementById('dia-progresso-dots');
+  if (dotsEl && refeicoes.length > 0) {
+    dotsEl.innerHTML = refeicoes.map(r =>
+      `<div class="prog-dot ${checkins[r.chave] ? 'feito' : 'pendente'}" title="${r.nome}"></div>`
+    ).join('');
   }
+
+  if (feitas === total && total > 0) dispararConfete();
 }
 
 /* ============================================================

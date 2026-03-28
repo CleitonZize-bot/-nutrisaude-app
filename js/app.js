@@ -322,6 +322,8 @@ function renderizarRefeicoes(refeicoes) {
 
     const card = document.createElement('div');
     card.className = `refeicao-card ${feito ? 'refeicao-feita' : ''}`;
+    const cor = COR_REFEICAO[refeicao.chave] || '#00c472';
+    card.style.setProperty('--cor-refeicao', cor);
     card.innerHTML = `
       <button class="refeicao-header" onclick="toggleRefeicao(this.parentElement)" aria-expanded="false">
         <span class="refeicao-icone">${refeicao.icone}</span>

@@ -1392,3 +1392,239 @@ body {
   text-shadow: 0 1px 3px rgba(0,0,0,0.3);
   z-index: 2;
 }
+
+/* ============================================================
+   MÓDULO SAÚDE
+============================================================ */
+.saude-secao {
+  background: var(--branco);
+  border-radius: var(--raio);
+  padding: 1.2rem 1.4rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--sombra);
+  border: 1.5px solid #f1f5f9;
+}
+.saude-secao-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.saude-secao-header h3 { font-size: 1rem; font-weight: 800; }
+.saude-data-hoje { font-size: 0.78rem; color: var(--cinza-medio); }
+.saude-descricao { font-size: 0.82rem; color: var(--cinza-medio); margin-bottom: 1rem; }
+.saude-vazio { font-size: 0.85rem; color: var(--cinza-medio); text-align: center; padding: 1rem; }
+
+.btn-saude-add {
+  padding: 0.4rem 0.9rem;
+  background: var(--verde-claro);
+  color: var(--verde-escuro);
+  border: 1.5px solid rgba(0,196,114,0.3);
+  border-radius: 99px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  font-family: var(--fonte);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-saude-add:hover { background: var(--verde); color: #fff; }
+
+/* Diário de sintomas */
+.diario-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem;
+}
+.diario-campo-full { grid-column: 1 / -1; }
+.diario-label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--cinza-escuro); margin-bottom: 0.4rem; }
+
+.emoji-scale {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+.emoji-btn {
+  padding: 0.35rem 0.6rem;
+  background: #f1f5f9;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--fonte);
+  font-weight: 600;
+  color: var(--cinza-medio);
+}
+.emoji-btn:hover { background: var(--verde-claro); border-color: var(--verde); }
+.emoji-btn.ativo { background: var(--verde-claro); border-color: var(--verde); color: var(--verde-escuro); }
+
+.diario-input-group { display: flex; align-items: center; gap: 0.5rem; }
+.diario-input-group input { flex: 1; padding: 0.65rem 0.85rem; border: 2px solid #e2e8f0; border-radius: var(--raio-pequeno); font-size: 1rem; font-family: var(--fonte); }
+.diario-input-group input:focus { outline: none; border-color: var(--verde); }
+.diario-unidade { font-size: 0.82rem; color: var(--cinza-medio); font-weight: 600; white-space: nowrap; }
+#diario-notas { width: 100%; padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: var(--raio-pequeno); font-family: var(--fonte); font-size: 0.88rem; resize: vertical; }
+#diario-notas:focus { outline: none; border-color: var(--verde); }
+
+.historico-diario-wrapper { margin-top: 1rem; }
+.historico-diario-wrapper h4 { font-size: 0.88rem; font-weight: 700; margin-bottom: 0.5rem; }
+.diario-historico-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  margin-bottom: 0.3rem;
+  font-size: 1rem;
+}
+.diario-hist-data { font-size: 0.75rem; font-weight: 700; color: var(--cinza-medio); min-width: 50px; }
+.diario-hist-glicemia { font-size: 0.72rem; font-weight: 700; color: #dc2626; background: #fef2f2; padding: 0.1rem 0.4rem; border-radius: 99px; }
+.diario-hist-nota { cursor: default; }
+
+/* Exames */
+.exames-lista { display: flex; flex-direction: column; gap: 0.6rem; }
+.exame-card { background: #f8fafc; border-radius: var(--raio-pequeno); padding: 0.75rem 0.9rem; border-left: 4px solid #e2e8f0; }
+.exame-normal  { border-color: #10b981; background: #f0fdf4; }
+.exame-atencao { border-color: #f59e0b; background: #fffbeb; }
+.exame-alto    { border-color: #ef4444; background: #fef2f2; }
+.exame-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem; }
+.exame-nome { font-size: 0.88rem; font-weight: 700; }
+.exame-valor-badge { font-size: 0.88rem; font-weight: 800; padding: 0.2rem 0.6rem; border-radius: 99px; }
+.exame-badge-normal  { background: #dcfce7; color: #166534; }
+.exame-badge-atencao { background: #fef3c7; color: #92400e; }
+.exame-badge-alto    { background: #fee2e2; color: #991b1b; }
+.exame-rodape { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; font-size: 0.72rem; color: var(--cinza-medio); }
+.exame-data { font-weight: 600; }
+.exame-ref { margin-left: auto; }
+.btn-exame-del { background: none; border: none; cursor: pointer; font-size: 0.85rem; opacity: 0.5; margin-left: 0.3rem; }
+.btn-exame-del:hover { opacity: 1; }
+.exame-dica { font-size: 0.72rem; color: var(--cinza-medio); margin-top: 0.4rem; font-style: italic; }
+
+/* Medicamentos */
+.remedios-lista { display: flex; flex-direction: column; gap: 0.6rem; }
+.remedio-card {
+  background: #f8fafc;
+  border-radius: var(--raio-pequeno);
+  padding: 0.85rem 1rem;
+  border-left: 4px solid #e2e8f0;
+  border-top: 1.5px solid #f1f5f9;
+  border-right: 1.5px solid #f1f5f9;
+  border-bottom: 1.5px solid #f1f5f9;
+}
+.remedio-proximo { border-left-color: var(--azul); background: #eff6ff; }
+.remedio-info { display: flex; gap: 0.75rem; align-items: flex-start; margin-bottom: 0.5rem; }
+.remedio-icone { font-size: 1.4rem; }
+.remedio-detalhe { display: flex; flex-direction: column; gap: 0.15rem; }
+.remedio-nome { font-size: 0.92rem; font-weight: 700; }
+.remedio-dose { font-size: 0.78rem; color: var(--cinza-medio); }
+.remedio-obs-txt { font-size: 0.72rem; color: var(--cinza-medio); font-style: italic; }
+.remedio-horarios { display: flex; gap: 0.4rem; flex-wrap: wrap; align-items: center; }
+.remedio-horario-badge {
+  padding: 0.25rem 0.6rem;
+  background: var(--cinza-claro);
+  border-radius: 99px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--cinza-escuro);
+  border: 1.5px solid #e2e8f0;
+}
+.badge-agora { background: var(--azul); color: #fff; border-color: var(--azul); animation: pulseCalc 1s infinite; }
+
+.horarios-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+.horario-input { padding: 0.65rem; border: 2px solid #e2e8f0; border-radius: var(--raio-pequeno); font-size: 0.95rem; }
+.horario-input:focus { outline: none; border-color: var(--verde); }
+
+/* Modal Saúde */
+.modal-saude {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  padding: 1rem;
+}
+.modal-saude.escondido { display: none; }
+.modal-saude-content {
+  background: var(--branco);
+  border-radius: var(--raio) var(--raio) 0 0;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  animation: slideUp 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+.modal-saude-header { display: flex; justify-content: space-between; align-items: center; }
+.modal-saude-header h4 { font-size: 1.05rem; font-weight: 800; }
+.modal-fechar { background: #f1f5f9; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; }
+
+/* Relatório PDF */
+.btn-relatorio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, #1e3a5f, #1d4ed8);
+  color: #fff;
+  border: none;
+  border-radius: var(--raio-pequeno);
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: var(--fonte);
+  cursor: pointer;
+  transition: all 0.25s;
+  box-shadow: 0 4px 16px rgba(29,78,216,0.3);
+}
+.btn-relatorio:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(29,78,216,0.4); }
+
+/* Alerta de remédio (popup) */
+#alerta-remedio-container {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 9998;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 300px;
+}
+.alerta-remedio-popup {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #1e3a5f, #1a4a7a);
+  color: #fff;
+  padding: 1rem;
+  border-radius: var(--raio);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  animation: slideDown 0.4s cubic-bezier(0.4,0,0.2,1);
+  border: 1px solid rgba(59,130,246,0.3);
+}
+@keyframes slideDown {
+  from { transform: translateY(-20px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+.alerta-remedio-icone { font-size: 1.5rem; }
+.alerta-remedio-texto { flex: 1; display: flex; flex-direction: column; gap: 0.2rem; }
+.alerta-remedio-texto strong { font-size: 0.9rem; }
+.alerta-remedio-texto span { font-size: 0.78rem; opacity: 0.8; }
+.alerta-remedio-texto small { font-size: 0.72rem; opacity: 0.6; }
+.alerta-remedio-popup > button { background: rgba(255,255,255,0.15); border: none; color: #fff; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-size: 0.7rem; flex-shrink: 0; }
+
+@media (max-width: 480px) {
+  .diario-grid { grid-template-columns: 1fr; }
+  .diario-campo-full { grid-column: 1; }
+  .horarios-grid { grid-template-columns: 1fr 1fr; }
+}

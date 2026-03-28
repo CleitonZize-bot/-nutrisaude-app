@@ -12,32 +12,34 @@
        TELA 1 — BOAS-VINDAS
   ============================================================ -->
   <div id="tela-boas-vindas" class="tela ativa">
+
+    <!-- Círculos decorativos de fundo -->
+    <div class="bv-bg-circle bv-circle1"></div>
+    <div class="bv-bg-circle bv-circle2"></div>
+    <div class="bv-bg-circle bv-circle3"></div>
+
     <div class="bv-hero">
-      <span class="bv-badge">✦ Nutrição Personalizada</span>
-      <div class="bv-icone">🥗</div>
-      <h1 class="bv-titulo">NutriSaúde</h1>
-      <p class="bv-subtitulo">
-        Seu plano alimentar personalizado,<br>
-        feito para o seu corpo e a sua saúde
-      </p>
-      <p class="bv-descricao">
-        Responda algumas perguntas rápidas e receba um cardápio diário
-        com receitas e quantidades calculadas para você — levando em conta
-        qualquer condição de saúde que você tenha.
-      </p>
-      <div class="bv-stats">
-        <div class="bv-stat">
-          <span class="bv-stat-num">6</span>
-          <span class="bv-stat-txt">Refeições/dia</span>
+
+      <!-- Topo: logo + badge -->
+      <div class="bv-topo">
+        <div class="bv-logo">
+          <span class="bv-logo-icone">🥗</span>
+          <span class="bv-logo-nome">NutriSaúde</span>
         </div>
-        <div class="bv-stat">
-          <span class="bv-stat-num">120+</span>
-          <span class="bv-stat-txt">Alimentos</span>
-        </div>
-        <div class="bv-stat">
-          <span class="bv-stat-num">8</span>
-          <span class="bv-stat-txt">Condições</span>
-        </div>
+        <span class="bv-badge">✦ IA Nutricional</span>
+      </div>
+
+      <!-- Título principal -->
+      <div class="bv-centro">
+        <h1 class="bv-titulo">
+          Seu cardápio<br>
+          <span class="bv-titulo-destaque">personalizado</span><br>
+          para sua saúde
+        </h1>
+        <p class="bv-subtitulo">
+          Calculado para o seu corpo. Adaptado à sua condição.<br>
+          Diferente todo dia.
+        </p>
       </div>
 
       <!-- Banner de perfil salvo -->
@@ -49,9 +51,30 @@
         </div>
       </div>
 
-      <button class="btn-primario" onclick="irPara('tela-dados')" id="btn-comecar">
-        Começar agora →
+      <!-- Botão de ação -->
+      <button class="btn-comecar" onclick="irPara('tela-dados')" id="btn-comecar">
+        Criar meu plano grátis
+        <span class="btn-comecar-seta">→</span>
       </button>
+
+      <!-- Stats -->
+      <div class="bv-stats">
+        <div class="bv-stat">
+          <span class="bv-stat-num">6</span>
+          <span class="bv-stat-txt">refeições/dia</span>
+        </div>
+        <div class="bv-stat-div"></div>
+        <div class="bv-stat">
+          <span class="bv-stat-num">120+</span>
+          <span class="bv-stat-txt">alimentos</span>
+        </div>
+        <div class="bv-stat-div"></div>
+        <div class="bv-stat">
+          <span class="bv-stat-num">8</span>
+          <span class="bv-stat-txt">condições de saúde</span>
+        </div>
+      </div>
+
     </div>
   </div>
 

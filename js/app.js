@@ -256,6 +256,8 @@ function renderizarRefeicoes(refeicoes) {
       const substituicoes = temGrupo ? obterSubstituicoes(item.grupoId, item.indiceNoGrupo) : [];
       const temSub = substituicoes.length > 0;
       const idUnico = `sub-${refeicao.chave}-${itemIdx}`;
+      const receita = (typeof obterReceita === 'function') ? obterReceita(item.nome) : null;
+      const idReceita = `rec-${refeicao.chave}-${itemIdx}`;
 
       return `
         <li class="item-alimento ${temSub ? 'item-clicavel' : ''}"
@@ -289,6 +291,30 @@ function renderizarRefeicoes(refeicoes) {
                     </li>`;
                 }).join('')}
               </ul>
+            </div>
+          ` : ''}
+          ${receita ? `
+            <button class="btn-receita" onclick="toggleReceita('${idReceita}', event)">
+              👨‍🍳 Como preparar
+            </button>
+            <div id="${idReceita}" class="painel-receita escondido">
+              <div class="receita-header">
+                <span class="receita-nome-titulo">👨‍🍳 ${item.nome}</span>
+                <span class="receita-tempo">⏱ ${receita.tempo}</span>
+              </div>
+              <div class="receita-section">
+                <strong>Ingredientes (${receita.porcao}):</strong>
+                <ul class="receita-ingredientes-lista">
+                  ${receita.ingredientes.map(i => `<li>${i}</li>`).join('')}
+                </ul>
+              </div>
+              <div class="receita-section">
+                <strong>Modo de preparo:</strong>
+                <ol class="receita-preparo-lista">
+                  ${receita.preparo.map(p => `<li>${p}</li>`).join('')}
+                </ol>
+              </div>
+              ${receita.dica ? `<div class="receita-dica">💡 <strong>Dica:</strong> ${receita.dica}</div>` : ''}
             </div>
           ` : ''}
         </li>`;

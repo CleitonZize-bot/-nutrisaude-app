@@ -2,7 +2,27 @@
   "permissions": {
     "allow": [
       "Bash(python3 -c \"print\\(''works''\\)\")",
-      "Bash(start \"\" \"C:/Users/Cleiton/Desktop/nutri-app/index.html\")"
+      "Bash(start \"\" \"C:/Users/Cleiton/Desktop/nutri-app/index.html\")",
+      "Skill(update-config)",
+      "Skill(update-config:*)",
+      "Bash(git -C C:/Users/Cleiton/Desktop/nutri-app add:*)",
+      "Bash(git -C C:/Users/Cleiton/Desktop/nutri-app commit:*)",
+      "Bash(git -C C:/Users/Cleiton/Desktop/nutri-app push:*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"C:/Users/Cleiton/Desktop/nutri-app\" && git add -A && git commit -m \"Auto-deploy: atualização do site\" && git push origin main 2>/dev/null || true",
+            "timeout": 30,
+            "statusMessage": "Enviando para GitHub e fazendo deploy..."
+          }
+        ]
+      }
     ]
   }
 }

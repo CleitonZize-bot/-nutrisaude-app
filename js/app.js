@@ -454,9 +454,16 @@ function mostrarAba(aba, botao) {
   document.getElementById('conteudo-semana').classList.toggle('escondido',        aba !== 'semana');
   document.getElementById('conteudo-progresso').classList.toggle('escondido',     aba !== 'progresso');
   document.getElementById('conteudo-ingredientes').classList.toggle('escondido',  aba !== 'ingredientes');
+  const saudeEl = document.getElementById('conteudo-saude');
+  if (saudeEl) saudeEl.classList.toggle('escondido', aba !== 'saude');
 
   if (aba === 'semana')    renderizarPlanoSemanal(usuario);
   if (aba === 'progresso') renderizarProgresso(usuario);
+}
+
+function trocarAba(nomeAba, botao) {
+  mostrarAba(nomeAba, botao);
+  if (nomeAba === 'saude') iniciarSaude();
 }
 
 /* ============================================================

@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c \"print\\(''works''\\)\")",
+      "Bash(start \"\" \"C:/Users/Cleiton/Desktop/nutri-app/index.html\")"
+    ]
+  }
+}

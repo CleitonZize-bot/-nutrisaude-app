@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NutriSaúde — Plano Personalizado</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ============================================================
+       TELA 1 — BOAS-VINDAS
+  ============================================================ -->
+  <div id="tela-boas-vindas" class="tela ativa">
+    <div class="bv-hero">
+      <span class="bv-badge">✦ Nutrição Personalizada</span>
+      <div class="bv-icone">🥗</div>
+      <h1 class="bv-titulo">NutriSaúde</h1>
+      <p class="bv-subtitulo">
+        Seu plano alimentar personalizado,<br>
+        feito para o seu corpo e a sua saúde
+      </p>
+      <p class="bv-descricao">
+        Responda algumas perguntas rápidas e receba um cardápio diário
+        com receitas e quantidades calculadas para você — levando em conta
+        qualquer condição de saúde que você tenha.
+      </p>
+      <div class="bv-stats">
+        <div class="bv-stat">
+          <span class="bv-stat-num">6</span>
+          <span class="bv-stat-txt">Refeições/dia</span>
+        </div>
+        <div class="bv-stat">
+          <span class="bv-stat-num">120+</span>
+          <span class="bv-stat-txt">Alimentos</span>
+        </div>
+        <div class="bv-stat">
+          <span class="bv-stat-num">8</span>
+          <span class="bv-stat-txt">Condições</span>
+        </div>
+      </div>
+
+      <!-- Banner de perfil salvo -->
+      <div id="banner-perfil-salvo" class="banner-perfil escondido">
+        <p>👋 Olá, <strong id="banner-nome"></strong>! Seu perfil está salvo.</p>
+        <div class="banner-botoes">
+          <button class="btn-primario" onclick="continuarComPerfilSalvo()">Continuar com meu perfil →</button>
+          <button class="btn-link" onclick="ignorarPerfilSalvo()">Criar novo perfil</button>
+        </div>
+      </div>
+
+      <button class="btn-primario" onclick="irPara('tela-dados')" id="btn-comecar">
+        Começar agora →
+      </button>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       TELA 2 — DADOS PESSOAIS
+  ============================================================ -->
+  <div id="tela-dados" class="tela">
+    <div class="container">
+      <div class="progresso"><div class="progresso-barra" style="width: 25%"></div></div>
+      <p class="passo-label">Passo 1 de 4</p>
+      <h2 class="tela-titulo">Seus dados</h2>
+      <p class="tela-subtitulo">Precisamos dessas informações para calcular suas necessidades nutricionais.</p>
+
+      <form id="form-dados" class="formulario" onsubmit="submitDados(event)">
+        <div class="campo">
+          <label for="nome">Como você se chama?</label>
+          <input type="text" id="nome" placeholder="Seu nome" required />
+        </div>
+        <div class="campos-lado-a-lado">
+          <div class="campo">
+            <label for="peso">Peso (kg)</label>
+            <input type="number" id="peso" placeholder="Ex: 80" min="30" max="300" step="0.1" required />
+          </div>
+          <div class="campo">
+            <label for="altura">Altura (cm)</label>
+            <input type="number" id="altura" placeholder="Ex: 170" min="100" max="250" required />
+          </div>
+        </div>
+        <div class="campos-lado-a-lado">
+          <div class="campo">
+            <label for="idade">Idade</label>
+            <input type="number" id="idade" placeholder="Ex: 45" min="10" max="100" required />
+          </div>
+          <div class="campo">
+            <label>Sexo</label>
+            <div class="opcoes-sexo">
+              <label class="opcao-radio">
+                <input type="radio" name="sexo" value="masculino" required />
+                <span>Masculino</span>
+              </label>
+              <label class="opcao-radio">
+                <input type="radio" name="sexo" value="feminino" />
+                <span>Feminino</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn-primario">Continuar →</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       TELA 3 — OBJETIVO
+  ============================================================ -->
+  <div id="tela-objetivo" class="tela">
+    <div class="container">
+      <div class="progresso"><div class="progresso-barra" style="width: 50%"></div></div>
+      <p class="passo-label">Passo 2 de 4</p>
+      <h2 class="tela-titulo">Qual é o seu objetivo?</h2>
+      <p class="tela-subtitulo">Escolha a opção que melhor descreve o que você quer alcançar.</p>
+
+      <div class="cards-objetivo">
+        <div class="card-objetivo" onclick="selecionarObjetivo('emagrecer', this)">
+          <div class="card-icone">⚖️</div>
+          <h3>Emagrecer</h3>
+          <p>Reduzir gordura corporal com déficit calórico controlado</p>
+        </div>
+        <div class="card-objetivo" onclick="selecionarObjetivo('massa', this)">
+          <div class="card-icone">💪</div>
+          <h3>Ganhar massa muscular</h3>
+          <p>Aumentar a massa magra com superávit calórico e proteína adequada</p>
+        </div>
+        <div class="card-objetivo" onclick="selecionarObjetivo('manter', this)">
+          <div class="card-icone">🎯</div>
+          <h3>Manter o peso</h3>
+          <p>Manter o peso atual com uma alimentação equilibrada</p>
+        </div>
+      </div>
+
+      <button class="btn-primario" id="btn-continuar-objetivo" onclick="irPara('tela-saude')" disabled>
+        Continuar →
+      </button>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       TELA 4 — SAÚDE
+  ============================================================ -->
+  <div id="tela-saude" class="tela">
+    <div class="container">
+      <div class="progresso"><div class="progresso-barra" style="width: 75%"></div></div>
+      <p class="passo-label">Passo 3 de 4</p>
+      <h2 class="tela-titulo">Você tem alguma condição de saúde?</h2>
+      <p class="tela-subtitulo">Pode selecionar <strong>mais de uma</strong>. Usaremos isso para alertar sobre alimentos prejudiciais e adaptar seu cardápio.</p>
+
+      <div class="cards-saude">
+        <div class="card-saude" data-condicao="esteatose" onclick="toggleCondicao('esteatose', this)">
+          <div class="card-icone">🫀</div>
+          <div class="card-saude-texto"><h3>Esteatose Hepática</h3><p>Gordura no fígado — evitar gorduras saturadas, açúcar e álcool</p></div>
+          <span class="card-check">✓</span>
+        </div>
+        <div class="card-saude" data-condicao="diabetes" onclick="toggleCondicao('diabetes', this)">
+          <div class="card-icone">🩸</div>
+          <div class="card-saude-texto"><h3>Diabetes</h3><p>Controle de glicemia — evitar açúcares e carboidratos refinados</p></div>
+          <span class="card-check">✓</span>
+        </div>
+        <div class="card-saude" data-condicao="hipertensao" onclick="toggleCondicao('hipertensao', this)">
+          <div class="card-icone">💓</div>
+          <div class="card-saude-texto"><h3>Hipertensão</h3><p>Pressão alta — reduzir sódio, embutidos e alimentos industrializados</p></div>
+          <span class="card-check">✓</span>
+        </div>
+        <div class="card-saude" data-condicao="colesterol" onclick="toggleCondicao('colesterol', this)">
+          <div class="card-icone">🫁</div>
+          <div class="card-saude-texto"><h3>Colesterol Alto</h3><p>Dislipidemia — evitar gorduras trans e saturadas, priorizar fibras</p></div>
+          <span class="card-check">✓</span>
+        </div>
+        <div class="card-saude" data-condicao="gastrite" onclick="toggleCondicao('gastrite', this)">
+          <div class="card-icone">🫃</div>
+          <div class="card-saude-texto"><h3>Gastrite / Refluxo</h3><p>Evitar alimentos ácidos, condimentados, café em excesso e frituras</p></div>
+          <span class="card-check">✓</span>
+        </div>
+        <div class="card-saude" data-condicao="lactose" onclick="toggleCondicao('lactose', this)">
+          <div class="card-icone">🥛</div>
+          <div class="card-saude-texto"><h3>Intolerância à Lactose</h3><p>Evitar leite e derivados com lactose</p></div>
+          <span class="card-check">✓</span>
+        </div>
+        <div class="card-saude" data-condicao="celiaca" onclick="toggleCondicao('celiaca', this)">
+          <div class="card-icone">🌾</div>
+          <div class="card-saude-texto"><h3>Doença Celíaca / Glúten</h3><p>Intolerância ao glúten — evitar trigo, cevada e centeio</p></div>
+          <span class="card-check">✓</span>
+        </div>
+        <div class="card-saude" data-condicao="anemia" onclick="toggleCondicao('anemia', this)">
+          <div class="card-icone">💊</div>
+          <div class="card-saude-texto"><h3>Anemia</h3><p>Deficiência de ferro — priorizar carnes, leguminosas e vitamina C</p></div>
+          <span class="card-check">✓</span>
+        </div>
+        <div class="card-saude card-nenhuma" data-condicao="nenhum" onclick="toggleCondicao('nenhum', this)">
+          <div class="card-icone">✅</div>
+          <div class="card-saude-texto"><h3>Nenhuma das anteriores</h3><p>Não tenho nenhuma condição de saúde específica no momento</p></div>
+          <span class="card-check">✓</span>
+        </div>
+      </div>
+
+      <button class="btn-primario" id="btn-continuar-saude" onclick="gerarCardapio()" disabled>
+        Gerar meu cardápio →
+      </button>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       TELA 5 — CARDÁPIO DO DIA
+  ============================================================ -->
+  <div id="tela-cardapio" class="tela">
+    <div class="container container-largo">
+
+      <!-- Cabeçalho -->
+      <div class="cardapio-header">
+        <div class="cardapio-saudacao">
+          <span>Olá, <strong id="exibe-nome"></strong>! 👋</span>
+          <p id="exibe-data" class="cardapio-data"></p>
+          <p id="exibe-dados-usuario"></p>
+        </div>
+        <div class="cardapio-meta">
+          <div class="meta-item">
+            <span class="meta-numero" id="exibe-calorias">—</span>
+            <span class="meta-label">kcal/dia</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-numero" id="exibe-proteina">—</span>
+            <span class="meta-label">g proteína</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-numero" id="exibe-carbo">—</span>
+            <span class="meta-label">g carboidrato</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-numero" id="exibe-gordura">—</span>
+            <span class="meta-label">g gordura</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alerta de saúde -->
+      <div id="alerta-saude" class="alerta-saude escondido">
+        <span class="alerta-icone">⚠️</span>
+        <div>
+          <strong id="alerta-titulo"></strong>
+          <p id="alerta-texto"></p>
+        </div>
+      </div>
+
+      <!-- TRACKER DE ÁGUA -->
+      <div class="agua-tracker">
+        <div class="agua-header">
+          <span class="agua-titulo">💧 Hidratação do dia</span>
+          <div class="agua-header-right">
+            <span id="agua-meta-texto">Meta: —</span>
+            <span id="agua-emoji">😅</span>
+            <button class="btn-agua-zerar" onclick="zerarAgua()" title="Zerar">↺</button>
+          </div>
+        </div>
+        <div class="agua-barra-container">
+          <div class="agua-barra-fill" id="agua-fill"></div>
+          <span class="agua-barra-texto">
+            <span id="agua-consumido">0ml</span> / <span id="agua-total">—</span>
+            <strong id="agua-perc" class="agua-perc">0%</strong>
+          </span>
+        </div>
+        <div class="agua-botoes">
+          <button class="btn-agua" onclick="adicionarAgua(200)">+200ml</button>
+          <button class="btn-agua" onclick="adicionarAgua(350)">+350ml</button>
+          <button class="btn-agua btn-agua-destaque" onclick="adicionarAgua(500)">+500ml</button>
+          <button class="btn-agua btn-agua-remover" onclick="removerAgua(200)">-200ml</button>
+        </div>
+      </div>
+
+      <!-- Abas -->
+      <div class="abas">
+        <button class="aba ativa" onclick="mostrarAba('cardapio', this)">🍽️ Hoje</button>
+        <button class="aba" onclick="mostrarAba('semana', this)">📅 Semana</button>
+        <button class="aba" onclick="mostrarAba('progresso', this)">📊 Progresso</button>
+        <button class="aba" onclick="mostrarAba('ingredientes', this)">🥕 Ingredientes</button>
+      </div>
+
+      <!-- Aba: Cardápio do dia -->
+      <div id="conteudo-cardapio" class="conteudo-aba">
+        <div class="checkins-resumo">
+          <span>Refeições feitas hoje:</span>
+          <span id="contador-checkins" style="font-weight:700">0/6</span>
+          <span style="font-size:0.75rem;color:#7f8c8d">— Clique em "Marcar ✓" após comer</span>
+        </div>
+        <div id="lista-refeicoes" class="lista-refeicoes"></div>
+      </div>
+
+      <!-- Aba: Semana -->
+      <div id="conteudo-semana" class="conteudo-aba escondido"></div>
+
+      <!-- Aba: Progresso -->
+      <div id="conteudo-progresso" class="conteudo-aba escondido"></div>
+
+      <!-- Aba: Ingredientes -->
+      <div id="conteudo-ingredientes" class="conteudo-aba escondido">
+        <div class="ingredientes-form">
+          <h3>Quais ingredientes você tem em casa?</h3>
+          <p>Digite os ingredientes disponíveis e sugerimos receitas com eles.</p>
+
+          <div class="ingredientes-input-area">
+            <input type="text" id="input-ingrediente" placeholder="Ex: frango, brócolis, azeite..." />
+            <button onclick="adicionarIngrediente()">Adicionar</button>
+          </div>
+
+          <div id="lista-ingredientes-adicionados" class="tags-ingredientes"></div>
+
+          <div class="filtro-refeicao">
+            <p class="filtro-label">Receitas para qual refeição?</p>
+            <div class="filtro-refeicao-opcoes">
+              <button class="filtro-refeicao-btn ativo" onclick="setFiltroRefeicao('todas', this)">Todas</button>
+              <button class="filtro-refeicao-btn" onclick="setFiltroRefeicao('cafe', this)">☀️ Café</button>
+              <button class="filtro-refeicao-btn" onclick="setFiltroRefeicao('lanche', this)">🍎 Lanche</button>
+              <button class="filtro-refeicao-btn" onclick="setFiltroRefeicao('almoco', this)">🍽️ Almoço</button>
+              <button class="filtro-refeicao-btn" onclick="setFiltroRefeicao('jantar', this)">🌙 Jantar</button>
+              <button class="filtro-refeicao-btn" onclick="setFiltroRefeicao('ceia', this)">🌛 Ceia</button>
+            </div>
+          </div>
+
+          <button class="btn-primario" onclick="buscarReceitas()" id="btn-buscar-receitas" style="display:none">
+            🔍 Sugerir receitas
+          </button>
+        </div>
+        <div id="resultado-receitas" class="resultado-receitas escondido"></div>
+      </div>
+
+      <!-- Rodapé -->
+      <div class="rodape-cardapio">
+        <button class="btn-secundario" onclick="recomecar()">↩ Refazer meu perfil</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/alimentos.js"></script>
+  <script src="js/receitas.js"></script>
+  <script src="js/nutricao.js"></script>
+  <script src="js/progresso.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

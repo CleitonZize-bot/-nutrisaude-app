@@ -1135,3 +1135,260 @@ body {
   .progresso-cards { grid-template-columns: repeat(3,1fr); gap: 0.5rem; }
   .prog-numero { font-size: 1.2rem; }
 }
+
+/* ============================================================
+   TELA DE CARREGAMENTO
+============================================================ */
+#tela-calculando {
+  background: linear-gradient(145deg, #080f14, #0a1f14);
+  display: none;
+}
+#tela-calculando.ativa {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.calc-wrapper {
+  text-align: center;
+  color: #fff;
+  padding: 2rem 1.5rem;
+  max-width: 380px;
+  width: 100%;
+}
+.calc-emoji {
+  font-size: 3.5rem;
+  margin-bottom: 1.2rem;
+  display: block;
+  animation: pulseCalc 1.2s ease-in-out infinite;
+}
+@keyframes pulseCalc {
+  0%,100% { transform: scale(1); filter: drop-shadow(0 0 8px rgba(0,196,114,0.4)); }
+  50% { transform: scale(1.12); filter: drop-shadow(0 0 20px rgba(0,196,114,0.8)); }
+}
+.calc-titulo {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.5px;
+}
+.calc-sub {
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 1.8rem;
+}
+.calc-barra {
+  width: 100%;
+  height: 6px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+.calc-barra-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00c472, #4ade80);
+  border-radius: 99px;
+  width: 0%;
+  transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+.calc-passos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  text-align: left;
+}
+.calc-passo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.25);
+  padding: 0.6rem 0.9rem;
+  border-radius: 12px;
+  transition: all 0.4s ease;
+}
+.calc-passo.ativo {
+  color: rgba(255,255,255,0.9);
+  background: rgba(0,196,114,0.12);
+  border: 1px solid rgba(0,196,114,0.2);
+}
+.calc-passo.feito {
+  color: #4ade80;
+}
+.calc-passo-icone {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  flex-shrink: 0;
+  transition: all 0.3s;
+}
+.calc-passo.feito .calc-passo-icone {
+  background: #00c472;
+  color: #fff;
+  font-style: normal;
+}
+
+/* ============================================================
+   PROGRESSO DO DIA
+============================================================ */
+.dia-progresso-wrapper {
+  background: #fff;
+  border-radius: var(--raio);
+  padding: 1rem 1.2rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--sombra);
+  border: 1.5px solid #f1f5f9;
+}
+.dia-progresso-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.6rem;
+  font-size: 0.85rem;
+}
+.dia-progresso-label { font-weight: 600; color: var(--cinza-escuro); }
+.dia-progresso-count { font-weight: 800; color: var(--verde-escuro); font-size: 0.92rem; }
+.dia-progresso-barra {
+  height: 8px;
+  background: #f1f5f9;
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 0.6rem;
+}
+.dia-progresso-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00c472, #4ade80);
+  border-radius: 99px;
+  width: 0%;
+  transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+}
+.dia-progresso-dots {
+  display: flex;
+  gap: 0.4rem;
+  justify-content: center;
+}
+.prog-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  transition: all 0.3s;
+  flex-shrink: 0;
+}
+.prog-dot.feito { background: var(--verde); transform: scale(1.2); }
+.prog-dot.pendente { background: #e2e8f0; }
+
+/* ============================================================
+   CONFETE
+============================================================ */
+.confete-container {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+.confete-p {
+  position: absolute;
+  top: -20px;
+  animation: confete-cair linear forwards;
+}
+@keyframes confete-cair {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
+}
+
+/* ============================================================
+   RECEITAS NOS CARDS DE ALIMENTO
+============================================================ */
+.btn-receita {
+  margin-top: 0.4rem;
+  padding: 0.3rem 0.75rem;
+  background: #fff7ed;
+  border: 1.5px solid #fed7aa;
+  border-radius: 99px;
+  color: #c2410c;
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-family: var(--fonte);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-receita:hover { background: #ffedd5; }
+
+.painel-receita {
+  background: #fffbf5;
+  border: 1.5px solid #fed7aa;
+  border-radius: var(--raio-pequeno);
+  padding: 1rem;
+  margin-top: 0.5rem;
+  animation: fadeIn 0.25s ease;
+}
+.receita-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.receita-nome-titulo { font-size: 0.9rem; font-weight: 700; color: #92400e; }
+.receita-tempo { font-size: 0.75rem; background: #fed7aa; color: #92400e; padding: 0.2rem 0.5rem; border-radius: 99px; font-weight: 700; }
+.receita-section { margin-bottom: 0.75rem; }
+.receita-section strong { display: block; font-size: 0.8rem; margin-bottom: 0.4rem; color: var(--cinza-escuro); }
+.receita-ingredientes-lista, .receita-preparo-lista {
+  padding-left: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.receita-ingredientes-lista li, .receita-preparo-lista li { font-size: 0.82rem; color: var(--cinza-medio); line-height: 1.4; }
+.receita-dica { background: #ecfdf5; border-left: 3px solid #00c472; padding: 0.5rem 0.75rem; border-radius: 0 8px 8px 0; font-size: 0.8rem; color: #065f46; }
+
+/* ============================================================
+   TRACKER DE ÁGUA COM ONDA
+============================================================ */
+.agua-onda-wrapper {
+  position: relative;
+  height: 36px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+.agua-nivel-fill {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: linear-gradient(180deg, #60a5fa 0%, #3b82f6 100%);
+  transition: height 0.8s cubic-bezier(0.4,0,0.2,1);
+  overflow: hidden;
+}
+.agua-onda-svg {
+  position: absolute;
+  top: -8px; left: -10%;
+  width: 120%;
+  animation: ondaMove 2.5s ease-in-out infinite;
+}
+@keyframes ondaMove {
+  0%,100% { transform: translateX(0); }
+  50% { transform: translateX(-8%); }
+}
+.agua-texto-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  z-index: 2;
+}

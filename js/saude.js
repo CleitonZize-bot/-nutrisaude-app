@@ -333,6 +333,13 @@ function verificarRemedios() {
   const agora = new Date();
   const hhmm = `${String(agora.getHours()).padStart(2,'0')}:${String(agora.getMinutes()).padStart(2,'0')}`;
   const hoje  = agora.toISOString().split('T')[0];
+
+  // Limpa memória ao virar o dia (evita memory leak)
+  if (hoje !== _remediosDiaAtual) {
+    _remediosJaNotificados = {};
+    _remediosDiaAtual = hoje;
+  }
+
   const chaveBase = `${hoje}_${hhmm}`;
 
   remedios.forEach(r => {

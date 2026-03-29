@@ -3,11 +3,11 @@
    Cache offline e performance
 ============================================================ */
 
-const CACHE_NAME = 'nutrisaude-v5';
+const CACHE_NAME = 'nutrisaude-v6';
 const ASSETS = [
   '/',
   '/index.html',
-  '/css/style.css?v=5',
+  '/css/style.css?v=6',
   '/js/storage.js',
   '/js/alimentos.js',
   '/js/receitas.js',
@@ -17,8 +17,8 @@ const ASSETS = [
   '/js/app.js',
   '/js/saude.js',
   '/manifest.json',
-  '/icons/icon-192.png',
-  '/icons/icon-512.png'
+  '/icons/icon-192.svg',
+  '/icons/icon-512.svg'
 ];
 
 // Instala: cacheia todos os assets

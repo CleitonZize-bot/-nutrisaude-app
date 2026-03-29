@@ -1623,8 +1623,360 @@ body {
 .alerta-remedio-texto small { font-size: 0.72rem; opacity: 0.6; }
 .alerta-remedio-popup > button { background: rgba(255,255,255,0.15); border: none; color: #fff; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-size: 0.7rem; flex-shrink: 0; }
 
-@media (max-width: 480px) {
-  .diario-grid { grid-template-columns: 1fr; }
+/* ============================================================
+   OTIMIZAÇÃO MOBILE COMPLETA
+   Baseado em iPhone 14 (390x844) e Android padrão (360x800)
+============================================================ */
+
+/* --- BASE GLOBAL MOBILE --- */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: contain;
+}
+
+/* Todos os botões: touch-friendly */
+button, .btn-primario, .btn-secundario, .aba, .emoji-btn,
+.btn-agua, .btn-comecar, .checkin-btn, .checkin-feito,
+.btn-saude-add, .filtro-refeicao-btn, .btn-receita {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+}
+
+/* Inputs: mínimo 16px para não dar zoom no iOS */
+input, textarea, select {
+  font-size: 16px !important;
+  font-family: var(--fonte);
+}
+
+/* --- BREAKPOINT PRINCIPAL: até 768px --- */
+@media (max-width: 768px) {
+
+  /* Container */
+  .container { padding: 1rem 1rem; }
+  .container-largo { padding: 1rem 1rem; }
+
+  /* Raios menores no mobile */
+  :root {
+    --raio: 16px;
+    --raio-pequeno: 10px;
+  }
+
+  /* === BOAS-VINDAS === */
+  #tela-boas-vindas { padding: 0; }
+
+  .bv-hero {
+    padding: 1.5rem 1.25rem;
+    gap: 1.1rem;
+    justify-content: center;
+    min-height: 100dvh;
+  }
+
+  .bv-titulo { font-size: 2.2rem; letter-spacing: -1.5px; }
+  .bv-subtitulo { font-size: 0.88rem; }
+  .bv-logo-nome { font-size: 1rem; }
+
+  .bv-stats {
+    padding: 0.6rem 0.75rem;
+  }
+  .bv-stat-num { font-size: 1.1rem; }
+  .bv-stat-txt { font-size: 0.6rem; }
+
+  .btn-comecar {
+    padding: 1rem 1.2rem;
+    font-size: 1rem;
+    border-radius: 14px;
+  }
+
+  /* === ABAS — SCROLLÁVEIS HORIZONTALMENTE === */
+  .abas {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 0.25rem;
+    padding: 0.35rem;
+    border-radius: var(--raio-pequeno);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--branco);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+  }
+  .abas::-webkit-scrollbar { display: none; }
+
+  .aba {
+    flex-shrink: 0;
+    padding: 0.55rem 0.75rem;
+    font-size: 0.72rem;
+    border-radius: 8px;
+    white-space: nowrap;
+  }
+
+  /* === FORMULÁRIOS === */
+  .tela-titulo { font-size: 1.4rem; }
+  .tela-subtitulo { font-size: 0.85rem; margin-bottom: 1.5rem; }
+
+  .campo label { font-size: 0.82rem; }
+  .campo input[type="text"],
+  .campo input[type="number"] {
+    padding: 0.85rem 1rem;
+    border-radius: 10px;
+  }
+
+  /* Todos os campos lado a lado viram 1 coluna no mobile */
+  .campos-lado-a-lado { grid-template-columns: 1fr; gap: 0.75rem; }
+
+  /* === CARDS DE OBJETIVO / SAÚDE === */
+  .cards-objetivo { gap: 0.75rem; }
+  .card-objetivo { padding: 1rem 1.1rem; gap: 0.75rem; }
+  .card-objetivo h3 { font-size: 0.9rem; }
+  .card-objetivo p { font-size: 0.75rem; }
+
+  .cards-saude { grid-template-columns: 1fr; gap: 0.6rem; }
+  .card-nenhuma { grid-column: 1; }
+  .card-saude { padding: 0.85rem 1rem; }
+
+  /* === CABEÇALHO DO CARDÁPIO === */
+  .cardapio-header {
+    padding: 1.1rem;
+    border-radius: var(--raio);
+    gap: 0.85rem;
+    flex-direction: column;
+  }
+
+  .cardapio-saudacao span { font-size: 1.05rem; }
+  .cardapio-data { font-size: 0.75rem; }
+  .cardapio-saudacao p { font-size: 0.75rem; }
+
+  .cardapio-meta {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.4rem;
+  }
+
+  .meta-item { padding: 0.5rem 0.4rem; min-width: 0; }
+  .meta-numero { font-size: 1.1rem; }
+  .meta-label { font-size: 0.58rem; }
+
+  /* === TRACKER DE ÁGUA === */
+  .agua-tracker { padding: 1rem 1.1rem; border-radius: var(--raio); }
+  .agua-titulo { font-size: 0.85rem; }
+  .agua-header-right { font-size: 0.75rem; }
+
+  .agua-botoes { gap: 0.35rem; }
+  .btn-agua { padding: 0.45rem 0.7rem; font-size: 0.78rem; }
+
+  /* === BARRA DE PROGRESSO DO DIA === */
+  .dia-progresso-wrapper { padding: 0.85rem 1rem; border-radius: var(--raio); }
+  .dia-progresso-label { font-size: 0.8rem; }
+  .prog-dot { width: 7px; height: 7px; }
+
+  /* === CARDS DE REFEIÇÃO === */
+  .refeicao-card { border-radius: var(--raio); }
+
+  .refeicao-header { padding: 0.9rem 1rem; gap: 0.6rem; }
+  .refeicao-icone {
+    width: 38px; height: 38px; font-size: 1.4rem; border-radius: 10px;
+  }
+  .refeicao-nome { font-size: 0.88rem; }
+  .refeicao-horario { font-size: 0.7rem; }
+  .refeicao-kcal { font-size: 0.7rem; padding: 0.2rem 0.5rem; }
+
+  .checkin-btn, .checkin-feito {
+    padding: 0.28rem 0.55rem;
+    font-size: 0.68rem;
+  }
+
+  .refeicao-conteudo { padding: 0 1rem 1rem; }
+
+  .item-alimento { padding: 0.45rem 0.3rem; }
+  .item-nome { font-size: 0.84rem; }
+  .item-quantidade { font-size: 0.78rem; }
+
+  .macros-refeicao { gap: 0.3rem; margin-top: 0.75rem; }
+  .macro-badge { font-size: 0.68rem; padding: 0.2rem 0.5rem; }
+
+  /* === SUBSTITUIÇÕES === */
+  .painel-substituicao { padding: 0.65rem; }
+  .sub-nome { font-size: 0.82rem; }
+  .sub-quantidade { font-size: 0.78rem; }
+  .sub-macros { font-size: 0.67rem; }
+
+  /* === RECEITAS === */
+  .painel-receita { padding: 0.85rem; }
+  .receita-nome-titulo { font-size: 0.85rem; }
+  .receita-ingredientes-lista li, .receita-preparo-lista li { font-size: 0.8rem; }
+  .receita-dica { font-size: 0.77rem; }
+
+  /* === ALERTA DE SAÚDE === */
+  .alerta-saude { padding: 0.85rem; }
+  .alerta-saude strong { font-size: 0.88rem; }
+  .alerta-saude p { font-size: 0.78rem; }
+
+  /* === PROGRESSO === */
+  .progresso-cards { grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+  .prog-card { padding: 0.75rem 0.5rem; }
+  .prog-numero { font-size: 1.1rem; }
+  .prog-label { font-size: 0.65rem; }
+
+  .grafico-wrapper { padding: 0.85rem; }
+
+  .registrar-peso { padding: 1rem; }
+  .registrar-peso-form input { width: 90px; }
+  .registrar-peso-form button { padding: 0.6rem 1rem; font-size: 0.88rem; }
+
+  .historico-tabela { padding: 1rem; }
+  .historico-tabela td, .historico-tabela th { padding: 0.4rem 0.3rem; font-size: 0.78rem; }
+
+  /* === PLANO SEMANAL === */
+  .dia-header { padding: 0.85rem 1rem; }
+  .dia-nome { font-size: 0.88rem; }
+  .dia-data { font-size: 0.7rem; }
+  .dia-conteudo { padding: 0.6rem 1rem 1rem; }
+  .dia-refeicao-nome { font-size: 0.8rem; }
+  .dia-refeicao-itens li { font-size: 0.75rem; }
+
+  .compra-categoria h4 { font-size: 0.85rem; }
+  .compra-item label { font-size: 0.82rem; padding: 0.45rem; }
+
+  /* === INGREDIENTES === */
+  .ingredientes-form { padding: 1.1rem; }
+  .ingredientes-input-area { gap: 0.5rem; }
+  .ingredientes-input-area input { font-size: 0.9rem; padding: 0.75rem 0.85rem; }
+  .ingredientes-input-area button { padding: 0.75rem 1rem; font-size: 0.85rem; }
+
+  .filtro-refeicao-opcoes { gap: 0.3rem; }
+  .filtro-refeicao-btn { padding: 0.3rem 0.65rem; font-size: 0.72rem; }
+
+  /* === MÓDULO SAÚDE === */
+  .saude-secao { padding: 1rem 1.1rem; border-radius: var(--raio); }
+  .saude-secao-header h3 { font-size: 0.92rem; }
+
+  /* Diário grid → 1 coluna */
+  .diario-grid { grid-template-columns: 1fr; gap: 0.75rem; }
   .diario-campo-full { grid-column: 1; }
-  .horarios-grid { grid-template-columns: 1fr 1fr; }
+
+  .emoji-scale { gap: 0.25rem; flex-wrap: wrap; }
+  .emoji-btn { padding: 0.3rem 0.5rem; font-size: 0.78rem; border-radius: 8px; }
+
+  /* Horários de remédio → 2 colunas */
+  .horarios-grid { grid-template-columns: 1fr 1fr; gap: 0.4rem; }
+  .horario-input { padding: 0.6rem; font-size: 0.9rem; }
+
+  /* Modal → full bottom sheet */
+  .modal-saude {
+    align-items: flex-end;
+    padding: 0;
+  }
+  .modal-saude-content {
+    border-radius: var(--raio) var(--raio) 0 0;
+    padding: 1.25rem 1.25rem calc(1.25rem + env(safe-area-inset-bottom));
+    max-height: 92vh;
+  }
+
+  /* Exames */
+  .exame-card { padding: 0.65rem 0.85rem; }
+  .exame-nome { font-size: 0.82rem; }
+  .exame-valor-badge { font-size: 0.82rem; }
+  .exame-rodape { font-size: 0.68rem; }
+  .exame-dica { font-size: 0.7rem; }
+
+  /* Remédios */
+  .remedio-card { padding: 0.75rem 0.9rem; }
+  .remedio-nome { font-size: 0.88rem; }
+  .remedio-dose { font-size: 0.75rem; }
+  .remedio-horario-badge { font-size: 0.72rem; padding: 0.2rem 0.5rem; }
+
+  /* Botão relatório */
+  .btn-relatorio { padding: 0.9rem; font-size: 0.92rem; }
+
+  /* Alerta remédio popup */
+  #alerta-remedio-container {
+    top: auto;
+    bottom: calc(1rem + env(safe-area-inset-bottom));
+    right: 0.75rem;
+    left: 0.75rem;
+    max-width: 100%;
+  }
+  .alerta-remedio-popup { padding: 0.9rem; }
+
+  /* === BARRA DE PROGRESSO (steps do cadastro) === */
+  .passo-label { font-size: 0.75rem; }
+
+  /* === TELA DE CALCULANDO === */
+  .calc-wrapper { padding: 1.5rem 1.25rem; }
+  .calc-emoji { font-size: 3rem; margin-bottom: 1rem; }
+  .calc-titulo { font-size: 1.35rem; }
+  .calc-sub { font-size: 0.82rem; margin-bottom: 1.5rem; }
+  .calc-passo { font-size: 0.82rem; padding: 0.5rem 0.75rem; }
+
+  /* === BOTÃO PRIMÁRIO === */
+  .btn-primario { padding: 0.95rem; font-size: 0.96rem; border-radius: 12px; }
+  .btn-secundario { padding: 0.7rem 1.2rem; font-size: 0.85rem; }
+
+  /* Previne scroll horizontal global */
+  body, html { overflow-x: hidden; max-width: 100vw; }
+}
+
+/* --- BREAKPOINT PEQUENO: até 380px (iPhone SE, Galaxy A) --- */
+@media (max-width: 380px) {
+  .bv-titulo { font-size: 1.9rem; }
+  .bv-logo-nome { font-size: 0.9rem; }
+  .bv-badge { font-size: 0.65rem; padding: 0.3rem 0.65rem; }
+
+  .cardapio-meta { grid-template-columns: repeat(2, 1fr); }
+
+  .progresso-cards { grid-template-columns: 1fr 1fr; }
+
+  .aba { padding: 0.5rem 0.6rem; font-size: 0.68rem; }
+
+  .abas { gap: 0.2rem; padding: 0.3rem; }
+
+  .meta-item { padding: 0.4rem 0.3rem; }
+  .meta-numero { font-size: 1rem; }
+
+  .refeicao-header { padding: 0.8rem 0.85rem; gap: 0.5rem; }
+  .refeicao-icone { width: 34px; height: 34px; font-size: 1.2rem; }
+  .refeicao-nome { font-size: 0.82rem; }
+
+  .checkin-btn, .checkin-feito { font-size: 0.65rem; padding: 0.25rem 0.45rem; }
+}
+
+/* --- SAFE AREA para iPhone com notch/Dynamic Island --- */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  #tela-boas-vindas .bv-hero { padding-bottom: calc(1.5rem + env(safe-area-inset-bottom)); }
+  #tela-cardapio .container { padding-bottom: calc(2rem + env(safe-area-inset-bottom)); }
+  .abas { padding-top: calc(0.35rem + env(safe-area-inset-top)); }
+}
+
+/* --- LANDSCAPE MOBILE --- */
+@media (max-width: 768px) and (orientation: landscape) {
+  #tela-boas-vindas .bv-hero { min-height: auto; padding: 1rem 1.5rem; }
+  .bv-titulo { font-size: 1.8rem; }
+  .calc-wrapper { padding: 1rem 1.5rem; }
+}
+
+/* --- FOCUS VISIBLE: melhor acessibilidade no mobile --- */
+@media (hover: none) {
+  .btn-primario:hover { transform: none; box-shadow: var(--sombra-verde); }
+  .btn-comecar:hover { transform: none; }
+  .card-objetivo:hover { transform: none; }
+  .card-saude:hover { transform: none; }
+  .sub-item:hover { transform: none; }
+}
+
+/* --- PRINT (relatório PDF) --- */
+@media print {
+  body { background: white; }
+  .tela { display: none !important; }
+  #tela-cardapio { display: none !important; }
 }

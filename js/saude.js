@@ -318,6 +318,7 @@ function renderizarRemedios() {
 
 /* ---------- VERIFICADOR DE REMÉDIOS (roda a cada minuto) ---------- */
 let _remediosJaNotificados = {};
+let _remediosDiaAtual = new Date().toISOString().split('T')[0];
 
 function iniciarVerificadorRemedios() {
   verificarRemedios();

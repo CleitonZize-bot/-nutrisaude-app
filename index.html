@@ -569,6 +569,24 @@
             📄 Gerar Relatório PDF
           </button>
         </div>
+
+        <!-- BACKUP DE DADOS -->
+        <div class="saude-secao backup-secao">
+          <div class="saude-secao-header">
+            <h3>💾 Backup dos seus dados</h3>
+          </div>
+          <p class="saude-descricao">Salve seus dados em um arquivo para não perder nada ao limpar o navegador. Importe para restaurar.</p>
+          <div class="backup-botoes">
+            <button class="btn-backup-exportar" onclick="exportarBackup()">
+              📥 Exportar backup
+            </button>
+            <label class="btn-backup-importar">
+              📤 Importar backup
+              <input type="file" accept=".json" onchange="importarBackup(this)" style="display:none" />
+            </label>
+          </div>
+          <p class="backup-aviso">⚠️ Salve o backup antes de limpar cookies ou dados do navegador.</p>
+        </div>
       </div>
 
       <!-- Rodapé -->

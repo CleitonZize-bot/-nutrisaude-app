@@ -106,3 +106,64 @@ function carregarAguaHoje() {
 function _hoje() {
   return new Date().toISOString().split('T')[0];
 }
+
+/* ---- ACESSO GERAL (usado pelo saude.js e outros) ---- */
+function carregarDados() {
+  return _carregar();
+}
+
+function salvarDados(dados) {
+  _salvar(dados);
+}
+
+/* ---- BACKUP: EXPORTAR ---- */
+function exportarBackup() {
+  try {
+    const dados = _carregar();
+    const json = JSON.stringify(dados, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url  = URL.createObjectURL(blob);
+    const hoje = _hoje();
+
+    const link = document.createElement('a');
+    link.href     = url;
+    link.download = `nutrisaude_backup_${hoje}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    mostrarToast('✅ Backup salvo! Guarde o arquivo em local seguro.', 'verde');
+  } catch (e) {
+    mostrarToast('❌ Erro ao exportar backup.', 'vermelho');
+  }
+}
+
+/* ---- BACKUP: IMPORTAR ---- */
+function importarBackup(input) {
+  const arquivo = input.files[0];
+  if (!arquivo) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const dados = JSON.parse(e.target.result);
+
+      // Valida se é um backup do NutriSaúde
+      if (typeof dados !== 'object' || Array.isArray(dados)) {
+        mostrarToast('❌ Arquivo inválido. Use um backup do NutriSaúde.', 'vermelho');
+        return;
+      }
+
+      _salvar(dados);
+      mostrarToast('✅ Dados restaurados! Recarregando o app...', 'verde');
+      setTimeout(() => location.reload(), 1500);
+    } catch (err) {
+      mostrarToast('❌ Arquivo corrompido ou inválido.', 'vermelho');
+    }
+  };
+  reader.readAsText(arquivo);
+
+  // Limpa o input para permitir importar o mesmo arquivo novamente
+  input.value = '';
+}

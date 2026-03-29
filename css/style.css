@@ -1412,6 +1412,9 @@ body {
   margin-bottom: 1rem;
   box-shadow: var(--sombra);
   border: 1.5px solid #f1f5f9;
+  overflow: hidden;
+  max-width: 100%;
+  word-wrap: break-word;
 }
 .saude-secao-header {
   display: flex;

@@ -223,9 +223,23 @@ function fecharModalRemedio() {
 }
 
 function solicitarPermissaoNotificacao() {
-  if ('Notification' in window && Notification.permission === 'default') {
-    Notification.requestPermission();
+  if (!('Notification' in window)) return; // browser não suporta
+
+  if (Notification.permission === 'granted') return; // já permitido
+
+  if (Notification.permission === 'denied') {
+    mostrarToast('🔔 Notificações bloqueadas. Habilite nas configurações do navegador.', 'vermelho');
+    return;
   }
+
+  // Pede permissão (API moderna com promise)
+  Notification.requestPermission().then(resultado => {
+    if (resultado === 'granted') {
+      mostrarToast('🔔 Notificações ativadas! Você será avisado no horário do remédio.', 'verde');
+    } else {
+      mostrarToast('🔕 Notificações negadas. Os alertas aparecerão só dentro do app.', 'vermelho');
+    }
+  });
 }
 
 function salvarRemedio() {

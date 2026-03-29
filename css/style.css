@@ -1706,13 +1706,11 @@ input, textarea, select {
     border-radius: 14px;
   }
 
-  /* === ABAS — SCROLLÁVEIS HORIZONTALMENTE === */
+  /* === ABAS — QUEBRA PARA SEGUNDA LINHA === */
   .abas {
     display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+    flex-wrap: wrap;
+    overflow-x: visible;
     gap: 0.25rem;
     padding: 0.35rem;
     border-radius: var(--raio-pequeno);
@@ -1722,14 +1720,15 @@ input, textarea, select {
     background: var(--branco);
     box-shadow: 0 2px 12px rgba(0,0,0,0.1);
   }
-  .abas::-webkit-scrollbar { display: none; }
 
   .aba {
-    flex-shrink: 0;
-    padding: 0.55rem 0.75rem;
+    flex: 1 1 auto;
+    min-width: fit-content;
+    padding: 0.55rem 0.6rem;
     font-size: 0.72rem;
     border-radius: 8px;
     white-space: nowrap;
+    text-align: center;
   }
 
   /* === FORMULÁRIOS === */

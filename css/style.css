@@ -622,16 +622,19 @@ body {
 ============================================================ */
 .abas {
   display: flex;
+  flex-wrap: wrap;       /* SEMPRE quebra para segunda linha se não couber */
   gap: 0.3rem;
   margin-bottom: 1.2rem;
   background: var(--branco);
   padding: 0.4rem;
   border-radius: var(--raio);
   box-shadow: var(--sombra);
+  overflow-x: visible;   /* sem scroll lateral */
 }
 
 .aba {
-  flex: 1;
+  flex: 1 1 auto;        /* cresce e encolhe conforme o espaço */
+  min-width: 0;          /* permite encolher abaixo do conteúdo */
   padding: 0.65rem 0.5rem;
   border: none;
   border-radius: var(--raio-pequeno);
@@ -643,6 +646,7 @@ body {
   cursor: pointer;
   transition: all 0.2s;
   white-space: nowrap;
+  text-align: center;
 }
 
 .aba.ativa {

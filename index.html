@@ -590,5 +590,16 @@
   <div id="alerta-remedio-container"></div>
   <script src="js/saude.js"></script>
 
+  <!-- PWA Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => console.log('SW registrado:', reg.scope))
+          .catch(err => console.log('SW erro:', err));
+      });
+    }
+  </script>
+
 </body>
 </html>

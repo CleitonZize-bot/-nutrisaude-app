@@ -306,7 +306,7 @@ body {
 /* ============================================================
    CONTAINER E LAYOUT
 ============================================================ */
-.container { max-width: 560px; margin: 0 auto; padding: 2rem 1.5rem; }
+.container { max-width: 560px; margin: 0 auto; padding: 2rem 1.5rem; overflow-x: hidden; }
 .container-largo { max-width: 860px; }
 
 /* ============================================================

@@ -35,6 +35,10 @@ function salvarPerfil(u) {
     condicoes: [...u.condicoes]
   };
   _salvar(d);
+  // Salva perfil nos campos do usuário no PocketBase
+  if (typeof pbSalvarPerfil === 'function' && pbEstaLogado()) {
+    pbSalvarPerfil(u).catch(() => {});
+  }
 }
 
 function carregarPerfil() {

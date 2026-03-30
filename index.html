@@ -16,9 +16,64 @@
 <body>
 
   <!-- ============================================================
+       TELA 0 — AUTENTICAÇÃO (Login / Cadastro)
+  ============================================================ -->
+  <div id="tela-auth" class="tela ativa">
+    <div class="auth-wrapper">
+
+      <div class="auth-logo">
+        <span class="auth-logo-icon">🥗</span>
+        <span class="auth-logo-nome">NutriSaúde</span>
+      </div>
+
+      <!-- Login -->
+      <div id="auth-login" class="auth-card">
+        <h2>Entrar na conta</h2>
+        <p class="auth-sub">Seus dados ficam salvos no servidor</p>
+        <div class="campo">
+          <label>E-mail</label>
+          <input type="email" id="auth-email" placeholder="seu@email.com" autocomplete="email"
+            onkeydown="if(event.key==='Enter') fazerLogin()" />
+        </div>
+        <div class="campo">
+          <label>Senha</label>
+          <input type="password" id="auth-senha" placeholder="Sua senha" autocomplete="current-password"
+            onkeydown="if(event.key==='Enter') fazerLogin()" />
+        </div>
+        <div id="auth-erro" class="auth-erro escondido"></div>
+        <button class="btn-primario" onclick="fazerLogin()">Entrar →</button>
+        <p class="auth-link">Não tem conta? <button class="btn-link auth-btn-link" onclick="mostrarRegistro()">Criar conta grátis</button></p>
+      </div>
+
+      <!-- Cadastro -->
+      <div id="auth-registro" class="auth-card escondido">
+        <h2>Criar conta</h2>
+        <p class="auth-sub">É gratuito — seus dados ficam no servidor</p>
+        <div class="campo">
+          <label>Seu nome</label>
+          <input type="text" id="auth-nome" placeholder="Como quer ser chamado?" autocomplete="name" />
+        </div>
+        <div class="campo">
+          <label>E-mail</label>
+          <input type="email" id="auth-email-reg" placeholder="seu@email.com" autocomplete="email" />
+        </div>
+        <div class="campo">
+          <label>Senha</label>
+          <input type="password" id="auth-senha-reg" placeholder="Mínimo 8 caracteres" autocomplete="new-password"
+            onkeydown="if(event.key==='Enter') fazerRegistro()" />
+        </div>
+        <div id="auth-erro-reg" class="auth-erro escondido"></div>
+        <button class="btn-primario" onclick="fazerRegistro()">Criar conta →</button>
+        <p class="auth-link">Já tem conta? <button class="btn-link auth-btn-link" onclick="mostrarLogin()">Entrar</button></p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================================
        TELA 1 — BOAS-VINDAS
   ============================================================ -->
-  <div id="tela-boas-vindas" class="tela ativa">
+  <div id="tela-boas-vindas" class="tela">
 
     <!-- Círculos decorativos de fundo -->
     <div class="bv-bg-circle bv-circle1"></div>

@@ -79,7 +79,7 @@ const RECEITAS_DB = {
     tempo: "30 min", porcao: "1 prato fundo",
     ingredientes: ["150g frango desfiado", "Cenoura, abobrinha, batata doce", "Caldo de legumes natural", "Sal e cheiro-verde"],
     preparo: ["Cozinhe o frango e desfie.", "Refogue os legumes cortados em cubos.", "Adicione caldo e frango.", "Cozinhe 20 min em fogo médio. Finalize com cheiro-verde."],
-    dica: "Para esteatose: evite sal em excesso e use temperos naturais."
+    dica: "Evite sal em excesso e prefira temperos naturais como ervas e limão."
   },
   "Aveia em flocos": {
     tempo: "5 min", porcao: "4 col. sopa (40g)",

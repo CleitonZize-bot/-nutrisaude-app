@@ -2074,8 +2074,9 @@ input, textarea, select {
   .btn-primario { padding: 0.95rem; font-size: 0.96rem; border-radius: 12px; }
   .btn-secundario { padding: 0.7rem 1.2rem; font-size: 0.85rem; }
 
-  /* Previne scroll horizontal global */
-  body, html { overflow-x: hidden; max-width: 100vw; }
+  /* Previne scroll horizontal global sem bloquear scroll vertical */
+  html { overflow-x: clip; overflow-y: auto; max-width: 100vw; }
+  body { overflow-x: hidden; max-width: 100vw; }
 }
 
 /* --- BREAKPOINT PEQUENO: até 380px (iPhone SE, Galaxy A) --- */

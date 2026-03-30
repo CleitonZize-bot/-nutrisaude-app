@@ -66,7 +66,7 @@ const RECEITAS_DB = {
   "Iogurte grego natural": {
     tempo: "0 min", porcao: "1 pote (170g)",
     ingredientes: ["1 pote de iogurte grego sem açúcar", "Frutas, granola ou mel a gosto"],
-    preparo: ["Sirva gelado.", "Adicione frutas frescas para aumentar vitaminas.", "Evite granolas com muito açúcar se tiver diabetes."],
+    preparo: ["Sirva gelado.", "Adicione frutas frescas para aumentar vitaminas.", "Prefira granolas sem açúcar adicionado — verifique o rótulo."],
     dica: "Escolha versões sem açúcar adicionado. Verifique o rótulo."
   },
   "Salada verde variada": {

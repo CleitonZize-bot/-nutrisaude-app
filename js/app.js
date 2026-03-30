@@ -21,7 +21,7 @@ const COR_REFEICAO = {
 /* ============================================================
    INICIALIZAÇÃO — verifica se há perfil salvo
 ============================================================ */
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   // Listener do input de ingrediente
   const inputIngrediente = document.getElementById('input-ingrediente');
   if (inputIngrediente) {
@@ -30,12 +30,108 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Verifica perfil salvo no localStorage
-  const perfilSalvo = carregarPerfil();
-  if (perfilSalvo) {
-    mostrarBannerPerfil(perfilSalvo);
+  // Verifica autenticação PocketBase
+  if (pbEstaLogado()) {
+    try {
+      // Verifica se o token ainda é válido
+      await pb.collection('users').authRefresh();
+      // Restaura dados do servidor para o localStorage
+      await sincronizarParaLocal();
+    } catch (e) {
+      // Token expirado — deslogar
+      pbLogout();
+      irPara('tela-auth');
+      return;
+    }
+
+    const perfil = carregarPerfil();
+    if (perfil) {
+      Object.assign(usuario, perfil);
+      mostrarBannerPerfil(perfil);
+    }
+    irPara('tela-boas-vindas');
+  } else {
+    irPara('tela-auth');
   }
 });
+
+/* ============================================================
+   AUTENTICAÇÃO
+============================================================ */
+async function fazerLogin() {
+  const email  = document.getElementById('auth-email').value.trim();
+  const senha  = document.getElementById('auth-senha').value;
+  const erroEl = document.getElementById('auth-erro');
+  const btn    = document.querySelector('#auth-login .btn-primario');
+
+  if (!email || !senha) { _mostrarErroAuth(erroEl, 'Preencha e-mail e senha.'); return; }
+
+  btn.textContent = 'Entrando...'; btn.disabled = true;
+  erroEl.classList.add('escondido');
+
+  try {
+    await pbLogin(email, senha);
+    await sincronizarParaLocal();
+    const perfil = carregarPerfil();
+    if (perfil) { Object.assign(usuario, perfil); mostrarBannerPerfil(perfil); }
+    irPara('tela-boas-vindas');
+  } catch (e) {
+    _mostrarErroAuth(erroEl, 'E-mail ou senha incorretos. Verifique e tente novamente.');
+  } finally {
+    btn.textContent = 'Entrar →'; btn.disabled = false;
+  }
+}
+
+async function fazerRegistro() {
+  const nome   = document.getElementById('auth-nome').value.trim();
+  const email  = document.getElementById('auth-email-reg').value.trim();
+  const senha  = document.getElementById('auth-senha-reg').value;
+  const erroEl = document.getElementById('auth-erro-reg');
+  const btn    = document.querySelector('#auth-registro .btn-primario');
+
+  if (!nome || !email || !senha) { _mostrarErroAuth(erroEl, 'Preencha todos os campos.'); return; }
+  if (senha.length < 8) { _mostrarErroAuth(erroEl, 'Senha deve ter pelo menos 8 caracteres.'); return; }
+
+  btn.textContent = 'Criando conta...'; btn.disabled = true;
+  erroEl.classList.add('escondido');
+
+  try {
+    await pbRegistrar(email, senha, nome);
+    await pbLogin(email, senha);
+    irPara('tela-boas-vindas');
+  } catch (e) {
+    const msg = (e.response?.data?.email)
+      ? 'Este e-mail já está em uso.'
+      : 'Erro ao criar conta. Tente novamente.';
+    _mostrarErroAuth(erroEl, msg);
+  } finally {
+    btn.textContent = 'Criar conta →'; btn.disabled = false;
+  }
+}
+
+function fazerLogout() {
+  if (confirm('Deseja sair da sua conta?')) {
+    pbLogout();
+    location.reload();
+  }
+}
+
+function mostrarLogin() {
+  document.getElementById('auth-login').classList.remove('escondido');
+  document.getElementById('auth-registro').classList.add('escondido');
+  document.getElementById('auth-erro').classList.add('escondido');
+}
+
+function mostrarRegistro() {
+  document.getElementById('auth-login').classList.add('escondido');
+  document.getElementById('auth-registro').classList.remove('escondido');
+  document.getElementById('auth-erro-reg').classList.add('escondido');
+}
+
+function _mostrarErroAuth(el, msg) {
+  el.textContent = msg;
+  el.classList.remove('escondido');
+}
 
 function mostrarBannerPerfil(perfil) {
   const banner = document.getElementById('banner-perfil-salvo');

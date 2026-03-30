@@ -22,6 +22,8 @@ function _carregar() {
 
 function _salvar(dados) {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(dados)); } catch {}
+  // Sincroniza para o servidor em background (não bloqueia)
+  if (typeof agendarSyncServidor === 'function') agendarSyncServidor();
 }
 
 /* ---- PERFIL ---- */

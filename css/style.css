@@ -1705,10 +1705,11 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Todos os botões: touch-friendly */
+/* Todos os botões e cards: touch-friendly */
 button, .btn-primario, .btn-secundario, .aba, .emoji-btn,
 .btn-agua, .btn-comecar, .checkin-btn, .checkin-feito,
-.btn-saude-add, .filtro-refeicao-btn, .btn-receita {
+.btn-saude-add, .filtro-refeicao-btn, .btn-receita,
+.card-objetivo, .card-saude {
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   cursor: pointer;

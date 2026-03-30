@@ -1799,6 +1799,15 @@ input, textarea, select {
   .card-nenhuma { grid-column: 1; }
   .card-saude { padding: 0.85rem 1rem; }
 
+  /* Botão "Gerar cardápio" fixo no rodapé — sempre visível */
+  #btn-continuar-saude {
+    position: sticky;
+    bottom: 1rem;
+    z-index: 50;
+    box-shadow: 0 4px 20px rgba(0,196,114,0.45);
+    margin-top: 1rem;
+  }
+
   /* === CABEÇALHO DO CARDÁPIO === */
   .cardapio-header {
     padding: 1.1rem;

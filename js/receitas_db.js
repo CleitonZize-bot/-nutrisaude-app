@@ -85,7 +85,7 @@ const RECEITAS_DB = {
     tempo: "5 min", porcao: "4 col. sopa (40g)",
     ingredientes: ["40g de aveia em flocos", "200ml leite ou bebida vegetal", "Mel ou canela a gosto"],
     preparo: ["Misture aveia e leite em panela.", "Cozinhe em fogo médio mexendo sempre.", "Pronto em 3-4 min quando engrossar.", "Adicione frutas ou canela para servir."],
-    dica: "A beta-glucana da aveia ajuda a controlar colesterol e glicemia."
+    dica: "A beta-glucana da aveia é uma fibra solúvel que ajuda na saciedade e no bem-estar intestinal."
   },
   "Quinoa cozida": {
     tempo: "20 min", porcao: "4 col. sopa (80g cru)",

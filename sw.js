@@ -3,11 +3,11 @@
    Cache offline e performance
 ============================================================ */
 
-const CACHE_NAME = 'nutrisaude-v8';
+const CACHE_NAME = 'nutrisaude-v9';
 const ASSETS = [
   '/',
   '/index.html',
-  '/css/style.css?v=8',
+  '/css/style.css?v=9',
   '/js/storage.js',
   '/js/alimentos.js',
   '/js/receitas.js',

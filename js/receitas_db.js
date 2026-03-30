@@ -103,7 +103,7 @@ const RECEITAS_DB = {
     tempo: "0 min", porcao: "2 fatias (30g)",
     ingredientes: ["Peito de peru sem pele, sem fumaça líquida"],
     preparo: ["Verifique o rótulo: escolha sem conservantes em excesso.", "Use como proteína rápida no café da manhã.", "Combine com pão integral e queijo."],
-    dica: "Para hipertensão: prefira versões com menos sódio."
+    dica: "Prefira versões com menos sódio — verifique sempre o rótulo nutricional."
   },
   "Pasta de amendoim": {
     tempo: "0 min", porcao: "1 col. sopa (15g)",

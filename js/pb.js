@@ -5,7 +5,7 @@
       depois de configurar no EasyPanel (ex: https://pb.seudominio.com.br)
 ============================================================ */
 
-const PB_URL = 'https://pb.SEUDOMINIO.com'; // <-- TROCAR AQUI DEPOIS DE CONFIGURAR
+const PB_URL = 'https://pb.nutrisaudeapp.online';
 
 const pb = new PocketBase(PB_URL);
 pb.autoCancellation(false);

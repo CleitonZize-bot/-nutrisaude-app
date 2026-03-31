@@ -101,6 +101,11 @@ async function fazerRegistro() {
   erroEl.classList.add('escondido');
 
   try {
+    const temAcesso = await pbVerificarAssinatura(email);
+    if (!temAcesso) {
+      _mostrarErroAuth(erroEl, '❌ Este e-mail não possui uma assinatura ativa. Adquira o plano para criar sua conta.');
+      return;
+    }
     await pbRegistrar(email, senha, nome);
     await pbLogin(email, senha);
     irPara('tela-boas-vindas');

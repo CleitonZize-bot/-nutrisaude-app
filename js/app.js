@@ -70,6 +70,11 @@ async function fazerLogin() {
   erroEl.classList.add('escondido');
 
   try {
+    const temAcesso = await pbVerificarAssinatura(email);
+    if (!temAcesso) {
+      _mostrarErroAuth(erroEl, '❌ Você não possui uma assinatura ativa. Adquira o plano para acessar o app.');
+      return;
+    }
     await pbLogin(email, senha);
     await sincronizarParaLocal();
     const perfil = carregarPerfil();

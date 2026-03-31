@@ -8,7 +8,13 @@
       "Bash(git -C C:/Users/Cleiton/Desktop/nutri-app add:*)",
       "Bash(git -C C:/Users/Cleiton/Desktop/nutri-app commit:*)",
       "Bash(git -C C:/Users/Cleiton/Desktop/nutri-app push:*)",
-      "Bash(curl -s -X POST \"http://187.77.247.153:3000/api/deploy/2c3621a991a0ba6bd8df61fbeaf9b5a58ce2a5f2d2185a7a\")"
+      "Bash(curl -s -X POST \"http://187.77.247.153:3000/api/deploy/2c3621a991a0ba6bd8df61fbeaf9b5a58ce2a5f2d2185a7a\")",
+      "WebSearch",
+      "WebFetch(domain:ajuda.cakto.com.br)",
+      "WebFetch(domain:docs.cakto.com.br)",
+      "WebFetch(domain:help.dinamize.com)",
+      "WebFetch(domain:ajuda.notificacoesinteligentes.com)",
+      "WebFetch(domain:pluga.zendesk.com)"
     ]
   },
   "hooks": {

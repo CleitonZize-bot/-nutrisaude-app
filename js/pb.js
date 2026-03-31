@@ -27,6 +27,18 @@ async function pbRegistrar(email, senha, nome) {
   });
 }
 
+/* Verifica se o e-mail tem assinatura ativa */
+async function pbVerificarAssinatura(email) {
+  try {
+    const lista = await pb.collection('clientes').getList(1, 1, {
+      filter: `email = "${email}" && status = "ativo"`
+    });
+    return lista.items.length > 0;
+  } catch (e) {
+    return false;
+  }
+}
+
 function pbLogout() {
   pb.authStore.clear();
 }

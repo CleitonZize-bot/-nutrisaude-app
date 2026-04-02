@@ -705,26 +705,28 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
                         <Badge className="h-9 rounded-full border border-emerald-200 bg-emerald-50 px-3 text-emerald-600 hover:bg-emerald-50">
                           ~{meal.calorias} kcal
                         </Badge>
-                        {doneAt ? (
-                          <Button
-                            type="button"
-                            variant="outline"
-                            className="h-9 rounded-full border-emerald-200 px-4 text-emerald-600 hover:bg-emerald-50"
-                            onClick={() => markMealDone(meal.chave, false)}
-                          >
-                            <CheckCircle2 />
-                            {doneAt}
-                          </Button>
-                        ) : (
-                          <Button
-                            type="button"
-                            variant="outline"
-                            className="h-9 rounded-full border-emerald-200 px-4 text-emerald-600 hover:bg-emerald-50"
-                            onClick={() => markMealDone(meal.chave, true)}
-                          >
-                            Marcar
-                          </Button>
-                        )}
+                        {isPremium ? (
+                          doneAt ? (
+                            <Button
+                              type="button"
+                              variant="outline"
+                              className="h-9 rounded-full border-emerald-200 px-4 text-emerald-600 hover:bg-emerald-50"
+                              onClick={() => markMealDone(meal.chave, false)}
+                            >
+                              <CheckCircle2 />
+                              {doneAt}
+                            </Button>
+                          ) : (
+                            <Button
+                              type="button"
+                              variant="outline"
+                              className="h-9 rounded-full border-emerald-200 px-4 text-emerald-600 hover:bg-emerald-50"
+                              onClick={() => markMealDone(meal.chave, true)}
+                            >
+                              Marcar
+                            </Button>
+                          )
+                        ) : null}
                         <Button
                           type="button"
                           variant="ghost"

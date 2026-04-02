@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
+import { OnboardingFlow } from "@/components/onboarding/onboarding-flow";
 
 export default function OnboardingPage() {
-  redirect("/legacy/index.html?questionario=1");
+  return <OnboardingFlow />;
 }

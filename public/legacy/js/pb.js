@@ -10,17 +10,21 @@ const PB_URL = 'https://pb.nutrisaudeapp.online';
 const pb = new PocketBase(PB_URL);
 pb.autoCancellation(false);
 
+function pbNormalizeEmail(email) {
+  return String(email || '').trim().toLowerCase();
+}
+
 /* ============================================================
    AUTENTICAÇÃO
 ============================================================ */
 
 async function pbLogin(email, senha) {
-  return await pb.collection('users').authWithPassword(email, senha);
+  return await pb.collection('users').authWithPassword(pbNormalizeEmail(email), senha);
 }
 
 async function pbRegistrar(email, senha, nome) {
   return await pb.collection('users').create({
-    email,
+    email: pbNormalizeEmail(email),
     password: senha,
     passwordConfirm: senha,
     nome
@@ -29,9 +33,10 @@ async function pbRegistrar(email, senha, nome) {
 
 /* Verifica se o e-mail tem assinatura ativa */
 async function pbVerificarAssinatura(email) {
+  const normalizedEmail = pbNormalizeEmail(email);
   try {
     const lista = await pb.collection('clientes').getList(1, 1, {
-      filter: `email = "${email}" && status = "ativo"`
+      filter: `email = "${normalizedEmail}" && status = "ativo"`
     });
     return lista.items.length > 0;
   } catch (e) {

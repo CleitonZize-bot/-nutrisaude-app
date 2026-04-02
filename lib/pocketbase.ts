@@ -28,6 +28,10 @@ export type NutrisaudeStoredData = {
 let pocketbaseClient: PocketBase | null = null;
 let syncTimer: number | null = null;
 
+function normalizeEmail(email: string) {
+  return email.trim().toLowerCase();
+}
+
 function parseJson<T>(value: string | null | undefined, fallback: T): T {
   if (!value) return fallback;
 
@@ -111,12 +115,14 @@ export function perfilEstaCompleto(
 }
 
 export async function pbLogin(email: string, senha: string) {
-  return getPocketBase().collection("users").authWithPassword(email, senha);
+  return getPocketBase()
+    .collection("users")
+    .authWithPassword(normalizeEmail(email), senha);
 }
 
 export async function pbRegistrar(email: string, senha: string, nome: string) {
   return getPocketBase().collection("users").create({
-    email,
+    email: normalizeEmail(email),
     password: senha,
     passwordConfirm: senha,
     nome,
@@ -135,9 +141,11 @@ export async function pbRefresh() {
 }
 
 export async function pbVerificarAssinatura(email: string) {
+  const normalizedEmail = normalizeEmail(email);
+
   try {
     const lista = await getPocketBase().collection("clientes").getList(1, 1, {
-      filter: `email = "${email}" && status = "ativo"`,
+      filter: `email = "${normalizedEmail}" && status = "ativo"`,
     });
 
     return lista.items.length > 0;

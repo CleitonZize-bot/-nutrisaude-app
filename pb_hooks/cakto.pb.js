@@ -1,5 +1,5 @@
 routerAdd("POST", "/api/cakto-webhook", (e) => {
-  const SECRET = "COLOQUE_SEU_SECRET_AQUI";
+  const SECRET = $os.getenv("CAKTO_WEBHOOK_SECRET");
 
   let body = {};
   try {
@@ -8,10 +8,11 @@ routerAdd("POST", "/api/cakto-webhook", (e) => {
     return e.json(400, {error: "invalid body"});
   }
 
+  if (!SECRET) return e.json(500, {error: "missing webhook secret"});
   if (body.secret !== SECRET) return e.json(401, {error: "unauthorized"});
 
   const customer = body.data && body.data.customer ? body.data.customer : {};
-  const email    = customer.email || "";
+  const email    = String(customer.email || "").trim().toLowerCase();
   const nome     = customer.name  || "";
   const event    = body.event     || "";
 

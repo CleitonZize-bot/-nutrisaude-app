@@ -906,10 +906,9 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
                       </div>
 
                       {!isPremium ? (
-                        <a
-                          href={subscribeUrl}
-                          target="_blank"
-                          rel="noreferrer"
+                        <button
+                          type="button"
+                          onClick={() => setShowSubscribeModal(true)}
                           className="absolute inset-x-4 bottom-4 top-4 flex items-center justify-center"
                         >
                           <div className="w-full rounded-[1.2rem] bg-slate-900/90 px-6 py-5 text-center backdrop-blur-sm">
@@ -920,7 +919,7 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
                               Receitas, cardapios e todas as funcoes do aplicativo
                             </p>
                           </div>
-                        </a>
+                        </button>
                       ) : null}
                     </CardContent>
                   ) : null}

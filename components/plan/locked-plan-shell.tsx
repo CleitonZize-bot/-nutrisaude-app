@@ -90,7 +90,7 @@ function PreviewCard({
 
 export function LockedPlanShell() {
   const router = useRouter();
-  const [status, setStatus] = useState<"loading" | "locked">("loading");
+  const [status, setStatus] = useState<"loading" | "locked" | "unlocked">("loading");
 
   useEffect(() => {
     async function verificarAcesso() {

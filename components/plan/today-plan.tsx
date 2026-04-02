@@ -11,6 +11,7 @@ import {
   CheckCircle2,
   ChevronDown,
   Droplets,
+  LockKeyhole,
   Pill,
   RefreshCw,
   ShieldAlert,

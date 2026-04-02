@@ -113,7 +113,7 @@ export function LockedPlanShell() {
           pbIgnorarAssinaturaNoAmbienteAtual() || (await pbVerificarAssinatura(email));
 
         if (temAssinatura) {
-          window.location.href = "/legacy/index.html";
+          setStatus("unlocked");
           return;
         }
 

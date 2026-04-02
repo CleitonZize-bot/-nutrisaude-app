@@ -91,14 +91,61 @@ type GeneratedPlan = {
   refeicoes: Meal[];
 };
 
-function PremiumTabLock() {
+function SubscribeModal({ onClose }: { onClose: () => void }) {
   return (
-    <a
-      href={process.env.NEXT_PUBLIC_SUBSCRIBE_URL || "#"}
-      target="_blank"
-      rel="noreferrer"
-      className="block"
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 backdrop-blur-sm"
+      onClick={onClose}
     >
+      <div
+        className="nutri-surface w-full max-w-md rounded-[2rem] border border-white/10 p-0 text-center"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex flex-col items-center gap-4 px-6 pt-7">
+          <button
+            type="button"
+            onClick={onClose}
+            className="absolute right-5 top-5 flex size-8 items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200"
+          >
+            <X className="size-4" />
+          </button>
+          <div className="flex size-16 items-center justify-center rounded-full bg-primary/12 text-primary">
+            <LockKeyhole className="size-8" />
+          </div>
+          <p className="nutri-title text-3xl font-black text-slate-900">
+            Assine o NutriSaude para ter acesso completo
+          </p>
+          <p className="max-w-xs text-base leading-7 text-slate-500">
+            Seu perfil ja foi salvo. Para liberar cardapios, receitas, progresso e todas as funcoes, ative sua assinatura.
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-3 px-6 pb-7 pt-5">
+          <a href={subscribeUrl} target="_blank" rel="noreferrer">
+            <button
+              type="button"
+              className="flex h-14 w-full items-center justify-center gap-2 rounded-[1.2rem] bg-primary text-base font-bold text-white shadow-[0_18px_34px_rgba(0,196,114,0.22)] hover:bg-[#00d97e]"
+            >
+              Assinar o NutriSaude
+              <ArrowRight className="size-5" />
+            </button>
+          </a>
+          <button
+            type="button"
+            onClick={onClose}
+            className="h-12 w-full rounded-[1rem] border border-slate-200 bg-white text-sm font-semibold text-slate-500 hover:bg-slate-50"
+          >
+            Agora nao
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PremiumTabLock({ onUnlock }: { onUnlock: () => void }) {
+  return (
+    <button type="button" onClick={onUnlock} className="block w-full text-left">
       <div className="flex flex-col items-center gap-4 rounded-[1.9rem] bg-slate-900/90 px-6 py-12 text-center backdrop-blur-sm">
         <div className="flex size-14 items-center justify-center rounded-full bg-primary/15">
           <LockKeyhole className="size-7 text-primary" />
@@ -112,7 +159,7 @@ function PremiumTabLock() {
           </p>
         </div>
       </div>
-    </a>
+    </button>
   );
 }
 

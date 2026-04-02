@@ -854,22 +854,30 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
           </div>
         ) : null}
 
-        {activeTab === "semana" ? <PlanWeekView /> : null}
-
-        {activeTab === "progresso" ? (
-          <PlanProgressView
-            profile={profile}
-            weightHistory={weightHistory}
-            weightInput={weightInput}
-            feedback={feedback}
-            onWeightInputChange={setWeightInput}
-            onSaveWeight={saveWeight}
-          />
+        {activeTab === "semana" ? (
+          isPremium ? <PlanWeekView /> : <PremiumTabLock />
         ) : null}
 
-        {activeTab === "ingredientes" ? <PlanIngredientsView profile={profile} /> : null}
+        {activeTab === "progresso" ? (
+          isPremium ? (
+            <PlanProgressView
+              profile={profile}
+              weightHistory={weightHistory}
+              weightInput={weightInput}
+              feedback={feedback}
+              onWeightInputChange={setWeightInput}
+              onSaveWeight={saveWeight}
+            />
+          ) : <PremiumTabLock />
+        ) : null}
 
-        {activeTab === "saude" ? <PlanHealthView healthData={healthData} /> : null}
+        {activeTab === "ingredientes" ? (
+          isPremium ? <PlanIngredientsView profile={profile} /> : <PremiumTabLock />
+        ) : null}
+
+        {activeTab === "saude" ? (
+          isPremium ? <PlanHealthView healthData={healthData} /> : <PremiumTabLock />
+        ) : null}
 
         <div className="flex justify-center gap-3 pt-2">
           <Link href="/onboarding">

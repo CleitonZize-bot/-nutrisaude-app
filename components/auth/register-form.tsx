@@ -15,6 +15,7 @@ import {
 } from "@/lib/pocketbase";
 
 export function RegisterForm() {
+  const router = useRouter();
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");

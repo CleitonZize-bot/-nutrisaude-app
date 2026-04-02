@@ -972,6 +972,10 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
           </Button>
         </div>
       </div>
+
+      {showSubscribeModal ? (
+        <SubscribeModal onClose={() => setShowSubscribeModal(false)} />
+      ) : null}
     </main>
   );
 }

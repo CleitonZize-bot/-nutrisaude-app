@@ -88,6 +88,31 @@ type GeneratedPlan = {
   refeicoes: Meal[];
 };
 
+function PremiumTabLock() {
+  return (
+    <a
+      href={process.env.NEXT_PUBLIC_SUBSCRIBE_URL || "#"}
+      target="_blank"
+      rel="noreferrer"
+      className="block"
+    >
+      <div className="flex flex-col items-center gap-4 rounded-[1.9rem] bg-slate-900/90 px-6 py-12 text-center backdrop-blur-sm">
+        <div className="flex size-14 items-center justify-center rounded-full bg-primary/15">
+          <LockKeyhole className="size-7 text-primary" />
+        </div>
+        <div className="flex flex-col gap-2">
+          <p className="nutri-title text-2xl font-black text-white">
+            Clique para desbloquear
+          </p>
+          <p className="text-sm text-white/70">
+            Receitas, cardapios e todas as funcoes do aplicativo
+          </p>
+        </div>
+      </div>
+    </a>
+  );
+}
+
 const HEALTH_MESSAGES: Record<string, { titulo: string; texto: string }> = {
   esteatose: {
     titulo: "Esteatose Hepatica",

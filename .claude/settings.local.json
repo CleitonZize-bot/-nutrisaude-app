@@ -15,7 +15,9 @@
       "WebFetch(domain:help.dinamize.com)",
       "WebFetch(domain:ajuda.notificacoesinteligentes.com)",
       "WebFetch(domain:pluga.zendesk.com)",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ]
   },
   "hooks": {

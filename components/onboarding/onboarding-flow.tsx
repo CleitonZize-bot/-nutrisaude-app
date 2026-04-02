@@ -552,7 +552,13 @@ export function OnboardingFlow() {
                             ativo || feito ? "bg-primary text-primary-foreground" : "bg-slate-200 text-slate-500"
                           }`}
                         >
-                          {feito ? "✓" : "⏳"}
+                          {feito ? (
+                            <Check className="size-4" />
+                          ) : ativo ? (
+                            <Loader2 className="size-4 animate-spin" />
+                          ) : (
+                            <span className="text-xs">{index + 1}</span>
+                          )}
                         </div>
                         <span className="text-lg font-medium">{passo}</span>
                       </div>

@@ -232,7 +232,9 @@ function recomputeMeal(meal: Meal, items: MealItem[]): Meal {
   };
 }
 
-export function TodayPlan({ isNewPlan = false }: { isNewPlan?: boolean }) {
+const subscribeUrl = process.env.NEXT_PUBLIC_SUBSCRIBE_URL || "#";
+
+export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?: boolean; isPremium?: boolean }) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabKey>("hoje");
   const [openMeals, setOpenMeals] = useState<Record<string, boolean>>({

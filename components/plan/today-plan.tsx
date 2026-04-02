@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import {
   Activity,
   Apple,
+  ArrowRight,
   CalendarDays,
   CalendarRange,
   CheckCircle2,
@@ -15,6 +16,7 @@ import {
   Pill,
   RefreshCw,
   ShieldAlert,
+  X,
 } from "lucide-react";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";

@@ -743,89 +743,109 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
                   </CardHeader>
 
                   {isOpen ? (
-                    <CardContent className="flex flex-col gap-4 px-5 pb-5 sm:px-6 sm:pb-6">
-                      {hasAlert ? (
-                        <Alert className="rounded-[1rem] border-red-200 bg-red-50 text-red-700">
-                          <ShieldAlert />
-                          <AlertTitle>Atencao nesta refeicao</AlertTitle>
-                          <AlertDescription>
-                            Esta refeicao contem alimentos que pedem atencao para sua condicao de saude.
-                          </AlertDescription>
-                        </Alert>
-                      ) : null}
+                    <CardContent className="relative flex flex-col gap-4 px-5 pb-5 sm:px-6 sm:pb-6">
+                      <div className={isPremium ? undefined : "pointer-events-none select-none blur-sm"}>
+                        {hasAlert ? (
+                          <Alert className="mb-4 rounded-[1rem] border-red-200 bg-red-50 text-red-700">
+                            <ShieldAlert />
+                            <AlertTitle>Atencao nesta refeicao</AlertTitle>
+                            <AlertDescription>
+                              Esta refeicao contem alimentos que pedem atencao para sua condicao de saude.
+                            </AlertDescription>
+                          </Alert>
+                        ) : null}
 
-                      <div className="space-y-4">
-                        {meal.itens.map((item, itemIndex) => {
-                          const alert = verificarAlerta(item.nome, profile.condicoes);
-                          const substitutions =
-                            item.grupoId && item.indiceNoGrupo !== undefined
-                              ? obterSubstituicoes(item.grupoId, item.indiceNoGrupo)
-                              : [];
+                        <div className="space-y-4">
+                          {meal.itens.map((item, itemIndex) => {
+                            const alert = verificarAlerta(item.nome, profile.condicoes);
+                            const substitutions =
+                              item.grupoId && item.indiceNoGrupo !== undefined
+                                ? obterSubstituicoes(item.grupoId, item.indiceNoGrupo)
+                                : [];
 
-                          return (
-                            <div
-                              key={`${meal.chave}-${itemIndex}`}
-                              className="border-b border-slate-100 pb-4 last:border-b-0 last:pb-0"
-                            >
-                              <div className="flex flex-col gap-3">
-                                <div className="flex items-start justify-between gap-3">
-                                  <div className="min-w-0">
-                                    <p className="text-[1.04rem] font-medium text-slate-900">
-                                      {item.nome}
+                            return (
+                              <div
+                                key={`${meal.chave}-${itemIndex}`}
+                                className="border-b border-slate-100 pb-4 last:border-b-0 last:pb-0"
+                              >
+                                <div className="flex flex-col gap-3">
+                                  <div className="flex items-start justify-between gap-3">
+                                    <div className="min-w-0">
+                                      <p className="text-[1.04rem] font-medium text-slate-900">
+                                        {item.nome}
+                                      </p>
+                                    </div>
+                                    <p className="shrink-0 text-[1.04rem] font-medium text-emerald-500">
+                                      {item.quantidade}
                                     </p>
                                   </div>
-                                  <p className="shrink-0 text-[1.04rem] font-medium text-emerald-500">
-                                    {item.quantidade}
-                                  </p>
+
+                                  <Button
+                                    type="button"
+                                    variant="outline"
+                                    className="h-10 rounded-full border-amber-200 bg-white text-amber-600 hover:bg-amber-50 hover:text-amber-700"
+                                  >
+                                    Como preparar
+                                  </Button>
+
+                                  {alert ? (
+                                    <p className="text-sm leading-6 text-red-500">{alert}</p>
+                                  ) : null}
+
+                                  {substitutions.length > 0 ? (
+                                    <div className="flex flex-wrap gap-2">
+                                      {substitutions.slice(0, 4).map((sub) => (
+                                        <Button
+                                          key={`${item.nome}-${sub.indice}`}
+                                          type="button"
+                                          variant="outline"
+                                          size="sm"
+                                          className="rounded-full border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
+                                          onClick={() =>
+                                            replaceItem(meal.chave, itemIndex, item.grupoId!, sub.indice)
+                                          }
+                                        >
+                                          {sub.nome}
+                                        </Button>
+                                      ))}
+                                    </div>
+                                  ) : null}
                                 </div>
-
-                                <Button
-                                  type="button"
-                                  variant="outline"
-                                  className="h-10 rounded-full border-amber-200 bg-white text-amber-600 hover:bg-amber-50 hover:text-amber-700"
-                                >
-                                  Como preparar
-                                </Button>
-
-                                {alert ? (
-                                  <p className="text-sm leading-6 text-red-500">{alert}</p>
-                                ) : null}
-
-                                {substitutions.length > 0 ? (
-                                  <div className="flex flex-wrap gap-2">
-                                    {substitutions.slice(0, 4).map((sub) => (
-                                      <Button
-                                        key={`${item.nome}-${sub.indice}`}
-                                        type="button"
-                                        variant="outline"
-                                        size="sm"
-                                        className="rounded-full border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
-                                        onClick={() =>
-                                          replaceItem(meal.chave, itemIndex, item.grupoId!, sub.indice)
-                                        }
-                                      >
-                                        {sub.nome}
-                                      </Button>
-                                    ))}
-                                  </div>
-                                ) : null}
                               </div>
-                            </div>
-                          );
-                        })}
+                            );
+                          })}
+                        </div>
+
+                        <div className="flex flex-wrap gap-2">
+                          <Badge className="rounded-full bg-blue-50 px-3 py-1 text-blue-600 hover:bg-blue-50">
+                            {meal.macros.proteina}g proteina
+                          </Badge>
+                          <Badge className="rounded-full bg-amber-50 px-3 py-1 text-amber-600 hover:bg-amber-50">
+                            {meal.macros.carbo}g carb.
+                          </Badge>
+                          <Badge className="rounded-full bg-rose-50 px-3 py-1 text-rose-600 hover:bg-rose-50">
+                            {meal.macros.gordura}g gordura
+                          </Badge>
+                        </div>
                       </div>
 
-                      <div className="flex flex-wrap gap-2">
-                        <Badge className="rounded-full bg-blue-50 px-3 py-1 text-blue-600 hover:bg-blue-50">
-                          {meal.macros.proteina}g proteina
-                        </Badge>
-                        <Badge className="rounded-full bg-amber-50 px-3 py-1 text-amber-600 hover:bg-amber-50">
-                          {meal.macros.carbo}g carb.
-                        </Badge>
-                        <Badge className="rounded-full bg-rose-50 px-3 py-1 text-rose-600 hover:bg-rose-50">
-                          {meal.macros.gordura}g gordura
-                        </Badge>
-                      </div>
+                      {!isPremium ? (
+                        <a
+                          href={subscribeUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="absolute inset-x-4 bottom-4 top-4 flex items-center justify-center"
+                        >
+                          <div className="w-full rounded-[1.2rem] bg-slate-900/90 px-6 py-5 text-center backdrop-blur-sm">
+                            <p className="nutri-title text-lg font-black text-white">
+                              Clique para desbloquear
+                            </p>
+                            <p className="mt-1 text-sm text-white/70">
+                              Receitas, cardapios e todas as funcoes do aplicativo
+                            </p>
+                          </div>
+                        </a>
+                      ) : null}
                     </CardContent>
                   ) : null}
                 </Card>

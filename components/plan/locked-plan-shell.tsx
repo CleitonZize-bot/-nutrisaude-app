@@ -128,7 +128,7 @@ export function LockedPlanShell() {
   }, [router]);
 
   if (status === "unlocked") {
-    return <TodayPlan />;
+    return <TodayPlan isPremium={true} />;
   }
 
   if (status === "loading") {

@@ -127,6 +127,10 @@ export function LockedPlanShell() {
     void verificarAcesso();
   }, [router]);
 
+  if (status === "unlocked") {
+    return <TodayPlan />;
+  }
+
   if (status === "loading") {
     return (
       <main className="nutri-page-bg flex min-h-screen items-center justify-center px-5 text-white">

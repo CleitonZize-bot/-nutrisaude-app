@@ -1,0 +1,535 @@
+"use client";
+
+import { startTransition, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { CircleAlert } from "lucide-react";
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Field, FieldContent, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import {
+  carregarDadosLocais,
+  pbCarregarPerfilServidor,
+  pbSalvarPerfil,
+  salvarPerfilLocal,
+  type NutrisaudeProfile,
+} from "@/lib/pocketbase";
+
+const OBJETIVOS = [
+  {
+    value: "emagrecer",
+    icon: "⚖️",
+    title: "Emagrecer",
+    description: "Reduzir gordura corporal com deficit calorico controlado.",
+  },
+  {
+    value: "massa",
+    icon: "💪",
+    title: "Ganhar massa muscular",
+    description: "Aumentar a massa magra com superavit calorico e proteina adequada.",
+  },
+  {
+    value: "manter",
+    icon: "🎯",
+    title: "Manter o peso",
+    description: "Manter o peso atual com uma alimentacao equilibrada.",
+  },
+];
+
+const CONDICOES = [
+  {
+    value: "esteatose",
+    icon: "🫀",
+    title: "Esteatose Hepatica",
+    description: "Evitar gorduras saturadas, acucar e alcool.",
+  },
+  {
+    value: "diabetes",
+    icon: "🩸",
+    title: "Diabetes",
+    description: "Controle de glicemia e menos carboidratos refinados.",
+  },
+  {
+    value: "hipertensao",
+    icon: "💓",
+    title: "Hipertensao",
+    description: "Reduzir sodio, embutidos e industrializados.",
+  },
+  {
+    value: "colesterol",
+    icon: "🫁",
+    title: "Colesterol alto",
+    description: "Priorizar fibras e reduzir gorduras trans e saturadas.",
+  },
+  {
+    value: "gastrite",
+    icon: "🫃",
+    title: "Gastrite / Refluxo",
+    description: "Evitar alimentos acidos, condimentados e frituras.",
+  },
+  {
+    value: "lactose",
+    icon: "🥛",
+    title: "Intolerancia a lactose",
+    description: "Evitar leite e derivados com lactose.",
+  },
+  {
+    value: "celiaca",
+    icon: "🌾",
+    title: "Doenca celiaca / gluten",
+    description: "Evitar trigo, cevada e centeio.",
+  },
+  {
+    value: "anemia",
+    icon: "💊",
+    title: "Anemia",
+    description: "Priorizar ferro e vitamina C.",
+  },
+];
+
+const CALCULO_PASSOS = [
+  "Analisando seu perfil",
+  "Calculando calorias e macros",
+  "Selecionando alimentos ideais",
+  "Verificando restricoes de saude",
+  "Montando seu cardapio",
+];
+
+type Step = 1 | 2 | 3 | 4;
+
+export function OnboardingFlow() {
+  const router = useRouter();
+  const [step, setStep] = useState<Step>(1);
+  const [erro, setErro] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [passoAtivo, setPassoAtivo] = useState(-1);
+
+  const [nome, setNome] = useState("");
+  const [peso, setPeso] = useState("");
+  const [altura, setAltura] = useState("");
+  const [idade, setIdade] = useState("");
+  const [sexo, setSexo] = useState("");
+  const [objetivo, setObjetivo] = useState("");
+  const [condicoes, setCondicoes] = useState<string[]>([]);
+
+  useEffect(() => {
+    async function preencher() {
+      const perfilServidor = await pbCarregarPerfilServidor();
+      const local = carregarDadosLocais()?.perfil;
+      const perfil = perfilServidor || local;
+
+      if (!perfil) return;
+
+      setNome(perfil.nome || "");
+      setPeso(perfil.peso ? String(perfil.peso) : "");
+      setAltura(perfil.altura ? String(perfil.altura) : "");
+      setIdade(perfil.idade ? String(perfil.idade) : "");
+      setSexo(perfil.sexo || "");
+      setObjetivo(perfil.objetivo || "");
+      setCondicoes(
+        perfil.condicoes && perfil.condicoes[0] !== "nenhum" ? perfil.condicoes : []
+      );
+    }
+
+    preencher();
+  }, []);
+
+  useEffect(() => {
+    if (step !== 4) return;
+
+    const timers = CALCULO_PASSOS.map((_, index) =>
+      window.setTimeout(() => {
+        setPassoAtivo(index);
+        setProgress(Math.round(((index + 1) / CALCULO_PASSOS.length) * 100));
+      }, 320 + index * 340)
+    );
+
+    const redirectTimer = window.setTimeout(() => {
+      startTransition(() => {
+        router.push("/plano");
+      });
+    }, 2400);
+
+    return () => {
+      timers.forEach((timer) => window.clearTimeout(timer));
+      window.clearTimeout(redirectTimer);
+    };
+  }, [router, step]);
+
+  function validarDadosBasicos() {
+    if (!nome.trim() || !peso || !altura || !idade || !sexo) {
+      setErro("Preencha todos os campos para continuar.");
+      return false;
+    }
+
+    return true;
+  }
+
+  function irParaObjetivo() {
+    setErro("");
+    if (!validarDadosBasicos()) return;
+    setStep(2);
+  }
+
+  function irParaSaude() {
+    if (!objetivo) {
+      setErro("Escolha um objetivo para continuar.");
+      return;
+    }
+
+    setErro("");
+    setStep(3);
+  }
+
+  function toggleCondicao(valor: string, checked: boolean) {
+    setCondicoes((current) => {
+      if (checked) {
+        return current.includes(valor) ? current : [...current, valor];
+      }
+
+      return current.filter((item) => item !== valor);
+    });
+  }
+
+  async function finalizar() {
+    setErro("");
+
+    const perfil: NutrisaudeProfile = {
+      nome: nome.trim(),
+      peso: Number(peso),
+      altura: Number(altura),
+      idade: Number(idade),
+      sexo,
+      objetivo,
+      condicoes: condicoes.length > 0 ? condicoes : ["nenhum"],
+    };
+
+    setLoading(true);
+
+    try {
+      salvarPerfilLocal(perfil);
+      await pbSalvarPerfil(perfil);
+      setStep(4);
+    } catch {
+      setErro("Nao foi possivel salvar seus dados agora. Tente novamente.");
+      setLoading(false);
+    }
+  }
+
+  return (
+    <main className="relative min-h-screen overflow-hidden bg-[#eef4f9] px-4 py-8 text-slate-900 sm:px-6 lg:px-8">
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,rgba(0,196,114,0.14),transparent_26%),linear-gradient(180deg,#eef4f9_0%,#edf4ef_100%)]" />
+      <div className="mx-auto max-w-4xl">
+        <Card className="nutri-surface rounded-[2rem] border border-slate-200/80 py-0 ring-1 ring-white/70">
+          <CardHeader className="gap-4 border-b border-slate-100/90 px-6 py-6 sm:px-10 sm:py-8">
+            <div className="flex items-center gap-3">
+              <div className="flex size-11 items-center justify-center rounded-full bg-primary/15 text-xl ring-1 ring-primary/20">
+                <span aria-hidden="true">🥗</span>
+              </div>
+              <div>
+                <p className="nutri-title text-xl font-extrabold tracking-tight text-slate-900">NutriSaude</p>
+                <p className="text-sm text-slate-500">Questionario do seu plano personalizado</p>
+              </div>
+            </div>
+
+            {step !== 4 ? (
+              <div className="flex flex-col gap-3">
+                <Progress value={(step / 4) * 100} className="w-full" />
+                <p className="text-sm font-medium text-slate-500">Passo {step} de 4</p>
+              </div>
+            ) : null}
+          </CardHeader>
+
+          <CardContent className="px-6 py-8 sm:px-10 sm:py-10">
+            {erro ? (
+              <Alert variant="destructive" className="mb-6">
+                <CircleAlert />
+                <AlertTitle>Algo precisa ser corrigido</AlertTitle>
+                <AlertDescription>{erro}</AlertDescription>
+              </Alert>
+            ) : null}
+
+            {step === 1 ? (
+              <div className="flex flex-col gap-8">
+                <div className="flex flex-col gap-3">
+                  <CardTitle className="nutri-title text-4xl font-black tracking-tight text-slate-800">
+                    Seus dados
+                  </CardTitle>
+                  <CardDescription className="max-w-2xl text-lg leading-8 text-slate-500">
+                    Precisamos dessas informacoes para calcular suas necessidades nutricionais.
+                  </CardDescription>
+                </div>
+
+                <FieldGroup className="gap-6">
+                  <Field>
+                    <FieldLabel htmlFor="nome">Como voce se chama?</FieldLabel>
+                    <FieldContent>
+                      <Input
+                        id="nome"
+                        value={nome}
+                        onChange={(event) => setNome(event.target.value)}
+                        placeholder="Seu nome"
+                        className="h-16 rounded-2xl border-slate-200 bg-white px-6 text-xl"
+                      />
+                    </FieldContent>
+                  </Field>
+
+                  <div className="grid gap-6 md:grid-cols-2">
+                    <Field>
+                      <FieldLabel htmlFor="peso">Peso (kg)</FieldLabel>
+                      <FieldContent>
+                        <Input
+                          id="peso"
+                          type="number"
+                          value={peso}
+                          onChange={(event) => setPeso(event.target.value)}
+                          placeholder="Ex: 80"
+                          className="h-16 rounded-2xl border-slate-200 bg-white px-6 text-xl"
+                        />
+                      </FieldContent>
+                    </Field>
+
+                    <Field>
+                      <FieldLabel htmlFor="altura">Altura (cm)</FieldLabel>
+                      <FieldContent>
+                        <Input
+                          id="altura"
+                          type="number"
+                          value={altura}
+                          onChange={(event) => setAltura(event.target.value)}
+                          placeholder="Ex: 170"
+                          className="h-16 rounded-2xl border-slate-200 bg-white px-6 text-xl"
+                        />
+                      </FieldContent>
+                    </Field>
+                  </div>
+
+                  <div className="grid gap-6 md:grid-cols-2">
+                    <Field>
+                      <FieldLabel htmlFor="idade">Idade</FieldLabel>
+                      <FieldContent>
+                        <Input
+                          id="idade"
+                          type="number"
+                          value={idade}
+                          onChange={(event) => setIdade(event.target.value)}
+                          placeholder="Ex: 45"
+                          className="h-16 rounded-2xl border-slate-200 bg-white px-6 text-xl"
+                        />
+                      </FieldContent>
+                    </Field>
+
+                    <Field>
+                      <FieldLabel>Sexo</FieldLabel>
+                      <FieldContent>
+                        <ToggleGroup
+                          value={sexo ? [sexo] : []}
+                          onValueChange={(value) => setSexo(value[0] || "")}
+                          className="grid w-full grid-cols-2 gap-4"
+                        >
+                          <ToggleGroupItem
+                            value="masculino"
+                            className="h-16 rounded-2xl border border-slate-200 bg-white text-lg text-slate-800 data-[pressed]:border-primary data-[pressed]:bg-primary/10"
+                          >
+                            Masculino
+                          </ToggleGroupItem>
+                          <ToggleGroupItem
+                            value="feminino"
+                            className="h-16 rounded-2xl border border-slate-200 bg-white text-lg text-slate-800 data-[pressed]:border-primary data-[pressed]:bg-primary/10"
+                          >
+                            Feminino
+                          </ToggleGroupItem>
+                        </ToggleGroup>
+                      </FieldContent>
+                    </Field>
+                  </div>
+                </FieldGroup>
+
+                <Button
+                  type="button"
+                  size="lg"
+                  onClick={irParaObjetivo}
+                  className="h-16 rounded-2xl text-xl font-bold shadow-[0_20px_50px_rgba(0,196,114,0.22)]"
+                >
+                  Continuar
+                </Button>
+              </div>
+            ) : null}
+
+            {step === 2 ? (
+              <div className="flex flex-col gap-8">
+                <div className="flex flex-col gap-3">
+                  <CardTitle className="nutri-title text-4xl font-black tracking-tight text-slate-800">
+                    Qual e o seu objetivo?
+                  </CardTitle>
+                  <CardDescription className="max-w-2xl text-lg leading-8 text-slate-500">
+                    Escolha a opcao que melhor descreve o que voce quer alcancar.
+                  </CardDescription>
+                </div>
+
+                <div className="grid gap-4">
+                  {OBJETIVOS.map((item) => {
+                    const selecionado = objetivo === item.value;
+
+                    return (
+                      <button
+                        key={item.value}
+                        type="button"
+                        onClick={() => setObjetivo(item.value)}
+                        className={`rounded-[1.75rem] border px-6 py-6 text-left transition-all ${
+                          selecionado
+                            ? "border-primary bg-primary/8 shadow-lg shadow-primary/10"
+                            : "border-slate-200 bg-white hover:border-primary/40 hover:bg-primary/[0.03]"
+                        }`}
+                      >
+                        <div className="flex items-start gap-4">
+                          <div className="text-4xl">{item.icon}</div>
+                          <div className="flex flex-col gap-2">
+                            <p className="text-xl font-bold text-slate-800">{item.title}</p>
+                            <p className="text-base leading-7 text-slate-500">{item.description}</p>
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <div className="flex flex-col gap-3 sm:flex-row">
+                  <Button type="button" variant="outline" size="lg" className="h-14 rounded-2xl" onClick={() => setStep(1)}>
+                    Voltar
+                  </Button>
+                  <Button type="button" size="lg" className="h-14 rounded-2xl text-lg font-bold" onClick={irParaSaude}>
+                    Continuar
+                  </Button>
+                </div>
+              </div>
+            ) : null}
+
+            {step === 3 ? (
+              <div className="flex flex-col gap-8">
+                <div className="flex flex-col gap-3">
+                  <CardTitle className="nutri-title text-4xl font-black tracking-tight text-slate-800">
+                    Voce tem alguma condicao de saude?
+                  </CardTitle>
+                  <CardDescription className="max-w-3xl text-lg leading-8 text-slate-500">
+                    Pode selecionar mais de uma. Usaremos isso para adaptar seu plano e alertar sobre alimentos prejudiciais.
+                  </CardDescription>
+                </div>
+
+                <div className="grid gap-4 md:grid-cols-2">
+                  {CONDICOES.map((item) => {
+                    const checked = condicoes.includes(item.value);
+
+                    return (
+                      <label
+                        key={item.value}
+                        className={`flex gap-4 rounded-[1.75rem] border px-5 py-5 transition-all ${
+                          checked
+                            ? "border-primary bg-primary/8 shadow-lg shadow-primary/10"
+                            : "border-slate-200 bg-white hover:border-primary/40 hover:bg-primary/[0.03]"
+                        }`}
+                      >
+                        <div className="pt-1">
+                          <Checkbox
+                            checked={checked}
+                            onCheckedChange={(value) => toggleCondicao(item.value, Boolean(value))}
+                          />
+                        </div>
+                        <div className="flex flex-1 gap-4">
+                          <div className="text-3xl">{item.icon}</div>
+                          <div className="flex flex-col gap-2">
+                            <p className="text-lg font-bold text-slate-800">{item.title}</p>
+                            <p className="text-sm leading-6 text-slate-500">{item.description}</p>
+                          </div>
+                        </div>
+                      </label>
+                    );
+                  })}
+                </div>
+
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="h-14 rounded-2xl border-dashed border-slate-300 text-base font-semibold"
+                  onClick={() => setCondicoes([])}
+                >
+                  Nenhuma das anteriores
+                </Button>
+
+                <div className="flex flex-col gap-3 sm:flex-row">
+                  <Button type="button" variant="outline" size="lg" className="h-14 rounded-2xl" onClick={() => setStep(2)}>
+                    Voltar
+                  </Button>
+                  <Button
+                    type="button"
+                    size="lg"
+                    disabled={loading}
+                    className="h-14 rounded-2xl text-lg font-bold"
+                    onClick={finalizar}
+                  >
+                    {loading ? "Gerando seu plano..." : "Gerar meu cardapio"}
+                  </Button>
+                </div>
+              </div>
+            ) : null}
+
+            {step === 4 ? (
+              <div className="flex flex-col items-center gap-8 px-2 py-6 text-center">
+                <div className="text-7xl">🧬</div>
+                <div className="flex flex-col gap-3">
+                  <CardTitle className="nutri-title text-4xl font-black tracking-tight text-slate-800">
+                    Calculando seu plano...
+                  </CardTitle>
+                  <CardDescription className="text-lg text-slate-500">
+                    Personalizando para o seu corpo
+                  </CardDescription>
+                </div>
+
+                <div className="w-full max-w-2xl">
+                  <Progress value={progress} className="w-full" />
+                </div>
+
+                <div className="flex w-full max-w-2xl flex-col gap-3">
+                  {CALCULO_PASSOS.map((passo, index) => {
+                    const ativo = index === passoAtivo;
+                    const feito = index < passoAtivo;
+
+                    return (
+                      <div
+                        key={passo}
+                        className={`flex items-center gap-4 rounded-2xl px-5 py-4 text-left transition-all ${
+                          ativo || feito ? "bg-primary/8 text-primary" : "text-slate-400"
+                        }`}
+                      >
+                        <div
+                          className={`flex size-9 items-center justify-center rounded-full text-sm font-bold ${
+                            ativo || feito ? "bg-primary text-primary-foreground" : "bg-slate-200 text-slate-500"
+                          }`}
+                        >
+                          {feito ? "✓" : "⏳"}
+                        </div>
+                        <span className="text-lg font-medium">{passo}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : null}
+          </CardContent>
+        </Card>
+      </div>
+    </main>
+  );
+}

@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#080f14" />
+  <title>NutriSaúde — Plano Personalizado</title>
+  <link rel="stylesheet" href="css/style.css?v=11" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.svg" />
+  <link rel="icon" href="icons/icon-192.svg" type="image/svg+xml" />
+</head>
+<body>
+
+  <!-- ============================================================
+       TELA 0 — AUTENTICAÇÃO (Login / Cadastro)
+  ============================================================ -->
+  <div id="tela-auth" class="tela ativa">
+    <div class="auth-wrapper">
+
+      <div class="auth-logo">
+        <span class="auth-logo-icon">🥗</span>
+        <span class="auth-logo-nome">NutriSaúde</span>
+      </div>
+
+      <!-- Login -->
+      <div id="auth-login" class="auth-card">
+        <h2>Entrar na conta</h2>
+        <p class="auth-sub">Seus dados ficam salvos no servidor</p>
+        <div class="campo">
+          <label>E-mail</label>
+          <input type="email" id="auth-email" placeholder="seu@email.com" autocomplete="email"
+            onkeydown="if(event.key==='Enter') fazerLogin()" />
+        </div>
+        <div class="campo">
+          <label>Senha</label>
+          <input type="password" id="auth-senha" placeholder="Sua senha" autocomplete="current-password"
+            onkeydown="if(event.key==='Enter') fazerLogin()" />
+        </div>
+        <div id="auth-erro" class="auth-erro escondido"></div>
+        <button class="btn-primario" onclick="fazerLogin()">Entrar →</button>
+        <p class="auth-link">Não tem conta? <button class="btn-link auth-btn-link" onclick="mostrarRegistro()">Criar conta grátis</button></p>
+      </div>
+
+      <!-- Cadastro -->
+      <div id="auth-registro" class="auth-card escondido">
+        <h2>Criar conta</h2>
+        <p class="auth-sub">É gratuito — seus dados ficam no servidor</p>
+        <div class="campo">
+          <label>Seu nome</label>
+          <input type="text" id="auth-nome" placeholder="Como quer ser chamado?" autocomplete="name" />
+        </div>
+        <div class="campo">
+          <label>E-mail</label>
+          <input type="email" id="auth-email-reg" placeholder="seu@email.com" autocomplete="email" />
+        </div>
+        <div class="campo">
+          <label>Senha</label>
+          <input type="password" id="auth-senha-reg" placeholder="Mínimo 8 caracteres" autocomplete="new-password"
+            onkeydown="if(event.key==='Enter') fazerRegistro()" />
+        </div>
+        <div id="auth-erro-reg" class="auth-erro escondido"></div>
+        <button class="btn-primario" onclick="fazerRegistro()">Criar conta →</button>
+        <p class="auth-link">Já tem conta? <button class="btn-link auth-btn-link" onclick="mostrarLogin()">Entrar</button></p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================================
+       TELA 1 — BOAS-VINDAS
+  ============================================================ -->
+  <div id="tela-boas-vindas" class="tela">
+
+    <!-- Círculos decorativos de fundo -->
+    <div class="bv-bg-circle bv-circle1"></div>
+    <div class="bv-bg-circle bv-circle2"></div>
+    <div class="bv-bg-circle bv-circle3"></div>
+
+    <div class="bv-hero">
+
+      <!-- Topo: logo + badge -->
+      <div class="bv-topo">
+        <div class="bv-logo">
+          <span class="bv-logo-icone">🥗</span>
+          <span class="bv-logo-nome">NutriSaúde</span>
+        </div>
+        <span class="bv-badge">✦ IA Nutricional</span>
+      </div>
+
+      <!-- Título principal -->
+      <div class="bv-centro">
+        <h1 class="bv-titulo">
+          Seu cardápio<br>
+          <span class="bv-titulo-destaque">personalizado</span><br>
+          para sua saúde
+        </h1>
+        <p class="bv-subtitulo">
+          Calculado para o seu corpo. Adaptado à sua condição.<br>
+          Diferente todo dia.
+        </p>
+      </div>
+
+      <!-- Banner de perfil salvo -->
+      <div id="banner-perfil-salvo" class="banner-perfil escondido">
+        <p>👋 Olá, <strong id="banner-nome"></strong>! Seu perfil está salvo.</p>
+        <div class="banner-botoes">
+          <button class="btn-primario" onclick="continuarComPerfilSalvo()">Continuar com meu perfil →</button>
+          <button class="btn-link" onclick="ignorarPerfilSalvo()">Criar novo perfil</button>
+        </div>
+      </div>
+
+      <!-- Botão de ação -->
+      <button class="btn-comecar" onclick="irPara('tela-dados')" id="btn-comecar">
+        Criar meu plano grátis
+        <span class="btn-comecar-seta">→</span>
+      </button>
+
+      <!-- Stats -->
+      <div class="bv-stats">
+        <div class="bv-stat">
+          <span class="bv-stat-num">6</span>
+          <span class="bv-stat-txt">refeições/dia</span>
+        </div>
+        <div class="bv-stat-div"></div>
+        <div class="bv-stat">
+          <span class="bv-stat-num">120+</span>
+          <span class="bv-stat-txt">alimentos</span>
+        </div>
+        <div class="bv-stat-div"></div>
+        <div class="bv-stat">
+          <span class="bv-stat-num">8</span>
+          <span class="bv-stat-txt">condições de saúde</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================================
+       TELA 2 — DADOS PESSOAIS
+  ============================================================ -->
+  <div id="tela-dados" class="tela">
+    <div class="container">
+      <div class="progresso"><div class="progresso-barra" style="width: 25%"></div></div>
+      <p class="passo-label">Passo 1 de 4</p>
+      <h2 class="tela-titulo">Seus dados</h2>
+      <p class="tela-subtitulo">Precisamos dessas informações para calcular suas necessidades nutricionais.</p>
+
+      <form id="form-dados" class="formulario" onsubmit="submitDados(event)">
+        <div class="campo">
+          <label for="nome">Como você se chama?</label>
+          <input type="text" id="nome" placeholder="Seu nome" required />
+        </div>
+        <div class="campos-lado-a-lado">
+          <div class="campo">
+            <label for="peso">Peso (kg)</label>
+            <input type="number" id="peso" placeholder="Ex: 80" min="30" max="300" step="0.1" required />
+          </div>
+          <div class="campo">
+            <label for="altura">Altura (cm)</label>
+            <input type="number" id="altura" placeholder="Ex: 170" min="100" max="250" required />
+          </div>
+        </div>
+        <div class="campos-lado-a-lado">
+          <div class="campo">
+            <label for="idade">Idade</label>
+            <input type="number" id="idade" placeholder="Ex: 45" min="10" max="100" required />
+          </div>
+          <div class="campo">
+            <label>Sexo</label>
+            <div class="opcoes-sexo">
+              <label class="opcao-radio">
+                <input type="radio" name="sexo" value="masculino" required />
+                <span>Masculino</span>
+              </label>
+              <label class="opcao-radio">
+                <input type="radio" name="sexo" value="feminino" />
+                <span>Feminino</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn-primario">Continuar →</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       TELA 3 — OBJETIVO
+  ============================================================ -->
+  <div id="tela-objetivo" class="tela">
+    <div class="container">
+      <div class="progresso"><div class="progresso-barra" style="width: 50%"></div></div>
+      <p class="passo-label">Passo 2 de 4</p>
+      <h2 class="tela-titulo">Qual é o seu objetivo?</h2>
+      <p class="tela-subtitulo">Escolha a opção que melhor descreve o que você quer alcançar.</p>
+
+      <div class="cards-objetivo">
+        <div class="card-objetivo" onclick="selecionarObjetivo('emagrecer', this)">
+          <div class="card-icone">⚖️</div>
+          <h3>Emagrecer</h3>
+          <p>Reduzir gordura corporal com déficit calórico controlado</p>
+        </div>
+        <div class="card-objetivo" onclick="selecionarObjetivo('massa', this)">
+          <div class="card-icone">💪</div>
+          <h3>Ganhar massa muscular</h3>
+          <p>Aumentar a massa magra com superávit calórico e proteína adequada</p>
+        </div>
+        <div class="card-objetivo" onclick="selecionarObjetivo('manter', this)">
+          <div class="card-icone">🎯</div>
+          <h3>Manter o peso</h3>
+          <p>Manter o peso atual com uma alimentação equilibrada</p>
+        </div>
+      </div>
+
+      <button class="btn-primario" id="btn-continuar-objetivo" onclick="irPara('tela-saude')" disabled>
+        Continuar →
+      </button>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       TELA 4 — SAÚDE
+  ============================================================ -->
+  <div id="tela-saude" class="tela">
+    <div class="container">
+      <div class="progresso"><div class="progresso-barra" style="width: 75%"></div></div>
+      <p class="passo-label">Passo 3 de 4</p>
+      <h2 class="tela-titulo">Você tem alguma condição de saúde?</h2>
+      <p class="tela-subtitulo">Pode selecionar <strong>mais de uma</strong>. Usaremos isso para alertar sobre alimentos prejudiciais e adaptar seu cardápio.</p>
+
+      <div class="cards-saude">
+        <div class="card-saude" data-condicao="esteatose" onclick="toggleCondicao('esteatose', this)">
+          <div class="card-icone">🫀</div>
+          <div class="card-saude-texto"><h3>Esteatose Hepática</h3><p>Gordura no fígado — evitar gorduras saturadas, açúcar e álcool</p></div>
+          <span class="card-check">✓</span>
+        </div>
+        <div class="card-saude" data-condicao="diabetes" onclick="toggleCondicao('diabetes', this)">
+          <div class="card-icone">🩸</div>
+          <div class="card-saude-texto"><h3>Diabetes</h3><p>Controle de glicemia — evitar açúcares e carboidratos refinados</p></div>
+          <span class="card-check">✓</span>
+        </div>
+        <div class="card-saude" data-condicao="hipertensao" onclick="toggleCondicao('hipertensao', this)">
+          <div class="card-icone">💓</div>
+          <div class="card-saude-texto"><h3>Hipertensão</h3><p>Pressão alta — reduzir sódio, embutidos e alimentos industrializados</p></div>
+          <span class="card-check">✓</span>
+        </div>
+        <div class="card-saude" data-condicao="colesterol" onclick="toggleCondicao('colesterol', this)">
+          <div class="card-icone">🫁</div>
+          <div class="card-saude-texto"><h3>Colesterol Alto</h3><p>Dislipidemia — evitar gorduras trans e saturadas, priorizar fibras</p></div>
+          <span class="card-check">✓</span>
+        </div>
+        <div class="card-saude" data-condicao="gastrite" onclick="toggleCondicao('gastrite', this)">
+          <div class="card-icone">🫃</div>
+          <div class="card-saude-texto"><h3>Gastrite / Refluxo</h3><p>Evitar alimentos ácidos, condimentados, café em excesso e frituras</p></div>
+          <span class="card-check">✓</span>
+        </div>
+        <div class="card-saude" data-condicao="lactose" onclick="toggleCondicao('lactose', this)">
+          <div class="card-icone">🥛</div>
+          <div class="card-saude-texto"><h3>Intolerância à Lactose</h3><p>Evitar leite e derivados com lactose</p></div>
+          <span class="card-check">✓</span>
+        </div>
+        <div class="card-saude" data-condicao="celiaca" onclick="toggleCondicao('celiaca', this)">
+          <div class="card-icone">🌾</div>
+          <div class="card-saude-texto"><h3>Doença Celíaca / Glúten</h3><p>Intolerância ao glúten — evitar trigo, cevada e centeio</p></div>
+          <span class="card-check">✓</span>
+        </div>
+        <div class="card-saude" data-condicao="anemia" onclick="toggleCondicao('anemia', this)">
+          <div class="card-icone">💊</div>
+          <div class="card-saude-texto"><h3>Anemia</h3><p>Deficiência de ferro — priorizar carnes, leguminosas e vitamina C</p></div>
+          <span class="card-check">✓</span>
+        </div>
+        <div class="card-saude card-nenhuma" data-condicao="nenhum" onclick="toggleCondicao('nenhum', this)">
+          <div class="card-icone">✅</div>
+          <div class="card-saude-texto"><h3>Nenhuma das anteriores</h3><p>Não tenho nenhuma condição de saúde específica no momento</p></div>
+          <span class="card-check">✓</span>
+        </div>
+      </div>
+
+      <button class="btn-primario" id="btn-continuar-saude" onclick="gerarCardapio()" disabled>
+        Gerar meu cardápio →
+      </button>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       TELA 4.5 — CARREGANDO
+  ============================================================ -->
+  <div id="tela-calculando" class="tela">
+    <div class="calc-wrapper">
+      <div class="calc-emoji">🧬</div>
+      <h2 class="calc-titulo">Calculando seu plano...</h2>
+      <p class="calc-sub">Personalizando para o seu corpo</p>
+      <div class="calc-barra"><div class="calc-barra-fill" id="calc-barra-fill"></div></div>
+      <div class="calc-passos">
+        <div class="calc-passo" id="cp1"><span class="calc-passo-icone">⏳</span>Analisando seu perfil</div>
+        <div class="calc-passo" id="cp2"><span class="calc-passo-icone">⏳</span>Calculando calorias e macros</div>
+        <div class="calc-passo" id="cp3"><span class="calc-passo-icone">⏳</span>Selecionando alimentos ideais</div>
+        <div class="calc-passo" id="cp4"><span class="calc-passo-icone">⏳</span>Verificando restrições de saúde</div>
+        <div class="calc-passo" id="cp5"><span class="calc-passo-icone">⏳</span>Montando seu cardápio</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       TELA 5 — CARDÁPIO DO DIA
+  ============================================================ -->
+  <div id="tela-cardapio" class="tela">
+    <div class="container container-largo">
+
+      <!-- Cabeçalho -->
+      <div class="cardapio-header">
+        <div class="cardapio-saudacao">
+          <span>Olá, <strong id="exibe-nome"></strong>! 👋</span>
+          <p id="exibe-data" class="cardapio-data"></p>
+          <p id="exibe-dados-usuario"></p>
+        </div>
+        <div class="cardapio-meta">
+          <div class="meta-item">
+            <span class="meta-numero" id="exibe-calorias">—</span>
+            <span class="meta-label">kcal/dia</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-numero" id="exibe-proteina">—</span>
+            <span class="meta-label">g proteína</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-numero" id="exibe-carbo">—</span>
+            <span class="meta-label">g carboidrato</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-numero" id="exibe-gordura">—</span>
+            <span class="meta-label">g gordura</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alerta de saúde -->
+      <div id="area-assinatura-bloqueada" class="area-assinatura-bloqueada">
+      <div id="alerta-saude" class="alerta-saude escondido">
+        <span class="alerta-icone">⚠️</span>
+        <div>
+          <strong id="alerta-titulo"></strong>
+          <p id="alerta-texto"></p>
+        </div>
+      </div>
+
+      <!-- TRACKER DE ÁGUA -->
+      <div class="agua-tracker">
+        <div class="agua-header">
+          <span class="agua-titulo">💧 Hidratação do dia</span>
+          <div class="agua-header-right">
+            <span id="agua-meta-texto">Meta: —</span>
+            <span id="agua-emoji">😅</span>
+            <button class="btn-agua-zerar" onclick="zerarAgua()" title="Zerar">↺</button>
+          </div>
+        </div>
+        <div class="agua-barra-container">
+          <div class="agua-barra-fill" id="agua-fill"></div>
+          <span class="agua-barra-texto">
+            <span id="agua-consumido">0ml</span> / <span id="agua-total">—</span>
+            <strong id="agua-perc" class="agua-perc">0%</strong>
+          </span>
+        </div>
+        <div class="agua-botoes">
+          <button class="btn-agua" onclick="adicionarAgua(200)">+200ml</button>
+          <button class="btn-agua" onclick="adicionarAgua(350)">+350ml</button>
+          <button class="btn-agua btn-agua-destaque" onclick="adicionarAgua(500)">+500ml</button>
+          <button class="btn-agua btn-agua-remover" onclick="removerAgua(200)">-200ml</button>
+        </div>
+      </div>
+
+      <!-- Progresso do dia -->
+      <div class="dia-progresso-wrapper">
+        <div class="dia-progresso-header">
+          <span class="dia-progresso-label">📅 Progresso de hoje</span>
+          <span id="contador-checkins" class="dia-progresso-count">0/6</span>
+        </div>
+        <div class="dia-progresso-barra">
+          <div class="dia-progresso-fill" id="dia-progresso-fill"></div>
+        </div>
+        <div class="dia-progresso-dots" id="dia-progresso-dots"></div>
+      </div>
+
+      <!-- Abas -->
+      <div class="abas">
+        <button class="aba ativa" onclick="mostrarAba('cardapio', this)">🍽️ Hoje</button>
+        <button class="aba" onclick="mostrarAba('semana', this)">📅 Semana</button>
+        <button class="aba" onclick="mostrarAba('progresso', this)">📊 Progresso</button>
+        <button class="aba" onclick="mostrarAba('ingredientes', this)">🥕 Ingredientes</button>
+        <button class="aba" onclick="trocarAba('saude', this)">💊 Saúde</button>
+      </div>
+
+      <!-- Aba: Cardápio do dia -->
+      <div id="conteudo-cardapio" class="conteudo-aba">
+        <div id="lista-refeicoes" class="lista-refeicoes"></div>
+      </div>
+
+      <!-- Aba: Semana -->
+      <div id="conteudo-semana" class="conteudo-aba escondido"></div>
+
+      <!-- Aba: Progresso -->
+      <div id="conteudo-progresso" class="conteudo-aba escondido"></div>
+
+      <!-- Aba: Ingredientes -->
+      <div id="conteudo-ingredientes" class="conteudo-aba escondido">
+        <div class="ingredientes-form">
+          <h3>Quais ingredientes você tem em casa?</h3>
+          <p>Digite os ingredientes disponíveis e sugerimos receitas com eles.</p>
+
+          <div class="ingredientes-input-area">
+            <input type="text" id="input-ingrediente" placeholder="Ex: frango, brócolis, azeite..." />
+            <button onclick="adicionarIngrediente()">Adicionar</button>
+          </div>
+
+          <div id="lista-ingredientes-adicionados" class="tags-ingredientes"></div>
+
+          <div class="filtro-refeicao">
+            <p class="filtro-label">Receitas para qual refeição?</p>
+            <div class="filtro-refeicao-opcoes">
+              <button class="filtro-refeicao-btn ativo" onclick="setFiltroRefeicao('todas', this)">Todas</button>
+              <button class="filtro-refeicao-btn" onclick="setFiltroRefeicao('cafe', this)">☀️ Café</button>
+              <button class="filtro-refeicao-btn" onclick="setFiltroRefeicao('lanche', this)">🍎 Lanche</button>
+              <button class="filtro-refeicao-btn" onclick="setFiltroRefeicao('almoco', this)">🍽️ Almoço</button>
+              <button class="filtro-refeicao-btn" onclick="setFiltroRefeicao('jantar', this)">🌙 Jantar</button>
+              <button class="filtro-refeicao-btn" onclick="setFiltroRefeicao('ceia', this)">🌛 Ceia</button>
+            </div>
+          </div>
+
+          <button class="btn-primario" onclick="buscarReceitas()" id="btn-buscar-receitas" style="display:none">
+            🔍 Sugerir receitas
+          </button>
+        </div>
+        <div id="resultado-receitas" class="resultado-receitas escondido"></div>
+      </div>
+
+      <!-- Aba: Saúde -->
+      <div id="conteudo-saude" class="conteudo-aba escondido">
+        <!-- SEÇÃO: DIÁRIO DE SINTOMAS -->
+        <div class="saude-secao">
+          <div class="saude-secao-header">
+            <h3>📋 Diário de hoje</h3>
+            <span class="saude-data-hoje" id="diario-data"></span>
+          </div>
+
+          <div class="diario-grid">
+            <!-- Energia -->
+            <div class="diario-campo">
+              <label class="diario-label">⚡ Nível de energia</label>
+              <div class="emoji-scale" id="scale-energia">
+                <button class="emoji-btn" data-val="1" onclick="setEscala('energia',1,this)">😴</button>
+                <button class="emoji-btn" data-val="2" onclick="setEscala('energia',2,this)">😔</button>
+                <button class="emoji-btn" data-val="3" onclick="setEscala('energia',3,this)">😐</button>
+                <button class="emoji-btn" data-val="4" onclick="setEscala('energia',4,this)">😊</button>
+                <button class="emoji-btn" data-val="5" onclick="setEscala('energia',5,this)">🤩</button>
+              </div>
+            </div>
+            <!-- Desconforto hepático -->
+            <div class="diario-campo">
+              <label class="diario-label">🫀 Desconforto hepático</label>
+              <div class="emoji-scale" id="scale-figado">
+                <button class="emoji-btn" data-val="0" onclick="setEscala('figado',0,this)">✅ Nenhum</button>
+                <button class="emoji-btn" data-val="1" onclick="setEscala('figado',1,this)">😕 Leve</button>
+                <button class="emoji-btn" data-val="2" onclick="setEscala('figado',2,this)">😣 Moderado</button>
+                <button class="emoji-btn" data-val="3" onclick="setEscala('figado',3,this)">😫 Forte</button>
+              </div>
+            </div>
+            <!-- Inchaço/Digestão -->
+            <div class="diario-campo">
+              <label class="diario-label">🫃 Inchaço / Digestão</label>
+              <div class="emoji-scale" id="scale-inchaco">
+                <button class="emoji-btn" data-val="0" onclick="setEscala('inchaco',0,this)">✅ Ótima</button>
+                <button class="emoji-btn" data-val="1" onclick="setEscala('inchaco',1,this)">😕 Leve</button>
+                <button class="emoji-btn" data-val="2" onclick="setEscala('inchaco',2,this)">😣 Moderado</button>
+                <button class="emoji-btn" data-val="3" onclick="setEscala('inchaco',3,this)">😫 Forte</button>
+              </div>
+            </div>
+            <!-- Glicemia -->
+            <div class="diario-campo">
+              <label class="diario-label">🩸 Glicemia (opcional)</label>
+              <div class="diario-input-group">
+                <input type="number" id="diario-glicemia" placeholder="Ex: 95" min="40" max="600" />
+                <span class="diario-unidade">mg/dL</span>
+              </div>
+            </div>
+            <!-- Sono -->
+            <div class="diario-campo">
+              <label class="diario-label">😴 Qualidade do sono</label>
+              <div class="emoji-scale" id="scale-sono">
+                <button class="emoji-btn" data-val="1" onclick="setEscala('sono',1,this)">😫</button>
+                <button class="emoji-btn" data-val="2" onclick="setEscala('sono',2,this)">😔</button>
+                <button class="emoji-btn" data-val="3" onclick="setEscala('sono',3,this)">😐</button>
+                <button class="emoji-btn" data-val="4" onclick="setEscala('sono',4,this)">😊</button>
+                <button class="emoji-btn" data-val="5" onclick="setEscala('sono',5,this)">😍</button>
+              </div>
+            </div>
+            <!-- Notas -->
+            <div class="diario-campo diario-campo-full">
+              <label class="diario-label">📝 Observações do dia</label>
+              <textarea id="diario-notas" placeholder="Como foi seu dia? Algum alimento que comeu fora do plano? Sintomas específicos?" rows="3"></textarea>
+            </div>
+          </div>
+          <button class="btn-primario" onclick="salvarDiarioHoje()" style="margin-top:0.75rem">Salvar registro de hoje</button>
+
+          <!-- Histórico de sintomas -->
+          <div id="historico-diario-wrapper" class="historico-diario-wrapper escondido">
+            <h4>📈 Últimos 7 dias</h4>
+            <div id="historico-diario-lista"></div>
+          </div>
+        </div>
+
+        <!-- SEÇÃO: EXAMES -->
+        <div class="saude-secao">
+          <div class="saude-secao-header">
+            <h3>🔬 Meus Exames</h3>
+            <button class="btn-saude-add" onclick="abrirModalExame()">+ Adicionar</button>
+          </div>
+          <p class="saude-descricao">Registre seus resultados e acompanhe a evolução</p>
+
+          <div id="exames-lista" class="exames-lista">
+            <p class="saude-vazio">Nenhum exame registrado ainda.</p>
+          </div>
+
+          <!-- Modal de exame -->
+          <div id="modal-exame" class="modal-saude escondido">
+            <div class="modal-saude-content">
+              <div class="modal-saude-header">
+                <h4>Adicionar Exame</h4>
+                <button onclick="fecharModalExame()" class="modal-fechar">✕</button>
+              </div>
+              <div class="campo">
+                <label>Tipo de exame</label>
+                <select id="exame-tipo" onchange="preencherUnidade()">
+                  <option value="">Selecione...</option>
+                  <option value="ast">AST (TGO) - Enzima hepática</option>
+                  <option value="alt">ALT (TGP) - Enzima hepática</option>
+                  <option value="glicemia">Glicemia em jejum</option>
+                  <option value="hba1c">Hemoglobina Glicada (HbA1c)</option>
+                  <option value="colesterol_total">Colesterol Total</option>
+                  <option value="ldl">LDL Colesterol</option>
+                  <option value="hdl">HDL Colesterol</option>
+                  <option value="triglicerideos">Triglicerídeos</option>
+                  <option value="outro">Outro</option>
+                </select>
+              </div>
+              <div class="campo" id="exame-nome-custom-campo" style="display:none">
+                <label>Nome do exame</label>
+                <input type="text" id="exame-nome-custom" placeholder="Nome do exame" />
+              </div>
+              <div class="campos-lado-a-lado">
+                <div class="campo">
+                  <label>Resultado</label>
+                  <input type="number" id="exame-valor" step="0.1" placeholder="Ex: 35" />
+                </div>
+                <div class="campo">
+                  <label>Unidade</label>
+                  <input type="text" id="exame-unidade" placeholder="U/L" readonly />
+                </div>
+              </div>
+              <div class="campo">
+                <label>Data do exame</label>
+                <input type="date" id="exame-data" />
+              </div>
+              <button class="btn-primario" onclick="salvarExame()" style="margin-top:0.5rem">Salvar exame</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SEÇÃO: MEDICAMENTOS -->
+        <div class="saude-secao">
+          <div class="saude-secao-header">
+            <h3>💊 Meus Medicamentos</h3>
+            <button class="btn-saude-add" onclick="abrirModalRemedio()">+ Adicionar</button>
+          </div>
+          <p class="saude-descricao">Cadastre seus remédios e receba alertas no horário certo</p>
+
+          <div id="remedios-lista" class="remedios-lista">
+            <p class="saude-vazio">Nenhum medicamento cadastrado ainda.</p>
+          </div>
+
+          <!-- Modal de remédio -->
+          <div id="modal-remedio" class="modal-saude escondido">
+            <div class="modal-saude-content">
+              <div class="modal-saude-header">
+                <h4>💊 Adicionar Medicamento</h4>
+                <button onclick="fecharModalRemedio()" class="modal-fechar">✕</button>
+              </div>
+              <div class="campo">
+                <label>Nome do medicamento</label>
+                <input type="text" id="remedio-nome" placeholder="Ex: Metformina" />
+              </div>
+              <div class="campo">
+                <label>Dosagem</label>
+                <input type="text" id="remedio-dose" placeholder="Ex: 500mg, 1 comprimido" />
+              </div>
+              <div class="campo">
+                <label>Horários (adicione até 4)</label>
+                <div class="horarios-grid" id="horarios-grid">
+                  <input type="time" class="horario-input" id="h1" />
+                  <input type="time" class="horario-input" id="h2" />
+                  <input type="time" class="horario-input" id="h3" />
+                  <input type="time" class="horario-input" id="h4" />
+                </div>
+              </div>
+              <div class="campo">
+                <label>Observações</label>
+                <input type="text" id="remedio-obs" placeholder="Ex: tomar com alimento, em jejum..." />
+              </div>
+              <button class="btn-primario" onclick="salvarRemedio()" style="margin-top:0.5rem">Salvar medicamento</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOTÃO RELATÓRIO PDF -->
+        <div class="saude-secao">
+          <div class="saude-secao-header">
+            <h3>📄 Relatório para o Médico</h3>
+          </div>
+          <p class="saude-descricao">Gere um relatório completo com seu progresso, exames e sintomas para levar na consulta</p>
+          <button class="btn-relatorio" onclick="gerarRelatorio()">
+            📄 Gerar Relatório PDF
+          </button>
+        </div>
+
+        <!-- BACKUP DE DADOS -->
+        <div class="saude-secao backup-secao">
+          <div class="saude-secao-header">
+            <h3>💾 Backup dos seus dados</h3>
+          </div>
+          <p class="saude-descricao">Salve seus dados em um arquivo para não perder nada ao limpar o navegador. Importe para restaurar.</p>
+          <div class="backup-botoes">
+            <button class="btn-backup-exportar" onclick="exportarBackup()">
+              📥 Exportar backup
+            </button>
+            <label class="btn-backup-importar">
+              📤 Importar backup
+              <input type="file" accept=".json" onchange="importarBackup(this)" style="display:none" />
+            </label>
+          </div>
+          <p class="backup-aviso">⚠️ Salve o backup antes de limpar cookies ou dados do navegador.</p>
+        </div>
+      </div>
+
+      <!-- Rodapé -->
+      <div id="assinatura-camada" class="assinatura-camada escondido" onclick="abrirPopupAssinatura()">
+        <div class="assinatura-camada-dica">
+          Toque para desbloquear cardÃ¡pios, receitas e todas as funÃ§Ãµes
+        </div>
+      </div>
+      </div>
+
+      <div id="assinatura-popup" class="assinatura-popup escondido" onclick="fecharPopupAssinatura()">
+        <div class="assinatura-popup-card" onclick="event.stopPropagation()">
+          <div class="assinatura-popup-icone">ðŸ”’</div>
+          <h3>Assine o NutriSaude para ter acesso completo</h3>
+          <p>
+            Seu perfil e seus dados jÃ¡ foram salvos. Para liberar cardÃ¡pios,
+            receitas, progresso e todas as funÃ§Ãµes do app, ative sua assinatura.
+          </p>
+          <button class="btn-primario" onclick="irParaAssinatura()">Assinar o NutriSaude â†’</button>
+          <button class="btn-secundario assinatura-popup-sair" onclick="fazerLogout()">Sair da conta</button>
+        </div>
+      </div>
+
+      <div class="rodape-cardapio">
+        <button class="btn-secundario" onclick="recomecar()">↩ Refazer meu perfil</button>
+        <button class="btn-sair" onclick="fazerLogout()">Sair da conta</button>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="confete-container" class="confete-container escondido"></div>
+
+  <!-- PocketBase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/pocketbase@0.21.3/dist/pocketbase.umd.js"></script>
+  <script src="js/pb.js"></script>
+
+  <script src="js/storage.js"></script>
+  <script src="js/alimentos.js"></script>
+  <script src="js/receitas.js"></script>
+  <script src="js/nutricao.js"></script>
+  <script src="js/progresso.js"></script>
+  <script src="js/receitas_db.js"></script>
+  <script src="js/app.js"></script>
+  <div id="alerta-remedio-container"></div>
+  <script src="js/saude.js"></script>
+
+  <!-- PWA Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => console.log('SW registrado:', reg.scope))
+          .catch(err => console.log('SW erro:', err));
+      });
+    }
+  </script>
+
+</body>
+</html>

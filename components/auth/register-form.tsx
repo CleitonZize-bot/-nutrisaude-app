@@ -42,7 +42,7 @@ export function RegisterForm() {
       await pbRegistrar(email.trim(), senha, nome.trim());
       await pbLogin(email.trim(), senha);
       await sincronizarParaLocal();
-      window.location.href = "/legacy/index.html?questionario=1";
+      router.push("/onboarding");
     } catch (error: unknown) {
       const pocketbaseError = error as {
         response?: { data?: { email?: unknown } };

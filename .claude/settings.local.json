@@ -14,7 +14,8 @@
       "WebFetch(domain:docs.cakto.com.br)",
       "WebFetch(domain:help.dinamize.com)",
       "WebFetch(domain:ajuda.notificacoesinteligentes.com)",
-      "WebFetch(domain:pluga.zendesk.com)"
+      "WebFetch(domain:pluga.zendesk.com)",
+      "Bash(npm run:*)"
     ]
   },
   "hooks": {

@@ -299,6 +299,7 @@ function aplicarBloqueioAssinatura() {
 
   tela.classList.add('modo-sem-assinatura');
   camada.classList.remove('escondido');
+  document.querySelectorAll('.refeicao-card.aberto').forEach((card) => card.classList.remove('aberto'));
   fecharPopupAssinatura();
 }
 
@@ -513,7 +514,8 @@ function renderizarRefeicoes(refeicoes) {
         }
         <span class="refeicao-seta">▼</span>
       </button>
-      <div class="refeicao-conteudo">
+      <div class="refeicao-conteudo ${_temAssinaturaAtiva ? '' : 'refeicao-conteudo-bloqueado'}">
+        <div class="refeicao-premium">
         ${temAlerta ? `<div class="alerta-alimento">⚠️ Esta refeição contém alimentos que pedem atenção para sua condição de saúde.</div>` : ''}
         <ul class="lista-alimentos">${itensHTML}</ul>
         <div class="macros-refeicao">
@@ -521,6 +523,13 @@ function renderizarRefeicoes(refeicoes) {
           <span class="macro-badge carbo">🌾 ${refeicao.macros.carbo}g carb.</span>
           <span class="macro-badge gordura">🫒 ${refeicao.macros.gordura}g gordura</span>
         </div>
+        </div>
+        ${_temAssinaturaAtiva ? '' : `
+          <button class="refeicao-bloqueio-aviso" onclick="abrirPopupAssinatura(); event.stopPropagation();">
+            <strong>Clique para desbloquear</strong>
+            <span>Receitas, card&aacute;pios e todas as fun&ccedil;&otilde;es do aplicativo</span>
+          </button>
+        `}
       </div>`;
 
     if (index === 0) {

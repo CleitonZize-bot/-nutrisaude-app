@@ -1274,130 +1274,233 @@ body {
   position: relative;
 }
 
-#tela-cardapio.modo-sem-assinatura .area-assinatura-bloqueada > :not(.assinatura-camada) {
-  filter: blur(8px);
+#tela-cardapio.modo-sem-assinatura .refeicao-header,
+#tela-cardapio.modo-sem-assinatura .dia-header,
+#tela-cardapio.modo-sem-assinatura .abas .aba {
+  cursor: pointer;
+}
+
+#tela-cardapio.modo-sem-assinatura .refeicao-conteudo,
+#tela-cardapio.modo-sem-assinatura .dia-conteudo,
+#tela-cardapio.modo-sem-assinatura .grafico-wrapper,
+#tela-cardapio.modo-sem-assinatura .registrar-peso,
+#tela-cardapio.modo-sem-assinatura .historico-tabela,
+#tela-cardapio.modo-sem-assinatura .ingredientes-form,
+#tela-cardapio.modo-sem-assinatura #resultado-receitas,
+#tela-cardapio.modo-sem-assinatura .saude-secao {
+  position: relative;
+  filter: blur(12px);
+  opacity: 0.72;
   user-select: none;
   pointer-events: none;
 }
 
-.assinatura-camada {
+#tela-cardapio.modo-sem-assinatura .refeicao-conteudo {
+  filter: none;
+  opacity: 1;
+  user-select: auto;
+  pointer-events: auto;
+}
+
+#tela-cardapio.modo-sem-assinatura .refeicao-conteudo-bloqueado {
+  position: relative;
+  padding-top: 0.9rem;
+}
+
+#tela-cardapio.modo-sem-assinatura .refeicao-conteudo-bloqueado .refeicao-premium {
+  filter: blur(10px);
+  opacity: 0.55;
+  pointer-events: none;
+  user-select: none;
+}
+
+#tela-cardapio.modo-sem-assinatura .dia-conteudo::after,
+#tela-cardapio.modo-sem-assinatura .grafico-wrapper::after,
+#tela-cardapio.modo-sem-assinatura .registrar-peso::after,
+#tela-cardapio.modo-sem-assinatura .historico-tabela::after,
+#tela-cardapio.modo-sem-assinatura .ingredientes-form::after,
+#tela-cardapio.modo-sem-assinatura #resultado-receitas::after,
+#tela-cardapio.modo-sem-assinatura .saude-secao::after {
+  content: "";
   position: absolute;
   inset: 0;
-  z-index: 25;
+  border-radius: inherit;
+  background: rgba(255,255,255,0.18);
+}
+
+.refeicao-bloqueio-aviso {
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  border-radius: 22px;
+  padding: 1rem 1.1rem;
+  background: linear-gradient(135deg, rgba(8,15,20,0.92), rgba(28,41,56,0.9));
+  color: #fff;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
+  flex-direction: column;
+  gap: 0.25rem;
+  text-align: center;
+  box-shadow: 0 18px 40px rgba(8,15,20,0.28);
   cursor: pointer;
 }
 
+.refeicao-bloqueio-aviso strong {
+  font-size: 0.92rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.refeicao-bloqueio-aviso span {
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.82);
+}
+
+.assinatura-camada {
+  display: none !important;
+}
+
 .assinatura-camada-dica {
-  background: rgba(8, 15, 20, 0.82);
-  border: 1px solid rgba(255,255,255,0.08);
-  color: #fff;
-  padding: 0.85rem 1rem;
-  border-radius: 999px;
-  font-size: 0.82rem;
-  font-weight: 700;
-  text-align: center;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.24);
+  display: none;
 }
 
 .assinatura-popup {
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background: rgba(8, 15, 20, 0.52);
-  backdrop-filter: blur(10px);
+  background: rgba(8, 15, 20, 0.38);
+  backdrop-filter: blur(14px);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.25rem;
+  padding: 1.5rem;
 }
 
 .assinatura-popup-card {
-  width: min(100%, 390px);
-  background: #fff;
-  border-radius: 28px;
-  padding: 1.5rem;
-  box-shadow: 0 30px 90px rgba(0,0,0,0.25);
+  width: min(100%, 360px);
+  background:
+    radial-gradient(circle at top, rgba(0,196,114,0.08), transparent 28%),
+    linear-gradient(180deg, #ffffff 0%, #fbfcfd 100%);
+  border: 1px solid rgba(15, 25, 35, 0.06);
+  border-radius: 32px;
+  padding: 1.85rem 1.6rem 1.35rem;
+  box-shadow: 0 30px 90px rgba(8, 15, 20, 0.2);
   display: flex;
   flex-direction: column;
   gap: 1rem;
   text-align: center;
 }
 
+.assinatura-popup-card::before {
+  content: "🥗  NutriSaude";
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  background: rgba(8,15,20,0.04);
+  border: 1px solid rgba(15,25,35,0.07);
+  color: var(--cinza-escuro);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
 .assinatura-popup-icone {
-  width: 72px;
-  height: 72px;
+  width: 78px;
+  height: 78px;
   margin: 0 auto;
   border-radius: 999px;
-  background: #e9fbf1;
+  background: linear-gradient(180deg, #e8fbf1 0%, #dcfce7 100%);
   color: var(--verde-escuro);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 2rem;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
 }
 
 .assinatura-popup-card h3 {
-  font-size: 2rem;
-  line-height: 1.05;
+  font-size: 1.65rem;
+  line-height: 1.02;
   letter-spacing: -0.04em;
   color: var(--cinza-escuro);
   font-weight: 900;
+  max-width: 16rem;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .assinatura-popup-card p {
-  font-size: 1rem;
-  line-height: 1.8;
+  font-size: 0.96rem;
+  line-height: 1.65;
   color: var(--cinza-medio);
+  max-width: 16.5rem;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .assinatura-popup-sair {
   width: 100%;
   background: #f8fafc;
+  border-color: #dbe4ee;
 }
 
 body.modal-aberto {
   overflow: hidden;
 }
 
-.assinatura-camada-dica {
-  font-size: 0;
+.assinatura-camada-dica,
+.assinatura-popup-icone,
+.assinatura-popup-card p,
+.assinatura-popup-card .btn-primario {
+  color: transparent !important;
 }
 
 .assinatura-camada-dica::before {
   content: "Toque para desbloquear cardapios, receitas e todas as funcoes";
+  color: #fff;
   font-size: 0.82rem;
-}
-
-.assinatura-popup-icone {
-  font-size: 0;
 }
 
 .assinatura-popup-icone::before {
   content: "\1F512";
+  color: var(--verde-escuro);
   font-size: 2rem;
-}
-
-.assinatura-popup-card p {
-  font-size: 0;
 }
 
 .assinatura-popup-card p::before {
   content: "Seu perfil e seus dados ja foram salvos. Para liberar cardapios, receitas, progresso e todas as funcoes do app, ative sua assinatura.";
+  color: var(--cinza-medio);
   font-size: 1rem;
   line-height: 1.8;
 }
 
-.assinatura-popup-card .btn-primario {
-  font-size: 0;
-}
-
 .assinatura-popup-card .btn-primario::before {
   content: "Assinar o NutriSaude ->";
+  color: #fff;
   font-size: 1rem;
+}
+
+#tela-cardapio.modo-sem-assinatura .dia-header::after {
+  content: "Conteudo bloqueado";
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.22rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(0,196,114,0.12);
+  border: 1px solid rgba(0,196,114,0.24);
+  color: var(--verde-escuro);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
 }
 
 /* ============================================================
@@ -2214,18 +2317,53 @@ input, textarea, select {
   }
 
   .assinatura-popup-card {
-    border-radius: 24px;
-    padding: 1.25rem;
-    gap: 0.9rem;
+    border-radius: 28px;
+    padding: 1.45rem 1.2rem 1.15rem;
+    gap: 0.85rem;
+  }
+
+  .assinatura-popup-card::before {
+    font-size: 0.88rem;
+    padding: 0.5rem 0.9rem;
   }
 
   .assinatura-popup-card h3 {
-    font-size: 1.65rem;
+    font-size: 1.45rem;
   }
 
   .assinatura-popup-card p {
-    font-size: 0.9rem;
-    line-height: 1.7;
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+
+  .assinatura-camada-dica::before {
+    font-size: 0.75rem;
+  }
+
+  .assinatura-popup-card p::before {
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+
+  #tela-cardapio.modo-sem-assinatura .refeicao-header::after,
+  #tela-cardapio.modo-sem-assinatura .dia-header::after {
+    font-size: 0.6rem;
+    padding: 0.2rem 0.5rem;
+  }
+
+  .refeicao-bloqueio-aviso {
+    left: 0.75rem;
+    right: 0.75rem;
+    padding: 0.9rem 0.85rem;
+    border-radius: 18px;
+  }
+
+  .refeicao-bloqueio-aviso strong {
+    font-size: 0.85rem;
+  }
+
+  .refeicao-bloqueio-aviso span {
+    font-size: 0.73rem;
   }
 
   /* Previne scroll horizontal global sem bloquear scroll vertical */

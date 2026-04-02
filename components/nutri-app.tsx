@@ -1,7 +1,56 @@
 'use client';
 
 import { startTransition, useState } from 'react';
-import { gerarCardapioCompleto } from '../lib/nutricao.js';
+import {
+  AlertCircleIcon,
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  HeartPulseIcon,
+  SaladIcon,
+  SparklesIcon,
+  TargetIcon,
+} from 'lucide-react';
+
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSet,
+} from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
+import {
+  Progress,
+  ProgressLabel,
+  ProgressValue,
+} from '@/components/ui/progress';
+import { Separator } from '@/components/ui/separator';
+import {
+  ToggleGroup,
+  ToggleGroupItem,
+} from '@/components/ui/toggle-group';
+import { gerarCardapioCompleto } from '@/lib/nutricao.js';
+
 import { ServiceWorkerRegister } from './service-worker-register';
 
 type Sexo = 'masculino' | 'feminino' | '';
@@ -29,6 +78,33 @@ type Usuario = {
 
 type Tela = 'boas-vindas' | 'dados' | 'objetivo' | 'saude' | 'cardapio';
 
+type RefeicaoGerada = {
+  chave: string;
+  nome: string;
+  icone: string;
+  horario: string;
+  calorias: number;
+  macros: {
+    proteina: number;
+    carbo: number;
+    gordura: number;
+  };
+  itens: Array<{
+    nome: string;
+    quantidade: string;
+  }>;
+};
+
+type CardapioGerado = {
+  tdee: number;
+  macros: {
+    proteina: number;
+    carbo: number;
+    gordura: number;
+  };
+  refeicoes: RefeicaoGerada[];
+};
+
 const usuarioInicial: Usuario = {
   nome: '',
   peso: 0,
@@ -39,28 +115,33 @@ const usuarioInicial: Usuario = {
   condicoes: [],
 };
 
-const objetivos = [
+const objetivos: Array<{
+  id: Exclude<Objetivo, ''>;
+  titulo: string;
+  descricao: string;
+}> = [
   {
     id: 'emagrecer',
-    icone: 'Peso',
     titulo: 'Emagrecer',
     descricao: 'Deficit calorico controlado para reduzir gordura corporal.',
   },
   {
     id: 'massa',
-    icone: 'Forca',
     titulo: 'Ganhar massa muscular',
     descricao: 'Mais proteina e energia para apoiar construcao muscular.',
   },
   {
     id: 'manter',
-    icone: 'Equilibrio',
     titulo: 'Manter o peso',
     descricao: 'Rotina equilibrada para sustentar o peso atual com qualidade.',
   },
-] as const;
+];
 
-const condicoesDisponiveis = [
+const condicoesDisponiveis: Array<{
+  id: Condicao;
+  titulo: string;
+  descricao: string;
+}> = [
   {
     id: 'esteatose',
     titulo: 'Esteatose Hepatica',
@@ -106,7 +187,7 @@ const condicoesDisponiveis = [
     titulo: 'Nenhuma das anteriores',
     descricao: 'Sem condicoes especificas no momento.',
   },
-] as const;
+];
 
 const nomesObjetivo: Record<Exclude<Objetivo, ''>, string> = {
   emagrecer: 'Emagrecimento',
@@ -114,7 +195,7 @@ const nomesObjetivo: Record<Exclude<Objetivo, ''>, string> = {
   manter: 'Manutencao',
 };
 
-const nomesCondicoes: Record<Condicao, string> = {
+const nomesCondicoes: Record<Exclude<Condicao, 'nenhum'>, string> = {
   esteatose: 'Esteatose Hepatica',
   diabetes: 'Diabetes',
   hipertensao: 'Hipertensao',
@@ -123,16 +204,13 @@ const nomesCondicoes: Record<Condicao, string> = {
   lactose: 'Intolerancia a Lactose',
   celiaca: 'Doenca Celiaca',
   anemia: 'Anemia',
-  nenhum: 'Nenhuma',
 };
 
-const corRefeicao: Record<string, string> = {
-  cafe: '#f59e0b',
-  lancheManha: '#f97316',
-  almoco: '#10b981',
-  lancheTarde: '#8b5cf6',
-  jantar: '#3b82f6',
-  ceia: '#6366f1',
+const progressoTela: Record<Exclude<Tela, 'boas-vindas'>, number> = {
+  dados: 34,
+  objetivo: 67,
+  saude: 100,
+  cardapio: 100,
 };
 
 function formatarData() {
@@ -145,10 +223,14 @@ function formatarData() {
   return formatada.charAt(0).toUpperCase() + formatada.slice(1);
 }
 
+function formatarNumero(valor: number) {
+  return new Intl.NumberFormat('pt-BR').format(valor);
+}
+
 export function NutriApp() {
   const [tela, setTela] = useState<Tela>('boas-vindas');
   const [usuario, setUsuario] = useState<Usuario>(usuarioInicial);
-  const [cardapio, setCardapio] = useState<any>(null);
+  const [cardapio, setCardapio] = useState<CardapioGerado | null>(null);
   const [erros, setErros] = useState<string[]>([]);
 
   function atualizarCampo<K extends keyof Usuario>(campo: K, valor: Usuario[K]) {
@@ -193,20 +275,17 @@ export function NutriApp() {
   }
 
   function gerarPlano() {
-    if (!usuario.objetivo) {
-      setErros(['Selecione um objetivo antes de continuar.']);
-      return;
-    }
+    const proximosErros: string[] = [];
 
-    if (usuario.condicoes.length === 0) {
-      setErros(['Selecione pelo menos uma opcao de saude.']);
-      return;
-    }
+    if (!usuario.objetivo) proximosErros.push('Selecione um objetivo.');
+    if (usuario.condicoes.length === 0) proximosErros.push('Selecione pelo menos uma opcao de saude.');
 
-    setErros([]);
+    setErros(proximosErros);
+
+    if (proximosErros.length > 0) return;
 
     startTransition(() => {
-      const proximoCardapio = gerarCardapioCompleto(usuario);
+      const proximoCardapio = gerarCardapioCompleto(usuario) as CardapioGerado;
       setCardapio(proximoCardapio);
       setTela('cardapio');
     });
@@ -219,325 +298,420 @@ export function NutriApp() {
     setTela('boas-vindas');
   }
 
+  const condicoesAtivas = usuario.condicoes.filter(
+    (item): item is Exclude<Condicao, 'nenhum'> => item !== 'nenhum'
+  );
+
   return (
     <>
       <ServiceWorkerRegister />
 
-      {tela === 'boas-vindas' ? (
-        <div className="tela ativa">
-          <div className="bv-bg-circle bv-circle1" />
-          <div className="bv-bg-circle bv-circle2" />
-          <div className="bv-bg-circle bv-circle3" />
-
-          <div className="bv-hero">
-            <div className="bv-topo">
-              <div className="bv-logo">
-                <span className="bv-logo-icone">NS</span>
-                <span className="bv-logo-nome">NutriSaude</span>
-              </div>
-              <span className="bv-badge">React + Next</span>
-            </div>
-
-            <div className="bv-centro">
-              <h1 className="bv-titulo">
-                Seu cardapio
-                <br />
-                <span className="bv-titulo-destaque">personalizado</span>
-                <br />
-                agora em React
-              </h1>
-              <p className="bv-subtitulo">
-                Mantivemos o conceito do app original e iniciamos a migracao para uma base mais escalavel.
-              </p>
-            </div>
-
-            <button className="btn-comecar" onClick={() => setTela('dados')}>
-              Criar meu plano
-              <span className="btn-comecar-seta">→</span>
-            </button>
-
-            <div className="bv-stats">
-              <div className="bv-stat">
-                <span className="bv-stat-num">Next</span>
-                <span className="bv-stat-txt">App Router</span>
-              </div>
-              <div className="bv-stat-div" />
-              <div className="bv-stat">
-                <span className="bv-stat-num">React</span>
-                <span className="bv-stat-txt">componentes</span>
-              </div>
-              <div className="bv-stat-div" />
-              <div className="bv-stat">
-                <span className="bv-stat-num">TS</span>
-                <span className="bv-stat-txt">base tipada</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : null}
-
-      {tela === 'dados' ? (
-        <div className="tela ativa">
-          <div className="container">
-            <div className="progresso">
-              <div className="progresso-barra" style={{ width: '25%' }} />
-            </div>
-            <p className="passo-label">Passo 1 de 3</p>
-            <h2 className="tela-titulo">Seus dados</h2>
-            <p className="tela-subtitulo">Esta e a primeira tela portada para React com estado local tipado.</p>
-
-            {erros.length > 0 ? (
-              <div className="auth-erro" style={{ display: 'block', marginBottom: '1rem' }}>
-                {erros.join(' ')}
-              </div>
-            ) : null}
-
-            <div className="formulario">
-              <div className="campo">
-                <label htmlFor="nome">Como voce se chama?</label>
-                <input
-                  id="nome"
-                  type="text"
-                  value={usuario.nome}
-                  onChange={(event) => atualizarCampo('nome', event.target.value)}
-                  placeholder="Seu nome"
-                />
-              </div>
-
-              <div className="campos-lado-a-lado">
-                <div className="campo">
-                  <label htmlFor="peso">Peso (kg)</label>
-                  <input
-                    id="peso"
-                    type="number"
-                    min="30"
-                    max="300"
-                    step="0.1"
-                    value={usuario.peso || ''}
-                    onChange={(event) => atualizarCampo('peso', Number(event.target.value))}
-                  />
-                </div>
-                <div className="campo">
-                  <label htmlFor="altura">Altura (cm)</label>
-                  <input
-                    id="altura"
-                    type="number"
-                    min="100"
-                    max="250"
-                    value={usuario.altura || ''}
-                    onChange={(event) => atualizarCampo('altura', Number(event.target.value))}
-                  />
-                </div>
-              </div>
-
-              <div className="campos-lado-a-lado">
-                <div className="campo">
-                  <label htmlFor="idade">Idade</label>
-                  <input
-                    id="idade"
-                    type="number"
-                    min="10"
-                    max="100"
-                    value={usuario.idade || ''}
-                    onChange={(event) => atualizarCampo('idade', Number(event.target.value))}
-                  />
-                </div>
-                <div className="campo">
-                  <label>Sexo</label>
-                  <div className="opcoes-sexo">
-                    <label className="opcao-radio">
-                      <input
-                        type="radio"
-                        checked={usuario.sexo === 'masculino'}
-                        onChange={() => atualizarCampo('sexo', 'masculino')}
-                      />
-                      <span>Masculino</span>
-                    </label>
-                    <label className="opcao-radio">
-                      <input
-                        type="radio"
-                        checked={usuario.sexo === 'feminino'}
-                        onChange={() => atualizarCampo('sexo', 'feminino')}
-                      />
-                      <span>Feminino</span>
-                    </label>
+      <main className="min-h-screen bg-background text-foreground">
+        <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
+          {tela === 'boas-vindas' ? (
+            <>
+              <Card className="border-border/60 bg-card/80">
+                <CardHeader className="gap-4">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <Badge>shadcn/ui</Badge>
+                    <Badge variant="secondary">Next.js</Badge>
+                    <Badge variant="outline">React + TypeScript</Badge>
                   </div>
+                  <div className="flex flex-col gap-3">
+                    <CardTitle className="text-3xl sm:text-5xl">
+                      NutriSaude em uma base pronta para componentes reais
+                    </CardTitle>
+                    <CardDescription className="max-w-3xl text-base">
+                      O fluxo inicial do app foi migrado para Next e agora a interface passa a ser
+                      composta com componentes oficiais do ui.shadcn.com, em vez de cards e botoes
+                      montados manualmente.
+                    </CardDescription>
+                  </div>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-6">
+                  <div className="grid gap-4 md:grid-cols-3">
+                    <Card size="sm">
+                      <CardHeader>
+                        <CardTitle>Onboarding</CardTitle>
+                        <CardDescription>Cadastro, objetivo e condicoes de saude.</CardDescription>
+                      </CardHeader>
+                    </Card>
+                    <Card size="sm">
+                      <CardHeader>
+                        <CardTitle>Cardapio</CardTitle>
+                        <CardDescription>Motor nutricional reaproveitado do app atual.</CardDescription>
+                      </CardHeader>
+                    </Card>
+                    <Card size="sm">
+                      <CardHeader>
+                        <CardTitle>Padrao visual</CardTitle>
+                        <CardDescription>Button, Card, Field, ToggleGroup, Alert e Accordion.</CardDescription>
+                      </CardHeader>
+                    </Card>
+                  </div>
+
+                  <Separator />
+
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                    <Button size="lg" onClick={() => setTela('dados')}>
+                      <SparklesIcon data-icon="inline-start" />
+                      Comecar a migracao da interface
+                      <ArrowRightIcon data-icon="inline-end" />
+                    </Button>
+                    <p className="text-sm text-muted-foreground">
+                      Vamos manter a logica do seu app e trocar a camada visual por componentes do
+                      shadcn.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </>
+          ) : null}
+
+          {tela !== 'boas-vindas' ? (
+            <Card className="border-border/60 bg-card/90">
+              <CardHeader className="gap-4">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex flex-col gap-1">
+                    <CardTitle>
+                      {tela === 'dados' ? 'Seus dados' : null}
+                      {tela === 'objetivo' ? 'Seu objetivo' : null}
+                      {tela === 'saude' ? 'Condicoes de saude' : null}
+                      {tela === 'cardapio' ? 'Cardapio gerado' : null}
+                    </CardTitle>
+                    <CardDescription>
+                      {tela === 'dados' ? 'Etapa inicial do onboarding migrada para Field e Input.' : null}
+                      {tela === 'objetivo' ? 'Escolha com ToggleGroup em vez de botoes personalizados.' : null}
+                      {tela === 'saude' ? 'Selecao multipla com Checkbox e composicao de Field.' : null}
+                      {tela === 'cardapio'
+                        ? 'Resumo nutricional e refeicoes usando Card, Badge e Accordion.'
+                        : null}
+                    </CardDescription>
+                  </div>
+                  <Badge variant="secondary">
+                    {tela === 'dados' ? 'Passo 1 de 3' : null}
+                    {tela === 'objetivo' ? 'Passo 2 de 3' : null}
+                    {tela === 'saude' ? 'Passo 3 de 3' : null}
+                    {tela === 'cardapio' ? 'Plano pronto' : null}
+                  </Badge>
                 </div>
-              </div>
+                <Progress value={progressoTela[tela]}>
+                  <ProgressLabel>Progresso</ProgressLabel>
+                  <ProgressValue>
+                    {(formattedValue) => `${formattedValue}%`}
+                  </ProgressValue>
+                </Progress>
+              </CardHeader>
+            </Card>
+          ) : null}
 
-              <button className="btn-primario" onClick={validarDados}>
-                Continuar →
-              </button>
-            </div>
-          </div>
-        </div>
-      ) : null}
+          {erros.length > 0 && tela !== 'boas-vindas' ? (
+            <Alert variant="destructive">
+              <AlertCircleIcon />
+              <AlertTitle>Ajustes necessarios</AlertTitle>
+              <AlertDescription>{erros.join(' ')}</AlertDescription>
+            </Alert>
+          ) : null}
 
-      {tela === 'objetivo' ? (
-        <div className="tela ativa">
-          <div className="container">
-            <div className="progresso">
-              <div className="progresso-barra" style={{ width: '65%' }} />
-            </div>
-            <p className="passo-label">Passo 2 de 3</p>
-            <h2 className="tela-titulo">Qual e o seu objetivo?</h2>
-            <p className="tela-subtitulo">A logica de calculo do app original foi reaproveitada no novo fluxo React.</p>
+          {tela === 'dados' ? (
+            <Card>
+              <CardContent className="flex flex-col gap-6 pt-4">
+                <FieldSet>
+                  <FieldLegend>Perfil</FieldLegend>
+                  <FieldGroup>
+                    <Field>
+                      <FieldLabel htmlFor="nome">Como voce se chama?</FieldLabel>
+                      <Input
+                        id="nome"
+                        value={usuario.nome}
+                        onChange={(event) => atualizarCampo('nome', event.target.value)}
+                        placeholder="Seu nome"
+                      />
+                      <FieldDescription>Esse nome aparece no resumo do seu cardapio.</FieldDescription>
+                    </Field>
+                  </FieldGroup>
+                </FieldSet>
 
-            <div className="cards-objetivo">
-              {objetivos.map((objetivo) => (
-                <button
-                  key={objetivo.id}
-                  type="button"
-                  className={`card-objetivo ${usuario.objetivo === objetivo.id ? 'selecionado' : ''}`}
-                  onClick={() => atualizarCampo('objetivo', objetivo.id)}
+                <Separator />
+
+                <FieldSet>
+                  <FieldLegend>Medidas</FieldLegend>
+                  <FieldGroup className="grid gap-5 md:grid-cols-2">
+                    <Field>
+                      <FieldLabel htmlFor="peso">Peso (kg)</FieldLabel>
+                      <Input
+                        id="peso"
+                        type="number"
+                        min="30"
+                        max="300"
+                        step="0.1"
+                        value={usuario.peso || ''}
+                        onChange={(event) => atualizarCampo('peso', Number(event.target.value))}
+                      />
+                    </Field>
+                    <Field>
+                      <FieldLabel htmlFor="altura">Altura (cm)</FieldLabel>
+                      <Input
+                        id="altura"
+                        type="number"
+                        min="100"
+                        max="250"
+                        value={usuario.altura || ''}
+                        onChange={(event) => atualizarCampo('altura', Number(event.target.value))}
+                      />
+                    </Field>
+                    <Field>
+                      <FieldLabel htmlFor="idade">Idade</FieldLabel>
+                      <Input
+                        id="idade"
+                        type="number"
+                        min="10"
+                        max="100"
+                        value={usuario.idade || ''}
+                        onChange={(event) => atualizarCampo('idade', Number(event.target.value))}
+                      />
+                    </Field>
+                    <Field>
+                      <FieldLabel>Sexo</FieldLabel>
+                      <ToggleGroup
+                        variant="outline"
+                        value={usuario.sexo ? [usuario.sexo] : []}
+                        onValueChange={(value) => atualizarCampo('sexo', ((value[0] as Sexo) || ''))}
+                        className="w-full"
+                      >
+                        <ToggleGroupItem value="masculino" className="flex-1">
+                          Masculino
+                        </ToggleGroupItem>
+                        <ToggleGroupItem value="feminino" className="flex-1">
+                          Feminino
+                        </ToggleGroupItem>
+                      </ToggleGroup>
+                    </Field>
+                  </FieldGroup>
+                </FieldSet>
+              </CardContent>
+              <CardFooter className="justify-between">
+                <Button variant="outline" onClick={() => setTela('boas-vindas')}>
+                  <ArrowLeftIcon data-icon="inline-start" />
+                  Voltar
+                </Button>
+                <Button onClick={validarDados}>
+                  Continuar
+                  <ArrowRightIcon data-icon="inline-end" />
+                </Button>
+              </CardFooter>
+            </Card>
+          ) : null}
+
+          {tela === 'objetivo' ? (
+            <Card>
+              <CardContent className="flex flex-col gap-6 pt-4">
+                <ToggleGroup
+                  orientation="vertical"
+                  spacing={2}
+                  variant="outline"
+                  value={usuario.objetivo ? [usuario.objetivo] : []}
+                  onValueChange={(value) =>
+                    atualizarCampo('objetivo', ((value[0] as Objetivo) || ''))
+                  }
+                  className="w-full"
                 >
-                  <div className="card-icone">{objetivo.icone}</div>
-                  <h3>{objetivo.titulo}</h3>
-                  <p>{objetivo.descricao}</p>
-                </button>
-              ))}
-            </div>
+                  {objetivos.map((objetivo) => (
+                    <ToggleGroupItem
+                      key={objetivo.id}
+                      value={objetivo.id}
+                      className="h-auto w-full justify-start px-4 py-4 text-left"
+                    >
+                      <div className="flex flex-col gap-1">
+                        <span className="font-medium">{objetivo.titulo}</span>
+                        <span className="text-sm text-muted-foreground">{objetivo.descricao}</span>
+                      </div>
+                    </ToggleGroupItem>
+                  ))}
+                </ToggleGroup>
+              </CardContent>
+              <CardFooter className="justify-between">
+                <Button variant="outline" onClick={() => setTela('dados')}>
+                  <ArrowLeftIcon data-icon="inline-start" />
+                  Voltar
+                </Button>
+                <Button onClick={() => setTela('saude')} disabled={!usuario.objetivo}>
+                  Continuar
+                  <ArrowRightIcon data-icon="inline-end" />
+                </Button>
+              </CardFooter>
+            </Card>
+          ) : null}
 
-            <button
-              className="btn-primario"
-              disabled={!usuario.objetivo}
-              onClick={() => setTela('saude')}
-            >
-              Continuar →
-            </button>
-          </div>
-        </div>
-      ) : null}
+          {tela === 'saude' ? (
+            <Card>
+              <CardContent className="flex flex-col gap-6 pt-4">
+                <FieldSet>
+                  <FieldLegend>Selecione as opcoes aplicaveis</FieldLegend>
+                  <FieldDescription>
+                    Selecione quantas forem necessarias. Se nenhuma se aplicar, marque a ultima
+                    opcao.
+                  </FieldDescription>
+                  <FieldGroup className="grid gap-4 md:grid-cols-2">
+                    {condicoesDisponiveis.map((condicao) => {
+                      const id = `condicao-${condicao.id}`;
+                      const selecionada = usuario.condicoes.includes(condicao.id);
 
-      {tela === 'saude' ? (
-        <div className="tela ativa">
-          <div className="container">
-            <div className="progresso">
-              <div className="progresso-barra" style={{ width: '100%' }} />
-            </div>
-            <p className="passo-label">Passo 3 de 3</p>
-            <h2 className="tela-titulo">Voce tem alguma condicao de saude?</h2>
-            <p className="tela-subtitulo">Pode selecionar mais de uma. Esta etapa ja esta controlada por estado React.</p>
+                      return (
+                        <Card key={condicao.id} size="sm">
+                          <CardContent className="pt-3">
+                            <Field orientation="horizontal">
+                              <Checkbox
+                                id={id}
+                                checked={selecionada}
+                                onCheckedChange={() => toggleCondicao(condicao.id)}
+                              />
+                              <FieldContent>
+                                <FieldLabel htmlFor={id}>{condicao.titulo}</FieldLabel>
+                                <FieldDescription>{condicao.descricao}</FieldDescription>
+                              </FieldContent>
+                            </Field>
+                          </CardContent>
+                        </Card>
+                      );
+                    })}
+                  </FieldGroup>
+                </FieldSet>
+              </CardContent>
+              <CardFooter className="justify-between">
+                <Button variant="outline" onClick={() => setTela('objetivo')}>
+                  <ArrowLeftIcon data-icon="inline-start" />
+                  Voltar
+                </Button>
+                <Button onClick={gerarPlano}>
+                  Gerar cardapio
+                  <ArrowRightIcon data-icon="inline-end" />
+                </Button>
+              </CardFooter>
+            </Card>
+          ) : null}
 
-            {erros.length > 0 ? (
-              <div className="auth-erro" style={{ display: 'block', marginBottom: '1rem' }}>
-                {erros.join(' ')}
+          {tela === 'cardapio' && cardapio ? (
+            <>
+              <div className="grid gap-4 lg:grid-cols-[1.5fr_1fr]">
+                <Card>
+                  <CardHeader className="gap-3">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Badge>
+                        <SparklesIcon data-icon="inline-start" />
+                        Plano do dia
+                      </Badge>
+                      <Badge variant="outline">{formatarData()}</Badge>
+                    </div>
+                    <CardTitle>Ola, {usuario.nome}</CardTitle>
+                    <CardDescription>
+                      {usuario.peso}kg · {usuario.altura}cm · {usuario.idade} anos ·{' '}
+                      {usuario.objetivo ? nomesObjetivo[usuario.objetivo] : ''}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex flex-col gap-4">
+                    <div className="grid gap-3 sm:grid-cols-3">
+                      <Badge variant="secondary">
+                        <TargetIcon data-icon="inline-start" />
+                        {formatarNumero(cardapio.tdee)} kcal/dia
+                      </Badge>
+                      <Badge variant="secondary">{cardapio.macros.proteina}g proteina</Badge>
+                      <Badge variant="secondary">{cardapio.macros.carbo}g carboidrato</Badge>
+                    </div>
+                    <Badge variant="secondary">{cardapio.macros.gordura}g gordura</Badge>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Contexto de saude</CardTitle>
+                    <CardDescription>Restricoes consideradas no cardapio.</CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex flex-wrap gap-2">
+                    {condicoesAtivas.length > 0 ? (
+                      condicoesAtivas.map((condicao) => (
+                        <Badge key={condicao} variant="outline">
+                          <HeartPulseIcon data-icon="inline-start" />
+                          {nomesCondicoes[condicao]}
+                        </Badge>
+                      ))
+                    ) : (
+                      <Badge variant="outline">Sem restricoes especificas</Badge>
+                    )}
+                  </CardContent>
+                </Card>
               </div>
-            ) : null}
 
-            <div className="cards-saude">
-              {condicoesDisponiveis.map((condicao) => {
-                const selecionada = usuario.condicoes.includes(condicao.id);
-
-                return (
-                  <button
-                    key={condicao.id}
-                    type="button"
-                    className={`card-saude ${selecionada ? 'selecionado' : ''}`}
-                    onClick={() => toggleCondicao(condicao.id)}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Refeicoes do dia</CardTitle>
+                  <CardDescription>
+                    Cada bloco abaixo usa Accordion do shadcn para abrir os detalhes da refeicao.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Accordion
+                    className="w-full"
+                    defaultValue={cardapio.refeicoes[0] ? [cardapio.refeicoes[0].chave] : []}
                   >
-                    <div className="card-saude-texto">
-                      <h3>{condicao.titulo}</h3>
-                      <p>{condicao.descricao}</p>
-                    </div>
-                    <span className="card-check">✓</span>
-                  </button>
-                );
-              })}
-            </div>
-
-            <button className="btn-primario" onClick={gerarPlano}>
-              Gerar meu cardapio →
-            </button>
-          </div>
-        </div>
-      ) : null}
-
-      {tela === 'cardapio' && cardapio ? (
-        <div className="tela ativa">
-          <div className="container container-largo">
-            <div className="cardapio-header">
-              <div className="cardapio-saudacao">
-                <span>
-                  Ola, <strong>{usuario.nome}</strong>
-                </span>
-                <p className="cardapio-data">{formatarData()}</p>
-                <p>
-                  {usuario.peso}kg · {usuario.altura}cm · {usuario.idade} anos ·{' '}
-                  {usuario.objetivo ? nomesObjetivo[usuario.objetivo] : ''}
-                </p>
-                <p>
-                  {usuario.condicoes.filter((item) => item !== 'nenhum').map((item) => nomesCondicoes[item]).join(', ') ||
-                    'Sem restricoes especificas'}
-                </p>
-              </div>
-
-              <div className="cardapio-meta">
-                <div className="meta-item">
-                  <span className="meta-numero">{cardapio.tdee}</span>
-                  <span className="meta-label">kcal/dia</span>
-                </div>
-                <div className="meta-item">
-                  <span className="meta-numero">{cardapio.macros.proteina}</span>
-                  <span className="meta-label">g proteina</span>
-                </div>
-                <div className="meta-item">
-                  <span className="meta-numero">{cardapio.macros.carbo}</span>
-                  <span className="meta-label">g carboidrato</span>
-                </div>
-                <div className="meta-item">
-                  <span className="meta-numero">{cardapio.macros.gordura}</span>
-                  <span className="meta-label">g gordura</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="lista-refeicoes">
-              {cardapio.refeicoes.map((refeicao: any, index: number) => (
-                <div
-                  key={refeicao.chave}
-                  className={`refeicao-card ${index === 0 ? 'aberto' : ''}`}
-                  style={{ ['--cor-refeicao' as string]: corRefeicao[refeicao.chave] || '#00c472' }}
-                >
-                  <div className="refeicao-header" aria-expanded={index === 0}>
-                    <span className="refeicao-icone">{refeicao.icone}</span>
-                    <div className="refeicao-info">
-                      <div className="refeicao-nome">{refeicao.nome}</div>
-                      <div className="refeicao-horario">{refeicao.horario}</div>
-                    </div>
-                    <span className="refeicao-kcal">~{refeicao.calorias} kcal</span>
-                  </div>
-
-                  <div className="refeicao-conteudo">
-                    <ul className="lista-alimentos">
-                      {refeicao.itens.map((item: any) => (
-                        <li key={`${refeicao.chave}-${item.nome}`} className="item-alimento">
-                          <div className="item-principal">
-                            <span className="item-nome">{item.nome}</span>
-                            <span className="item-quantidade">{item.quantidade}</span>
+                    {cardapio.refeicoes.map((refeicao) => (
+                      <AccordionItem key={refeicao.chave} value={refeicao.chave}>
+                        <AccordionTrigger className="hover:no-underline">
+                          <div className="flex min-w-0 flex-1 flex-col gap-2 pr-4 text-left sm:flex-row sm:items-center sm:justify-between">
+                            <div className="flex min-w-0 flex-col gap-1">
+                              <span className="font-medium">
+                                {refeicao.icone} {refeicao.nome}
+                              </span>
+                              <span className="text-sm text-muted-foreground">{refeicao.horario}</span>
+                            </div>
+                            <Badge variant="secondary">~{refeicao.calorias} kcal</Badge>
                           </div>
-                        </li>
-                      ))}
-                    </ul>
+                        </AccordionTrigger>
+                        <AccordionContent>
+                          <div className="flex flex-col gap-4">
+                            <div className="grid gap-2">
+                              {refeicao.itens.map((item) => (
+                                <div
+                                  key={`${refeicao.chave}-${item.nome}`}
+                                  className="flex flex-col gap-1 rounded-lg border px-3 py-2 sm:flex-row sm:items-center sm:justify-between"
+                                >
+                                  <span className="font-medium">{item.nome}</span>
+                                  <span className="text-sm text-muted-foreground">{item.quantidade}</span>
+                                </div>
+                              ))}
+                            </div>
 
-                    <div className="macros-refeicao">
-                      <span className="macro-badge proteina">{refeicao.macros.proteina}g proteina</span>
-                      <span className="macro-badge carbo">{refeicao.macros.carbo}g carbo</span>
-                      <span className="macro-badge gordura">{refeicao.macros.gordura}g gordura</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+                            <Separator />
 
-            <div className="rodape-cardapio">
-              <button className="btn-secundario" onClick={recomecar}>
-                Refazer perfil
-              </button>
-            </div>
-          </div>
+                            <div className="flex flex-wrap gap-2">
+                              <Badge variant="outline">
+                                <SaladIcon data-icon="inline-start" />
+                                {refeicao.macros.proteina}g proteina
+                              </Badge>
+                              <Badge variant="outline">{refeicao.macros.carbo}g carbo</Badge>
+                              <Badge variant="outline">{refeicao.macros.gordura}g gordura</Badge>
+                            </div>
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
+                </CardContent>
+                <CardFooter className="justify-between">
+                  <Button variant="outline" onClick={() => setTela('saude')}>
+                    <ArrowLeftIcon data-icon="inline-start" />
+                    Voltar
+                  </Button>
+                  <Button onClick={recomecar}>
+                    Reiniciar fluxo
+                    <SparklesIcon data-icon="inline-end" />
+                  </Button>
+                </CardFooter>
+              </Card>
+            </>
+          ) : null}
         </div>
-      ) : null}
+      </main>
     </>
   );
 }

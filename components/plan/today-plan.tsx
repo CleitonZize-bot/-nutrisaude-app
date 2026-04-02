@@ -931,7 +931,7 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
         ) : null}
 
         {activeTab === "semana" ? (
-          isPremium ? <PlanWeekView /> : <PremiumTabLock />
+          isPremium ? <PlanWeekView /> : <PremiumTabLock onUnlock={() => setShowSubscribeModal(true)} />
         ) : null}
 
         {activeTab === "progresso" ? (
@@ -944,15 +944,15 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
               onWeightInputChange={setWeightInput}
               onSaveWeight={saveWeight}
             />
-          ) : <PremiumTabLock />
+          ) : <PremiumTabLock onUnlock={() => setShowSubscribeModal(true)} />
         ) : null}
 
         {activeTab === "ingredientes" ? (
-          isPremium ? <PlanIngredientsView profile={profile} /> : <PremiumTabLock />
+          isPremium ? <PlanIngredientsView profile={profile} /> : <PremiumTabLock onUnlock={() => setShowSubscribeModal(true)} />
         ) : null}
 
         {activeTab === "saude" ? (
-          isPremium ? <PlanHealthView healthData={healthData} /> : <PremiumTabLock />
+          isPremium ? <PlanHealthView healthData={healthData} /> : <PremiumTabLock onUnlock={() => setShowSubscribeModal(true)} />
         ) : null}
 
         <div className="flex justify-center gap-3 pt-2">

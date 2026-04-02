@@ -283,7 +283,12 @@ export function OnboardingFlow() {
 
                 <FieldGroup className="gap-6">
                   <Field>
-                    <FieldLabel htmlFor="nome">Como voce se chama?</FieldLabel>
+                    <FieldLabel htmlFor="nome">
+                      <span className="flex items-center gap-2">
+                        <User className="size-4 text-primary" />
+                        Como voce se chama?
+                      </span>
+                    </FieldLabel>
                     <FieldContent>
                       <Input
                         id="nome"
@@ -297,7 +302,12 @@ export function OnboardingFlow() {
 
                   <div className="grid gap-6 md:grid-cols-2">
                     <Field>
-                      <FieldLabel htmlFor="peso">Peso (kg)</FieldLabel>
+                      <FieldLabel htmlFor="peso">
+                        <span className="flex items-center gap-2">
+                          <Scale className="size-4 text-primary" />
+                          Peso (kg)
+                        </span>
+                      </FieldLabel>
                       <FieldContent>
                         <Input
                           id="peso"
@@ -311,7 +321,12 @@ export function OnboardingFlow() {
                     </Field>
 
                     <Field>
-                      <FieldLabel htmlFor="altura">Altura (cm)</FieldLabel>
+                      <FieldLabel htmlFor="altura">
+                        <span className="flex items-center gap-2">
+                          <Ruler className="size-4 text-primary" />
+                          Altura (cm)
+                        </span>
+                      </FieldLabel>
                       <FieldContent>
                         <Input
                           id="altura"
@@ -327,7 +342,12 @@ export function OnboardingFlow() {
 
                   <div className="grid gap-6 md:grid-cols-2">
                     <Field>
-                      <FieldLabel htmlFor="idade">Idade</FieldLabel>
+                      <FieldLabel htmlFor="idade">
+                        <span className="flex items-center gap-2">
+                          <Calendar className="size-4 text-primary" />
+                          Idade
+                        </span>
+                      </FieldLabel>
                       <FieldContent>
                         <Input
                           id="idade"
@@ -341,7 +361,12 @@ export function OnboardingFlow() {
                     </Field>
 
                     <Field>
-                      <FieldLabel>Sexo</FieldLabel>
+                      <FieldLabel>
+                        <span className="flex items-center gap-2">
+                          <Users className="size-4 text-primary" />
+                          Sexo
+                        </span>
+                      </FieldLabel>
                       <FieldContent>
                         <ToggleGroup
                           value={sexo ? [sexo] : []}

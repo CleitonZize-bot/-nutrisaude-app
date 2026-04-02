@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
+import { LockedPlanShell } from "@/components/plan/locked-plan-shell";
 
 export default function PlanoPage() {
-  redirect("/legacy/index.html");
+  return <LockedPlanShell />;
 }

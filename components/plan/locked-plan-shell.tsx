@@ -23,6 +23,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { TodayPlan } from "@/components/plan/today-plan";
 import {
   getPocketBase,
   pbEstaLogado,

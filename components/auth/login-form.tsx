@@ -42,9 +42,9 @@ export function LoginForm() {
       const temPerfil = perfilEstaCompleto(perfilServidor) || perfilEstaCompleto(perfilLocal);
 
       if (!temPerfil) {
-        window.location.href = "/legacy/index.html?questionario=1";
+        router.push("/onboarding");
       } else {
-        window.location.href = "/legacy/index.html";
+        router.push("/plano");
       }
     } catch {
       setErro("E-mail ou senha incorretos. Verifique e tente novamente.");

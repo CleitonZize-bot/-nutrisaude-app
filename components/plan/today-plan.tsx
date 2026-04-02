@@ -324,6 +324,7 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
   const [weightInput, setWeightInput] = useState("");
   const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(true);
+  const [showSubscribeModal, setShowSubscribeModal] = useState(false);
 
   useEffect(() => {
     async function carregar() {

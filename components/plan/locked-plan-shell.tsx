@@ -131,6 +131,10 @@ export function LockedPlanShell() {
     return <TodayPlan isPremium={true} />;
   }
 
+  if (status === "locked") {
+    return <TodayPlan isPremium={false} />;
+  }
+
   if (status === "loading") {
     return (
       <main className="nutri-page-bg flex min-h-screen items-center justify-center px-5 text-white">

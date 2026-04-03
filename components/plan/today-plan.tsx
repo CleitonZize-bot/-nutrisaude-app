@@ -179,7 +179,7 @@ function SubscribeModal({ onClose, titulo, descricao }: {
   );
 }
 
-// Popup periódico — aparece de 10 em 10 min para usuários free
+// Popup periódico — aparece de 4 em 4 min para usuários não premium
 function FreeReminderPopup({ onClose, onUpgrade }: { onClose: () => void; onUpgrade: () => void }) {
   const mensagens = [
     {

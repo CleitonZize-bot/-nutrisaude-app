@@ -1068,6 +1068,26 @@ export function TodayPlan({
                                 {/* Painel de receita expandido */}
                                 {isRecipeOpen && receita ? (
                                   <div className="mt-2 rounded-xl border border-amber-200/60 bg-amber-50/40 px-3 py-3">
+                                    {/* Badge recomendado para a condição do usuário */}
+                                    {receita.isRecomendado ? (
+                                      <div className="mb-2 flex items-center gap-1.5 rounded-lg bg-emerald-100 px-2.5 py-1.5">
+                                        <span className="text-sm">✅</span>
+                                        <span className="text-xs font-semibold text-emerald-700">Indicado para sua condição de saúde</span>
+                                      </div>
+                                    ) : null}
+
+                                    {/* Alertas personalizados por doença */}
+                                    {receita.alertasPersonalizados?.length > 0 ? (
+                                      <div className="mb-2 space-y-1">
+                                        {receita.alertasPersonalizados.map((a: { icone: string; texto: string }, i: number) => (
+                                          <div key={i} className="flex items-start gap-1.5 rounded-lg bg-red-50 px-2.5 py-1.5">
+                                            <span className="shrink-0 text-sm">{a.icone}</span>
+                                            <span className="text-xs leading-snug text-red-700">{a.texto}</span>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    ) : null}
+
                                     <div className="mb-2 flex items-center gap-3 text-xs text-amber-700">
                                       <span>⏱ {receita.tempo}</span>
                                       <span>📏 {receita.porcao}</span>

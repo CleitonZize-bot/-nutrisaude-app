@@ -829,7 +829,7 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
                                   <Button
                                     type="button"
                                     variant="outline"
-                                    className="h-10 rounded-full border-amber-200 bg-white text-amber-600 hover:bg-amber-50 hover:text-amber-700"
+                                    className="h-8 rounded-full border-amber-200 bg-white text-xs text-amber-600 hover:bg-amber-50 hover:text-amber-700"
                                   >
                                     Como preparar
                                   </Button>

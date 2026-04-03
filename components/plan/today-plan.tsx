@@ -647,33 +647,18 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
           </div>
         </div>
 
-        <Card className="nutri-surface rounded-[1.9rem] border border-slate-200/80 py-0">
-          <CardContent className="px-5 py-5 sm:px-6">
-            <div className="flex items-center justify-between gap-3">
-              <p className="flex items-center gap-2 text-sm font-semibold text-slate-800">
-                <CalendarDays className="size-4 text-violet-500" />
-                Progresso de hoje
-              </p>
-              <span className="text-sm font-bold text-emerald-500">
-                {progressCount}/{plan.refeicoes.length}
-              </span>
-            </div>
-
-            <div className="mt-4 flex flex-col gap-3">
-              <Progress value={progressPercent} className="w-full" />
-              <div className="flex justify-center gap-2">
-                {Array.from({ length: Math.max(plan.refeicoes.length, 6) }).map((_, index) => (
-                  <span
-                    key={`progress-dot-${index}`}
-                    className={`size-2 rounded-full ${
-                      index < progressCount ? "bg-slate-400" : "bg-slate-200"
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <div className="rounded-2xl border border-slate-100 bg-white px-4 py-3 shadow-sm">
+          <div className="flex items-center justify-between">
+            <p className="flex items-center gap-1.5 text-xs font-semibold text-slate-700">
+              <CalendarDays className="size-3.5 text-violet-500" />
+              Progresso de hoje
+            </p>
+            <span className="text-xs font-bold text-emerald-500">{progressCount}/{plan.refeicoes.length}</span>
+          </div>
+          <div className="mt-2">
+            <Progress value={progressPercent} className="w-full" />
+          </div>
+        </div>
 
         <Card className="nutri-surface rounded-[1.4rem] border border-slate-200/80 py-0">
           <CardContent className="grid grid-cols-5 gap-1.5 px-2 py-2 sm:flex sm:flex-wrap sm:gap-2 sm:px-4 sm:py-3">

@@ -15,6 +15,7 @@ import {
   LockKeyhole,
   Pill,
   RefreshCw,
+  Repeat2,
   ShieldAlert,
   X,
 } from "lucide-react";

@@ -101,7 +101,7 @@ export function pbIgnorarAssinaturaNoAmbienteAtual() {
 
 const TRIAL_DIAS = 5;
 
-export function pbObterStatusAcesso(temAssinatura: boolean): "premium" | "trial" | "free" {
+export function pbObterStatusAcesso(temAssinatura: boolean): "premium" | "free_period" | "free" {
   if (pbIgnorarAssinaturaNoAmbienteAtual() || temAssinatura) return "premium";
 
   const pb = getPocketBase();
@@ -112,7 +112,7 @@ export function pbObterStatusAcesso(temAssinatura: boolean): "premium" | "trial"
   const agora = new Date();
   const diffDias = (agora.getTime() - dataCriacao.getTime()) / (1000 * 60 * 60 * 24);
 
-  if (diffDias < TRIAL_DIAS) return "trial";
+  if (diffDias < TRIAL_DIAS) return "free_period";
   return "free";
 }
 

@@ -724,83 +724,68 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
               const isOpen = openMeals[meal.chave] ?? false;
 
               return (
-                <Card
+                <div
                   key={meal.chave}
-                  className={`relative overflow-hidden rounded-[1.6rem] border py-0 shadow-[0_4px_16px_rgba(148,163,184,0.12)] ${
+                  className={`relative overflow-hidden rounded-2xl border bg-white shadow-sm ${
                     isOpen ? style.border : "border-slate-100"
-                  } bg-white`}
+                  }`}
                 >
                   <div className={`absolute inset-y-0 left-0 w-1 ${style.stripe}`} />
-                  <CardHeader className="gap-2 px-4 pt-4 sm:px-5 sm:pt-5">
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex min-w-0 items-center gap-2.5">
-                        <div
-                          className={`flex size-9 shrink-0 items-center justify-center rounded-xl text-lg ${style.icon}`}
-                        >
-                          {meal.icone}
-                        </div>
-                        <div className="min-w-0">
-                          <CardTitle className="text-[0.92rem] font-bold leading-snug text-slate-900">
-                            {meal.nome}
-                          </CardTitle>
-                          <div className="flex items-center gap-1.5 text-xs font-medium text-slate-400">
-                            {hasAlert ? <span className="text-amber-500">⚠</span> : null}
-                            <span>{meal.horario}</span>
-                          </div>
-                        </div>
-                      </div>
 
-                      <div className="flex shrink-0 items-center gap-1.5">
-                        <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-600">
-                          ~{meal.calorias} kcal
-                        </span>
-                        {isPremium ? (
-                          doneAt ? (
-                            <button
-                              type="button"
-                              className="flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-600"
-                              onClick={() => markMealDone(meal.chave, false)}
-                            >
-                              <CheckCircle2 className="size-3" />
-                              {doneAt}
-                            </button>
-                          ) : (
-                            <button
-                              type="button"
-                              className="rounded-full border border-emerald-200 bg-white px-2.5 py-1 text-xs font-semibold text-emerald-600 hover:bg-emerald-50"
-                              onClick={() => markMealDone(meal.chave, true)}
-                            >
-                              Marcar
-                            </button>
-                          )
-                        ) : null}
-                        <button
-                          type="button"
-                          className="flex size-7 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-700"
-                          onClick={() => toggleMeal(meal.chave)}
-                        >
-                          <ChevronDown
-                            className={`size-4 transition-transform ${isOpen ? "rotate-180" : ""}`}
-                          />
-                        </button>
-                      </div>
+                  {/* Header — clicável para expandir/recolher */}
+                  <button
+                    type="button"
+                    className="flex w-full flex-col gap-1 px-3.5 py-3 text-left pl-5"
+                    onClick={() => toggleMeal(meal.chave)}
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="text-base">{meal.icone}</span>
+                      <span className="flex-1 text-sm font-semibold text-slate-900">{meal.nome}</span>
+                      <ChevronDown
+                        className={`size-4 shrink-0 text-slate-400 transition-transform ${isOpen ? "rotate-180" : ""}`}
+                      />
                     </div>
-                  </CardHeader>
+                    <div className="flex items-center gap-2 pl-7">
+                      <span className="text-[0.7rem] text-slate-400">{meal.horario}</span>
+                      {hasAlert ? <span className="text-[0.7rem] text-amber-500">⚠ atencao</span> : null}
+                      <span className="rounded-full border border-emerald-200/60 bg-emerald-50 px-2 py-0.5 text-[0.65rem] font-semibold text-emerald-600">
+                        ~{meal.calorias} kcal
+                      </span>
+                      {isPremium ? (
+                        doneAt ? (
+                          <span
+                            role="button"
+                            className="flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-[0.65rem] font-semibold text-emerald-700"
+                            onClick={(e) => { e.stopPropagation(); markMealDone(meal.chave, false); }}
+                          >
+                            <CheckCircle2 className="size-3" />
+                            {doneAt}
+                          </span>
+                        ) : (
+                          <span
+                            role="button"
+                            className="rounded-full border border-emerald-200/60 bg-white px-2 py-0.5 text-[0.65rem] font-semibold text-emerald-600"
+                            onClick={(e) => { e.stopPropagation(); markMealDone(meal.chave, true); }}
+                          >
+                            Marcar ✓
+                          </span>
+                        )
+                      ) : null}
+                    </div>
+                  </button>
 
+                  {/* Conteúdo expandido */}
                   {isOpen ? (
-                    <CardContent className="relative flex flex-col gap-3 px-4 pb-4 sm:px-5 sm:pb-5">
+                    <div className="relative border-t border-slate-100 px-3.5 pb-3.5 pt-3 pl-5">
                       <div className={isPremium ? undefined : "pointer-events-none select-none blur-sm"}>
                         {hasAlert ? (
-                          <Alert className="mb-4 rounded-[1rem] border-red-200 bg-red-50 text-red-700">
-                            <ShieldAlert />
-                            <AlertTitle>Atencao nesta refeicao</AlertTitle>
-                            <AlertDescription>
-                              Esta refeicao contem alimentos que pedem atencao para sua condicao de saude.
-                            </AlertDescription>
-                          </Alert>
+                          <div className="mb-3 flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-[0.75rem] leading-snug text-red-600">
+                            <ShieldAlert className="mt-0.5 size-3.5 shrink-0" />
+                            <span>Esta refeicao contem alimentos que pedem atencao para sua condicao de saude.</span>
+                          </div>
                         ) : null}
 
-                        <div className="space-y-4">
+                        <div className="space-y-2.5">
                           {meal.itens.map((item, itemIndex) => {
                             const alert = verificarAlerta(item.nome, profile.condicoes);
                             const substitutions =
@@ -811,66 +796,52 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
                             return (
                               <div
                                 key={`${meal.chave}-${itemIndex}`}
-                                className="border-b border-slate-100 pb-4 last:border-b-0 last:pb-0"
+                                className="border-b border-slate-50 pb-2.5 last:border-b-0 last:pb-0"
                               >
-                                <div className="flex flex-col gap-3">
-                                  <div className="flex items-start justify-between gap-3">
-                                    <div className="min-w-0">
-                                      <p className="text-sm font-medium text-slate-900">
-                                        {item.nome}
-                                      </p>
-                                    </div>
-                                    <p className="shrink-0 text-sm font-semibold text-emerald-500">
-                                      {item.quantidade}
-                                    </p>
-                                  </div>
+                                <div className="flex items-baseline justify-between gap-2">
+                                  <p className="text-[0.8rem] font-medium text-slate-800">{item.nome}</p>
+                                  <p className="shrink-0 text-[0.75rem] font-semibold text-emerald-500">{item.quantidade}</p>
+                                </div>
 
-                                  <Button
+                                {alert ? (
+                                  <p className="mt-1 text-[0.7rem] leading-snug text-red-500">{alert}</p>
+                                ) : null}
+
+                                <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                                  <button
                                     type="button"
-                                    variant="outline"
-                                    className="h-8 rounded-full border-amber-200 bg-white text-xs text-amber-600 hover:bg-amber-50 hover:text-amber-700"
+                                    className="rounded-full border border-amber-200 bg-amber-50/60 px-2.5 py-1 text-[0.65rem] font-medium text-amber-600"
                                   >
                                     Como preparar
-                                  </Button>
-
-                                  {alert ? (
-                                    <p className="text-sm leading-6 text-red-500">{alert}</p>
-                                  ) : null}
-
-                                  {substitutions.length > 0 ? (
-                                    <div className="flex flex-wrap gap-2">
-                                      {substitutions.slice(0, 4).map((sub) => (
-                                        <Button
-                                          key={`${item.nome}-${sub.indice}`}
-                                          type="button"
-                                          variant="outline"
-                                          size="sm"
-                                          className="rounded-full border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100"
-                                          onClick={() =>
-                                            replaceItem(meal.chave, itemIndex, item.grupoId!, sub.indice)
-                                          }
-                                        >
-                                          {sub.nome}
-                                        </Button>
-                                      ))}
-                                    </div>
-                                  ) : null}
+                                  </button>
+                                  {substitutions.slice(0, 4).map((sub) => (
+                                    <button
+                                      key={`${item.nome}-${sub.indice}`}
+                                      type="button"
+                                      className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[0.65rem] font-medium text-slate-600 active:bg-slate-100"
+                                      onClick={() =>
+                                        replaceItem(meal.chave, itemIndex, item.grupoId!, sub.indice)
+                                      }
+                                    >
+                                      {sub.nome}
+                                    </button>
+                                  ))}
                                 </div>
                               </div>
                             );
                           })}
                         </div>
 
-                        <div className="flex flex-wrap gap-2">
-                          <Badge className="rounded-full bg-blue-50 px-3 py-1 text-blue-600 hover:bg-blue-50">
+                        <div className="mt-3 flex flex-wrap gap-1.5">
+                          <span className="rounded-full bg-blue-50 px-2.5 py-1 text-[0.65rem] font-semibold text-blue-600">
                             {meal.macros.proteina}g proteina
-                          </Badge>
-                          <Badge className="rounded-full bg-amber-50 px-3 py-1 text-amber-600 hover:bg-amber-50">
+                          </span>
+                          <span className="rounded-full bg-amber-50 px-2.5 py-1 text-[0.65rem] font-semibold text-amber-600">
                             {meal.macros.carbo}g carb.
-                          </Badge>
-                          <Badge className="rounded-full bg-rose-50 px-3 py-1 text-rose-600 hover:bg-rose-50">
+                          </span>
+                          <span className="rounded-full bg-rose-50 px-2.5 py-1 text-[0.65rem] font-semibold text-rose-600">
                             {meal.macros.gordura}g gordura
-                          </Badge>
+                          </span>
                         </div>
                       </div>
 
@@ -878,21 +849,17 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
                         <button
                           type="button"
                           onClick={() => setShowSubscribeModal(true)}
-                          className="absolute inset-x-4 bottom-4 top-4 flex items-center justify-center"
+                          className="absolute inset-3 flex items-center justify-center"
                         >
-                          <div className="w-full rounded-[1.2rem] bg-slate-900/90 px-6 py-5 text-center backdrop-blur-sm">
-                            <p className="nutri-title text-lg font-black text-white">
-                              Clique para desbloquear
-                            </p>
-                            <p className="mt-1 text-sm text-white/70">
-                              Receitas, cardapios e todas as funcoes do aplicativo
-                            </p>
+                          <div className="w-full rounded-xl bg-slate-900/90 px-5 py-4 text-center backdrop-blur-sm">
+                            <p className="text-sm font-bold text-white">Clique para desbloquear</p>
+                            <p className="mt-0.5 text-[0.7rem] text-white/70">Receitas, cardapios e todas as funcoes</p>
                           </div>
                         </button>
                       ) : null}
-                    </CardContent>
+                    </div>
                   ) : null}
-                </Card>
+                </div>
               );
             })}
           </div>

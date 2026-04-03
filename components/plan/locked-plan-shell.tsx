@@ -121,7 +121,7 @@ export function LockedPlanShell() {
 
       const acesso = pbObterStatusAcesso(temAssinatura);
       setStatus(acesso);
-      if (acesso === "trial") {
+      if (acesso === "free_period") {
         setDiasRestantes(pbDiasRestantesTrial());
       }
 

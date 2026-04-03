@@ -50,7 +50,7 @@ const CATEGORIAS_ORDEM = [
 
 type Categoria = (typeof CATEGORIAS_ORDEM)[number];
 
-const KEYWORDS_MAP: Record<Exclude<Categoria, "Outros">, string[]> = {
+const KEYWORDS_MAP: Record<Categoria, string[]> = {
   Frutas: [
     "maçã", "pera", "banana", "manga", "melão", "abacaxi", "laranja",
     "uva", "morango", "kiwi", "mamão", "goiaba", "ameixa", "fruta",

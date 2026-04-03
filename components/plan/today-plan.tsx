@@ -49,7 +49,7 @@ import {
 import { FontSizeControl } from "@/components/plan/font-size-control";
 import { obterSubstituicoes } from "@/lib/alimentos-data";
 import { gerarCardapioCompleto } from "@/lib/nutricao-data";
-import { obterReceita } from "@/lib/receitas-db";
+import { obterReceitaPersonalizada } from "@/lib/receitas-db";
 import { verificarAlerta } from "@/lib/receitas-data";
 
 type TabKey = "hoje" | "semana" | "progresso" | "ingredientes" | "saude";

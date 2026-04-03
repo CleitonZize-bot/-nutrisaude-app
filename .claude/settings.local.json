@@ -19,7 +19,10 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git push:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(wc -l /c/Users/Cleiton/Desktop/nutri-app/components/plan/*.tsx)",
+      "Bash(xargs wc:*)",
+      "Bash(grep -r \"TODO\\\\|FIXME\\\\|XXX\" /c/Users/Cleiton/Desktop/nutri-app --include=*.tsx --include=*.ts)"
     ]
   },
   "hooks": {

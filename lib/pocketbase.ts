@@ -99,32 +99,9 @@ export function pbIgnorarAssinaturaNoAmbienteAtual() {
   return process.env.NEXT_PUBLIC_BYPASS_SUBSCRIPTION === "true";
 }
 
-const TRIAL_DIAS = 5;
-
-export function pbObterStatusAcesso(temAssinatura: boolean): "premium" | "free_period" | "free" {
+export function pbObterStatusAcesso(temAssinatura: boolean): "premium" | "free" {
   if (pbIgnorarAssinaturaNoAmbienteAtual() || temAssinatura) return "premium";
-
-  const pb = getPocketBase();
-  const created = pb.authStore.record?.created as string | undefined;
-  if (!created) return "free";
-
-  const dataCriacao = new Date(created);
-  const agora = new Date();
-  const diffDias = (agora.getTime() - dataCriacao.getTime()) / (1000 * 60 * 60 * 24);
-
-  if (diffDias < TRIAL_DIAS) return "free_period";
   return "free";
-}
-
-export function pbDiasRestantesTrial(): number {
-  const pb = getPocketBase();
-  const created = pb.authStore.record?.created as string | undefined;
-  if (!created) return 0;
-
-  const dataCriacao = new Date(created);
-  const agora = new Date();
-  const diffDias = (agora.getTime() - dataCriacao.getTime()) / (1000 * 60 * 60 * 24);
-  return Math.max(0, Math.ceil(TRIAL_DIAS - diffDias));
 }
 
 export function perfilEstaCompleto(

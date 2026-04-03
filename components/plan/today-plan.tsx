@@ -610,7 +610,7 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
               Meta: {(hydrationMeta / 1000).toFixed(1)}L
             </CardDescription>
           </CardHeader>
-          <CardContent className="flex flex-col gap-5 px-5 pb-5 sm:px-6 sm:pb-6">
+          <CardContent className="flex flex-col gap-3 px-4 pb-4 sm:px-6 sm:pb-5">
             <div className="rounded-2xl bg-white/10 p-4 backdrop-blur-sm">
               <div className="mb-3 flex items-center justify-between gap-3">
                 <span className="text-lg font-bold text-white">

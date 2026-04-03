@@ -46,6 +46,7 @@ import {
   type NutrisaudeProfile,
   type NutrisaudeStoredData,
 } from "@/lib/pocketbase";
+import { FontSizeControl } from "@/components/plan/font-size-control";
 import { obterSubstituicoes } from "@/lib/alimentos-data";
 import { gerarCardapioCompleto } from "@/lib/nutricao-data";
 import { obterReceita } from "@/lib/receitas-db";

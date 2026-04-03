@@ -1125,15 +1125,15 @@ export function TodayPlan({
                         </div>
                       </div>
 
-                      {!isPremium ? (
+                      {!isPrem ? (
                         <button
                           type="button"
                           onClick={() => setShowSubscribeModal(true)}
                           className="absolute inset-3 flex items-center justify-center"
                         >
                           <div className="w-full rounded-xl bg-slate-900/90 px-5 py-4 text-center backdrop-blur-sm">
-                            <p className="text-sm font-bold text-white">Clique para desbloquear</p>
-                            <p className="mt-0.5 text-xs text-white/70">Receitas, cardapios e todas as funcoes</p>
+                            <p className="text-sm font-bold text-white">🌱 Voce ja deu um otimo comeco!</p>
+                            <p className="mt-1 text-xs leading-relaxed text-white/80">Faca parte do Plano Pro e veja as receitas completas</p>
                           </div>
                         </button>
                       ) : null}

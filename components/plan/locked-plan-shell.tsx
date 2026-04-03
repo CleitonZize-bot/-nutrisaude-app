@@ -118,11 +118,7 @@ export function LockedPlanShell() {
         pbIgnorarAssinaturaNoAmbienteAtual() ||
         (await comTimeout(pbVerificarAssinatura(email), 6000, false));
 
-      const acesso = pbObterStatusAcesso(temAssinatura);
-      setStatus(acesso);
-      if (acesso === "free_period") {
-        setDiasRestantes(pbDiasRestantesTrial());
-      }
+      setStatus(pbObterStatusAcesso(temAssinatura));
 
       pbRefresh().catch((error: unknown) => {
         const pbError = error as { status?: number };

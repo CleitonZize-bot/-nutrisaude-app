@@ -556,50 +556,18 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
             <p className="text-[0.7rem] text-white/60">{profileSummary}</p>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <Card className="border-white/10 bg-white/8 py-0 text-white ring-0 backdrop-blur-sm">
-              <CardContent className="px-4 py-4 text-center sm:px-4 sm:py-5">
-                <p className="text-2xl font-black leading-none text-primary sm:text-[2rem]">
-                  {plan.tdee.toLocaleString("pt-BR")}
-                </p>
-                <p className="mt-2 text-[0.65rem] uppercase tracking-widest text-white/55">
-                  kcal/dia
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-white/10 bg-white/8 py-0 text-white ring-0 backdrop-blur-sm">
-              <CardContent className="px-4 py-4 text-center sm:px-4 sm:py-5">
-                <p className="text-2xl font-black leading-none text-primary sm:text-[2rem]">
-                  {plan.macros.proteina}g
-                </p>
-                <p className="mt-2 text-[0.65rem] uppercase tracking-widest text-white/55">
-                  proteina
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-white/10 bg-white/8 py-0 text-white ring-0 backdrop-blur-sm">
-              <CardContent className="px-4 py-4 text-center sm:px-4 sm:py-5">
-                <p className="text-2xl font-black leading-none text-primary sm:text-[2rem]">
-                  {plan.macros.carbo}g
-                </p>
-                <p className="mt-2 text-[0.65rem] uppercase tracking-widest text-white/55">
-                  carbo
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-white/10 bg-white/8 py-0 text-white ring-0 backdrop-blur-sm">
-              <CardContent className="px-4 py-4 text-center sm:px-4 sm:py-5">
-                <p className="text-2xl font-black leading-none text-primary sm:text-[2rem]">
-                  {plan.macros.gordura}g
-                </p>
-                <p className="mt-2 text-[0.65rem] uppercase tracking-widest text-white/55">
-                  gordura
-                </p>
-              </CardContent>
-            </Card>
+          <div className="grid grid-cols-4 gap-2">
+            {[
+              { value: plan.tdee.toLocaleString("pt-BR"), label: "kcal/dia" },
+              { value: `${plan.macros.proteina}g`, label: "proteína" },
+              { value: `${plan.macros.carbo}g`, label: "carbo" },
+              { value: `${plan.macros.gordura}g`, label: "gordura" },
+            ].map((item) => (
+              <div key={item.label} className="rounded-[1rem] border border-white/10 bg-white/8 py-3 text-center backdrop-blur-sm">
+                <p className="text-lg font-black leading-none text-primary sm:text-2xl">{item.value}</p>
+                <p className="mt-1.5 text-[0.58rem] uppercase tracking-wider text-white/55">{item.label}</p>
+              </div>
+            ))}
           </div>
         </div>
 

@@ -134,9 +134,17 @@ export async function pbRefresh() {
 
   try {
     return await getPocketBase().collection("users").authRefresh();
-  } catch (error) {
-    pbLogout();
-    throw error;
+  } catch (error: unknown) {
+    // Só desloga se o servidor respondeu 401 (token definitivamente inválido).
+    // Erros de rede, timeout ou outros não devem derrubar a sessão salva localmente.
+    const pbError = error as { status?: number };
+    if (pbError?.status === 401) {
+      pbLogout();
+      throw error;
+    }
+    // Problema de rede ou servidor indisponível — mantém sessão em cache.
+    console.warn("PB: refresh falhou mas sessão mantida (erro de rede?)", error);
+    return null;
   }
 }
 

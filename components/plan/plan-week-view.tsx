@@ -86,13 +86,14 @@ const KEYWORDS_MAP: Record<Categoria, string[]> = {
     "óleo", "tempero", "noz-moscada", "açafrão", "cúrcuma",
     "amendoim", "castanha", "nozes", "amêndoa",
   ],
+  Outros: [],
 };
 
 function categorizarItem(nome: string): Categoria {
   const lower = nome.toLowerCase();
   for (const cat of CATEGORIAS_ORDEM) {
     if (cat === "Outros") continue;
-    const keywords = KEYWORDS_MAP[cat as Exclude<Categoria, "Outros">];
+    const keywords = KEYWORDS_MAP[cat];
     if (keywords.some((kw) => lower.includes(kw))) {
       return cat;
     }

@@ -1,9 +1,21 @@
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { pbEstaLogado } from "@/lib/pocketbase";
 
 export default function HomePage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    if (pbEstaLogado()) {
+      router.replace("/plano");
+    }
+  }, [router]);
   return (
     <main className="nutri-page-bg relative min-h-screen overflow-hidden text-white">
       <div className="absolute -left-24 -top-24 -z-10 size-80 rounded-full bg-primary/12 blur-3xl" />

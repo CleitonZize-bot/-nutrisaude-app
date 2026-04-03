@@ -326,6 +326,7 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
   const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(true);
   const [showSubscribeModal, setShowSubscribeModal] = useState(false);
+  const [openRecipes, setOpenRecipes] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     async function carregar() {

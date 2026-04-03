@@ -461,7 +461,23 @@ function recomputeMeal(meal: Meal, items: MealItem[]): Meal {
 
 const subscribeUrl = process.env.NEXT_PUBLIC_SUBSCRIBE_URL || "#";
 
-export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?: boolean; isPremium?: boolean }) {
+type AcessoType = "premium" | "trial" | "free";
+
+export function TodayPlan({
+  isNewPlan = false,
+  isPremium,
+  acesso = "premium",
+  diasRestantes = 0,
+}: {
+  isNewPlan?: boolean;
+  isPremium?: boolean; // legado — usar acesso
+  acesso?: AcessoType;
+  diasRestantes?: number;
+}) {
+  // compatibilidade com código legado
+  const tipoAcesso: AcessoType = isPremium === false ? "free" : acesso;
+  const isPrem = tipoAcesso === "premium" || tipoAcesso === "trial";
+
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabKey>("hoje");
   const [openMeals, setOpenMeals] = useState<Record<string, boolean>>({

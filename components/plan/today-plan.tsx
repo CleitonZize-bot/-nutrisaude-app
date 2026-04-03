@@ -1146,11 +1146,16 @@ export function TodayPlan({
         ) : null}
 
         {activeTab === "semana" ? (
-          isPremium ? <PlanWeekView /> : <PremiumTabLock onUnlock={() => setShowSubscribeModal(true)} />
+          isPrem ? <PlanWeekView /> : (
+            <InlineLock
+              mensagem="Cardapio da semana completo — planeje seus 7 dias"
+              onUnlock={() => setShowSubscribeModal(true)}
+            />
+          )
         ) : null}
 
         {activeTab === "progresso" ? (
-          isPremium ? (
+          isPrem ? (
             <PlanProgressView
               profile={profile}
               weightHistory={weightHistory}
@@ -1159,15 +1164,30 @@ export function TodayPlan({
               onWeightInputChange={setWeightInput}
               onSaveWeight={saveWeight}
             />
-          ) : <PremiumTabLock onUnlock={() => setShowSubscribeModal(true)} />
+          ) : (
+            <InlineLock
+              mensagem="Acompanhe sua evolucao com grafico de peso"
+              onUnlock={() => setShowSubscribeModal(true)}
+            />
+          )
         ) : null}
 
         {activeTab === "ingredientes" ? (
-          isPremium ? <PlanIngredientsView profile={profile} /> : <PremiumTabLock onUnlock={() => setShowSubscribeModal(true)} />
+          isPrem ? <PlanIngredientsView profile={profile} /> : (
+            <InlineLock
+              mensagem="Busque receitas pelos ingredientes que voce tem em casa"
+              onUnlock={() => setShowSubscribeModal(true)}
+            />
+          )
         ) : null}
 
         {activeTab === "saude" ? (
-          isPremium ? <PlanHealthView healthData={healthData} /> : <PremiumTabLock onUnlock={() => setShowSubscribeModal(true)} />
+          isPrem ? <PlanHealthView healthData={healthData} /> : (
+            <InlineLock
+              mensagem="Diario de saude, exames e controle de medicamentos"
+              onUnlock={() => setShowSubscribeModal(true)}
+            />
+          )
         ) : null}
 
         <div className="flex justify-center gap-2 pb-4 pt-1">
@@ -1189,8 +1209,17 @@ export function TodayPlan({
         </div>
       </div>
 
+      {/* Modal principal de assinatura */}
       {showSubscribeModal ? (
         <SubscribeModal onClose={() => setShowSubscribeModal(false)} />
+      ) : null}
+
+      {/* Popup periódico para usuários free */}
+      {showFreePopup ? (
+        <FreeReminderPopup
+          onClose={() => setShowFreePopup(false)}
+          onUpgrade={() => { setShowFreePopup(false); setShowSubscribeModal(true); }}
+        />
       ) : null}
     </main>
   );

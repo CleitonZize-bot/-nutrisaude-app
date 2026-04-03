@@ -789,7 +789,7 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
                   </CardHeader>
 
                   {isOpen ? (
-                    <CardContent className="relative flex flex-col gap-4 px-5 pb-5 sm:px-6 sm:pb-6">
+                    <CardContent className="relative flex flex-col gap-3 px-4 pb-4 sm:px-5 sm:pb-5">
                       <div className={isPremium ? undefined : "pointer-events-none select-none blur-sm"}>
                         {hasAlert ? (
                           <Alert className="mb-4 rounded-[1rem] border-red-200 bg-red-50 text-red-700">

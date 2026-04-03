@@ -861,22 +861,22 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
           isPremium ? <PlanHealthView healthData={healthData} /> : <PremiumTabLock onUnlock={() => setShowSubscribeModal(true)} />
         ) : null}
 
-        <div className="flex justify-center gap-3 pt-2">
+        <div className="flex justify-center gap-2 pb-4 pt-1">
           <Link href="/onboarding">
-            <Button
-              variant="outline"
-              className="rounded-[1rem] border-slate-200 px-6 text-slate-500 hover:bg-slate-50"
+            <button
+              type="button"
+              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-medium text-slate-500 active:bg-slate-50"
             >
               Refazer meu perfil
-            </Button>
+            </button>
           </Link>
-          <Button
-            variant="outline"
-            className="rounded-[1rem] border-slate-200 px-6 text-slate-500 hover:bg-slate-50"
+          <button
+            type="button"
+            className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-medium text-slate-500 active:bg-slate-50"
             onClick={handleLogout}
           >
             Sair da conta
-          </Button>
+          </button>
         </div>
       </div>
 

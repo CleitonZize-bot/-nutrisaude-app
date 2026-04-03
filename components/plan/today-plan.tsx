@@ -980,7 +980,7 @@ export function TodayPlan({
                   {/* Conteúdo expandido */}
                   {isOpen ? (
                     <div className="relative border-t border-slate-100 px-4 pb-4 pt-3">
-                      <div className={isPremium ? undefined : "pointer-events-none select-none blur-sm"}>
+                      <div className={isPrem ? undefined : "pointer-events-none select-none blur-sm"}>
                         {hasAlert ? (
                           <div className="mb-3 flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 px-3 py-2.5 text-xs leading-snug text-red-600">
                             <ShieldAlert className="mt-0.5 size-3.5 shrink-0" />

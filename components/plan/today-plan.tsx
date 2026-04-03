@@ -587,8 +587,8 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
           </Alert>
         ) : null}
 
-        <Card className="overflow-hidden rounded-[1.9rem] border border-blue-900/10 bg-[linear-gradient(180deg,#244d7f_0%,#204a79_100%)] py-0 text-white shadow-[0_22px_48px_rgba(30,64,116,0.18)]">
-          <CardHeader className="gap-2 px-5 pt-5 sm:px-6 sm:pt-6">
+        <Card className="overflow-hidden rounded-[1.6rem] border border-blue-900/10 bg-[linear-gradient(180deg,#244d7f_0%,#204a79_100%)] py-0 text-white shadow-[0_22px_48px_rgba(30,64,116,0.18)] sm:rounded-[1.9rem]">
+          <CardHeader className="gap-1.5 px-4 pt-4 sm:px-6 sm:pt-5">
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-3">
                 <Droplets className="text-cyan-200" />

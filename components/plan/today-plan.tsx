@@ -732,62 +732,58 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
                   } bg-white`}
                 >
                   <div className={`absolute inset-y-0 left-0 w-1 ${style.stripe}`} />
-                  <CardHeader className="gap-3 px-5 pt-5 sm:px-6 sm:pt-6">
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex min-w-0 items-center gap-3">
+                  <CardHeader className="gap-2 px-4 pt-4 sm:px-5 sm:pt-5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex min-w-0 items-center gap-2.5">
                         <div
-                          className={`flex size-12 shrink-0 items-center justify-center rounded-2xl text-2xl ${style.icon}`}
+                          className={`flex size-9 shrink-0 items-center justify-center rounded-xl text-lg ${style.icon}`}
                         >
                           {meal.icone}
                         </div>
                         <div className="min-w-0">
-                          <CardTitle className="nutri-title text-[1.45rem] text-slate-900">
+                          <CardTitle className="text-[0.92rem] font-bold leading-snug text-slate-900">
                             {meal.nome}
                           </CardTitle>
-                          <div className="mt-1 flex items-center gap-2 text-sm font-medium text-slate-500">
-                            {hasAlert ? <span className="text-amber-500">!</span> : null}
+                          <div className="flex items-center gap-1.5 text-xs font-medium text-slate-400">
+                            {hasAlert ? <span className="text-amber-500">⚠</span> : null}
                             <span>{meal.horario}</span>
                           </div>
                         </div>
                       </div>
 
-                      <div className="flex shrink-0 items-start gap-2">
-                        <Badge className="h-9 rounded-full border border-emerald-200 bg-emerald-50 px-3 text-emerald-600 hover:bg-emerald-50">
+                      <div className="flex shrink-0 items-center gap-1.5">
+                        <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-600">
                           ~{meal.calorias} kcal
-                        </Badge>
+                        </span>
                         {isPremium ? (
                           doneAt ? (
-                            <Button
+                            <button
                               type="button"
-                              variant="outline"
-                              className="h-9 rounded-full border-emerald-200 px-4 text-emerald-600 hover:bg-emerald-50"
+                              className="flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-600"
                               onClick={() => markMealDone(meal.chave, false)}
                             >
-                              <CheckCircle2 />
+                              <CheckCircle2 className="size-3" />
                               {doneAt}
-                            </Button>
+                            </button>
                           ) : (
-                            <Button
+                            <button
                               type="button"
-                              variant="outline"
-                              className="h-9 rounded-full border-emerald-200 px-4 text-emerald-600 hover:bg-emerald-50"
+                              className="rounded-full border border-emerald-200 bg-white px-2.5 py-1 text-xs font-semibold text-emerald-600 hover:bg-emerald-50"
                               onClick={() => markMealDone(meal.chave, true)}
                             >
                               Marcar
-                            </Button>
+                            </button>
                           )
                         ) : null}
-                        <Button
+                        <button
                           type="button"
-                          variant="ghost"
-                          size="icon-sm"
-                          className="mt-0.5 rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+                          className="flex size-7 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-700"
                           onClick={() => toggleMeal(meal.chave)}
                         >
                           <ChevronDown
                             className={`size-4 transition-transform ${isOpen ? "rotate-180" : ""}`}
                           />
-                        </Button>
+                        </button>
                       </div>
                     </div>
                   </CardHeader>

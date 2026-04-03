@@ -101,6 +101,14 @@ export function LockedPlanShell() {
 
       try {
         await pbRefresh();
+      } catch {
+        // pbRefresh só lança para 401 — token definitivamente inválido.
+        pbLogout();
+        router.replace("/login");
+        return;
+      }
+
+      try {
         const email = String(getPocketBase().authStore.model?.email || "");
 
         if (!email) {
@@ -112,15 +120,11 @@ export function LockedPlanShell() {
         const temAssinatura =
           pbIgnorarAssinaturaNoAmbienteAtual() || (await pbVerificarAssinatura(email));
 
-        if (temAssinatura) {
-          setStatus("unlocked");
-          return;
-        }
-
-        setStatus("locked");
+        setStatus(temAssinatura ? "unlocked" : "locked");
       } catch {
-        pbLogout();
-        router.replace("/login");
+        // Erro ao verificar assinatura (rede offline, etc.) — mostra o plano bloqueado
+        // sem deslogar o usuário, pois a sessão local ainda é válida.
+        setStatus("locked");
       }
     }
 

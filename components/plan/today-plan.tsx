@@ -747,7 +747,7 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
         </Card>
 
         {activeTab === "hoje" ? (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3">
             {plan.refeicoes.map((meal) => {
               const doneAt = checkins[meal.chave];
               const hasAlert = meal.itens.some((item) =>
@@ -759,8 +759,8 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
               return (
                 <Card
                   key={meal.chave}
-                  className={`relative overflow-hidden rounded-[1.9rem] border py-0 shadow-[0_18px_34px_rgba(148,163,184,0.16)] ${
-                    isOpen ? style.border : "border-slate-200/80"
+                  className={`relative overflow-hidden rounded-[1.6rem] border py-0 shadow-[0_4px_16px_rgba(148,163,184,0.12)] ${
+                    isOpen ? style.border : "border-slate-100"
                   } bg-white`}
                 >
                   <div className={`absolute inset-y-0 left-0 w-1 ${style.stripe}`} />

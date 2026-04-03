@@ -770,8 +770,8 @@ export function TodayPlan({
           </div>
         </div>
 
-        {/* Banner de trial */}
-        {tipoAcesso === "trial" && diasRestantes > 0 ? (
+        {/* Banner de periodo gratuito */}
+        {tipoAcesso === "free_period" && diasRestantes > 0 ? (
           <TrialBanner dias={diasRestantes} onUpgrade={() => setShowSubscribeModal(true)} />
         ) : null}
 

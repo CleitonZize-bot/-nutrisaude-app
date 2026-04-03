@@ -483,6 +483,9 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
         refeicoes: nextMeals,
       };
     });
+
+    // Fecha o painel de substituição após trocar
+    setOpenSubs((current) => ({ ...current, [`${mealKey}-${itemIndex}`]: false }));
   }
 
   function saveWeight() {

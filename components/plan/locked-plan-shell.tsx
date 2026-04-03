@@ -98,8 +98,7 @@ async function comTimeout<T>(promise: Promise<T>, ms: number, fallback: T): Prom
 
 export function LockedPlanShell() {
   const router = useRouter();
-  const [status, setStatus] = useState<"loading" | "premium" | "free_period" | "free">("loading");
-  const [diasRestantes, setDiasRestantes] = useState(0);
+  const [status, setStatus] = useState<"loading" | "premium" | "free">("loading");
 
   useEffect(() => {
     async function verificarAcesso() {

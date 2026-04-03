@@ -797,15 +797,15 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
                                   {substitutions.length > 0 ? (
                                     <button
                                       type="button"
-                                      className={`flex size-7 shrink-0 items-center justify-center rounded-lg border transition-colors ${
+                                      className={`flex shrink-0 items-center gap-1 rounded-full border px-2.5 py-1 text-[0.7rem] font-semibold transition-colors ${
                                         isSubsOpen
-                                          ? "border-emerald-300 bg-emerald-50 text-emerald-600"
-                                          : "border-slate-200 bg-slate-50 text-slate-400 active:bg-emerald-50 active:text-emerald-600"
+                                          ? "border-emerald-400 bg-emerald-100 text-emerald-700"
+                                          : "border-emerald-300 bg-emerald-50 text-emerald-600 active:bg-emerald-100"
                                       }`}
                                       onClick={() => toggleSubs(recipeKey)}
-                                      title="Substituir alimento"
                                     >
                                       <Repeat2 className="size-3.5" />
+                                      Trocar
                                     </button>
                                   ) : null}
                                 </div>

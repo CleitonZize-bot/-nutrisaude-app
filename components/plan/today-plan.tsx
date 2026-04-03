@@ -541,6 +541,19 @@ export function TodayPlan({
     carregar();
   }, [router]);
 
+  // Popup periódico para usuários free — aparece após 3 min e repete a cada 10 min
+  useEffect(() => {
+    if (tipoAcesso !== "free") return;
+
+    const primeiro = setTimeout(() => setShowFreePopup(true), 3 * 60 * 1000);
+    const intervalo = setInterval(() => setShowFreePopup(true), 10 * 60 * 1000);
+
+    return () => {
+      clearTimeout(primeiro);
+      clearInterval(intervalo);
+    };
+  }, [tipoAcesso]);
+
   const hydrationMeta = useMemo(() => {
     if (!profile) return 0;
     return Math.round(profile.peso * 35);

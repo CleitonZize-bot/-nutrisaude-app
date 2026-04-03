@@ -753,71 +753,129 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
 
                   {/* Conteúdo expandido */}
                   {isOpen ? (
-                    <div className="relative border-t border-slate-100 px-3.5 pb-3.5 pt-3 pl-5">
+                    <div className="relative border-t border-slate-100 px-4 pb-4 pt-3">
                       <div className={isPremium ? undefined : "pointer-events-none select-none blur-sm"}>
                         {hasAlert ? (
-                          <div className="mb-3 flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-[0.75rem] leading-snug text-red-600">
+                          <div className="mb-3 flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 px-3 py-2.5 text-xs leading-snug text-red-600">
                             <ShieldAlert className="mt-0.5 size-3.5 shrink-0" />
                             <span>Esta refeicao contem alimentos que pedem atencao para sua condicao de saude.</span>
                           </div>
                         ) : null}
 
-                        <div className="space-y-2.5">
+                        <div className="space-y-3">
                           {meal.itens.map((item, itemIndex) => {
                             const alert = verificarAlerta(item.nome, profile.condicoes);
                             const substitutions =
                               item.grupoId && item.indiceNoGrupo !== undefined
                                 ? obterSubstituicoes(item.grupoId, item.indiceNoGrupo)
                                 : [];
+                            const receita = obterReceita(item.nome);
+                            const recipeKey = `${meal.chave}-${itemIndex}`;
+                            const isRecipeOpen = openRecipes[recipeKey] ?? false;
 
                             return (
                               <div
-                                key={`${meal.chave}-${itemIndex}`}
-                                className="border-b border-slate-50 pb-2.5 last:border-b-0 last:pb-0"
+                                key={recipeKey}
+                                className="border-b border-slate-100 pb-3 last:border-b-0 last:pb-0"
                               >
+                                {/* Nome + quantidade */}
                                 <div className="flex items-baseline justify-between gap-2">
-                                  <p className="text-[0.8rem] font-medium text-slate-800">{item.nome}</p>
-                                  <p className="shrink-0 text-[0.75rem] font-semibold text-emerald-500">{item.quantidade}</p>
+                                  <p className="text-[0.82rem] font-semibold text-slate-800">{item.nome}</p>
+                                  <p className="shrink-0 text-[0.82rem] font-bold text-emerald-500">{item.quantidade}</p>
                                 </div>
 
                                 {alert ? (
-                                  <p className="mt-1 text-[0.7rem] leading-snug text-red-500">{alert}</p>
+                                  <p className="mt-1 text-xs leading-snug text-red-500">⚠ {alert}</p>
                                 ) : null}
 
-                                <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                                {/* Botão "Como preparar" — destaque visual */}
+                                {receita ? (
                                   <button
                                     type="button"
-                                    className="rounded-full border border-amber-200 bg-amber-50/60 px-2.5 py-1 text-[0.65rem] font-medium text-amber-600"
+                                    className={`mt-2 flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left text-xs font-semibold transition-colors ${
+                                      isRecipeOpen
+                                        ? "border-amber-300 bg-amber-50 text-amber-700"
+                                        : "border-amber-200 bg-amber-50/50 text-amber-600 active:bg-amber-50"
+                                    }`}
+                                    onClick={() => toggleRecipe(recipeKey)}
                                   >
-                                    Como preparar
+                                    <span>👨‍🍳</span>
+                                    <span className="flex-1">Como preparar</span>
+                                    <ChevronDown className={`size-3.5 transition-transform ${isRecipeOpen ? "rotate-180" : ""}`} />
                                   </button>
-                                  {substitutions.slice(0, 4).map((sub) => (
-                                    <button
-                                      key={`${item.nome}-${sub.indice}`}
-                                      type="button"
-                                      className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[0.65rem] font-medium text-slate-600 active:bg-slate-100"
-                                      onClick={() =>
-                                        replaceItem(meal.chave, itemIndex, item.grupoId!, sub.indice)
-                                      }
-                                    >
-                                      {sub.nome}
-                                    </button>
-                                  ))}
-                                </div>
+                                ) : null}
+
+                                {/* Painel de receita expandido */}
+                                {isRecipeOpen && receita ? (
+                                  <div className="mt-2 rounded-xl border border-amber-200/60 bg-amber-50/40 px-3 py-3">
+                                    <div className="mb-2 flex items-center gap-3 text-xs text-amber-700">
+                                      <span>⏱ {receita.tempo}</span>
+                                      <span>📏 {receita.porcao}</span>
+                                    </div>
+
+                                    <p className="mb-1 text-xs font-bold text-slate-700">Ingredientes:</p>
+                                    <ul className="mb-2.5 space-y-0.5 text-xs text-slate-600">
+                                      {receita.ingredientes.map((ing: string, i: number) => (
+                                        <li key={i} className="flex gap-1.5">
+                                          <span className="text-amber-400">•</span>
+                                          <span>{ing}</span>
+                                        </li>
+                                      ))}
+                                    </ul>
+
+                                    <p className="mb-1 text-xs font-bold text-slate-700">Preparo:</p>
+                                    <ol className="mb-2.5 space-y-1 text-xs text-slate-600">
+                                      {receita.preparo.map((step: string, i: number) => (
+                                        <li key={i} className="flex gap-1.5">
+                                          <span className="shrink-0 font-bold text-amber-500">{i + 1}.</span>
+                                          <span>{step}</span>
+                                        </li>
+                                      ))}
+                                    </ol>
+
+                                    {receita.dica ? (
+                                      <p className="rounded-lg bg-amber-100/60 px-2.5 py-2 text-xs text-amber-800">
+                                        💡 {receita.dica}
+                                      </p>
+                                    ) : null}
+                                  </div>
+                                ) : null}
+
+                                {/* Substituições */}
+                                {substitutions.length > 0 ? (
+                                  <div className="mt-2">
+                                    <p className="mb-1 text-[0.68rem] font-semibold uppercase tracking-wide text-slate-400">Substituir por:</p>
+                                    <div className="flex flex-wrap gap-1.5">
+                                      {substitutions.slice(0, 5).map((sub) => (
+                                        <button
+                                          key={`${item.nome}-${sub.indice}`}
+                                          type="button"
+                                          className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-700 active:bg-emerald-50 active:text-emerald-700 active:border-emerald-300"
+                                          onClick={() =>
+                                            replaceItem(meal.chave, itemIndex, item.grupoId!, sub.indice)
+                                          }
+                                        >
+                                          {sub.nome}
+                                        </button>
+                                      ))}
+                                    </div>
+                                  </div>
+                                ) : null}
                               </div>
                             );
                           })}
                         </div>
 
-                        <div className="mt-3 flex flex-wrap gap-1.5">
-                          <span className="rounded-full bg-blue-50 px-2.5 py-1 text-[0.65rem] font-semibold text-blue-600">
-                            {meal.macros.proteina}g proteina
+                        {/* Macros da refeição */}
+                        <div className="mt-3 flex items-center gap-2 border-t border-slate-100 pt-3">
+                          <span className="rounded-full bg-blue-50 px-2.5 py-1 text-[0.7rem] font-semibold text-blue-600">
+                            {meal.macros.proteina}g prot.
                           </span>
-                          <span className="rounded-full bg-amber-50 px-2.5 py-1 text-[0.65rem] font-semibold text-amber-600">
+                          <span className="rounded-full bg-amber-50 px-2.5 py-1 text-[0.7rem] font-semibold text-amber-600">
                             {meal.macros.carbo}g carb.
                           </span>
-                          <span className="rounded-full bg-rose-50 px-2.5 py-1 text-[0.65rem] font-semibold text-rose-600">
-                            {meal.macros.gordura}g gordura
+                          <span className="rounded-full bg-rose-50 px-2.5 py-1 text-[0.7rem] font-semibold text-rose-600">
+                            {meal.macros.gordura}g gord.
                           </span>
                         </div>
                       </div>
@@ -830,7 +888,7 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
                         >
                           <div className="w-full rounded-xl bg-slate-900/90 px-5 py-4 text-center backdrop-blur-sm">
                             <p className="text-sm font-bold text-white">Clique para desbloquear</p>
-                            <p className="mt-0.5 text-[0.7rem] text-white/70">Receitas, cardapios e todas as funcoes</p>
+                            <p className="mt-0.5 text-xs text-white/70">Receitas, cardapios e todas as funcoes</p>
                           </div>
                         </button>
                       ) : null}

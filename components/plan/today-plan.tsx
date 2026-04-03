@@ -989,7 +989,7 @@ export function TodayPlan({
                               item.grupoId && item.indiceNoGrupo !== undefined
                                 ? obterSubstituicoes(item.grupoId, item.indiceNoGrupo)
                                 : [];
-                            const receita = obterReceita(item.nome);
+                            const receita = obterReceitaPersonalizada(item.nome, profile?.condicoes);
                             const recipeKey = `${meal.chave}-${itemIndex}`;
                             const isRecipeOpen = openRecipes[recipeKey] ?? false;
                             const isSubsOpen = openSubs[recipeKey] ?? false;

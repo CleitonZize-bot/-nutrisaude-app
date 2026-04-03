@@ -493,6 +493,7 @@ export function TodayPlan({
   const [feedback, setFeedback] = useState("");
   const [loading, setLoading] = useState(true);
   const [showSubscribeModal, setShowSubscribeModal] = useState(false);
+  const [showFreePopup, setShowFreePopup] = useState(false);
   const [openRecipes, setOpenRecipes] = useState<Record<string, boolean>>({});
   const [openSubs, setOpenSubs] = useState<Record<string, boolean>>({});
 

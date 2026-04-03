@@ -47,6 +47,7 @@ import {
 } from "@/lib/pocketbase";
 import { obterSubstituicoes } from "@/lib/alimentos-data";
 import { gerarCardapioCompleto } from "@/lib/nutricao-data";
+import { obterReceita } from "@/lib/receitas-db";
 import { verificarAlerta } from "@/lib/receitas-data";
 
 type TabKey = "hoje" | "semana" | "progresso" | "ingredientes" | "saude";

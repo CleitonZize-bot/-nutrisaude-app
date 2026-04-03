@@ -541,12 +541,12 @@ export function TodayPlan({
     carregar();
   }, [router]);
 
-  // Popup periódico para usuários free — aparece após 3 min e repete a cada 10 min
+  // Popup periódico — aparece após 2 min e repete a cada 4 min para não premium
   useEffect(() => {
-    if (tipoAcesso !== "free") return;
+    if (tipoAcesso === "premium") return;
 
-    const primeiro = setTimeout(() => setShowFreePopup(true), 3 * 60 * 1000);
-    const intervalo = setInterval(() => setShowFreePopup(true), 10 * 60 * 1000);
+    const primeiro = setTimeout(() => setShowFreePopup(true), 2 * 60 * 1000);
+    const intervalo = setInterval(() => setShowFreePopup(true), 4 * 60 * 1000);
 
     return () => {
       clearTimeout(primeiro);

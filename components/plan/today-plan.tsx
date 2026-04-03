@@ -461,23 +461,20 @@ function recomputeMeal(meal: Meal, items: MealItem[]): Meal {
 
 const subscribeUrl = process.env.NEXT_PUBLIC_SUBSCRIBE_URL || "#";
 
-type AcessoType = "premium" | "free_period" | "free";
+type AcessoType = "premium" | "free";
 
 export function TodayPlan({
   isNewPlan = false,
   isPremium,
   acesso = "premium",
-  diasRestantes = 0,
 }: {
   isNewPlan?: boolean;
   isPremium?: boolean; // legado
   acesso?: AcessoType;
-  diasRestantes?: number;
 }) {
   // compatibilidade com código legado
   const tipoAcesso: AcessoType = isPremium === false ? "free" : acesso;
-  // free_period = 5 dias gratuitos com acesso completo
-  const isPrem = tipoAcesso === "premium" || tipoAcesso === "free_period";
+  const isPrem = tipoAcesso === "premium";
 
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabKey>("hoje");

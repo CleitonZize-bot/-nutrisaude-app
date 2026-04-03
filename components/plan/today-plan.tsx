@@ -547,13 +547,13 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
   return (
     <main className="min-h-screen bg-[#f6fbf8] px-4 py-6 text-slate-900 sm:px-6 sm:py-8 lg:px-8">
       <div className="mx-auto flex max-w-6xl flex-col gap-4 sm:gap-6">
-        <div className="nutri-dark-panel flex flex-col gap-5 rounded-[2rem] px-5 py-6 text-white sm:px-8 sm:py-8">
-          <div className="flex flex-col gap-1.5">
-            <p className="nutri-title text-[1.85rem] font-black leading-tight tracking-tight sm:text-3xl">
+        <div className="nutri-dark-panel flex flex-col gap-4 rounded-[1.6rem] px-4 py-5 text-white sm:rounded-[2rem] sm:px-8 sm:py-8">
+          <div className="flex flex-col gap-1">
+            <p className="nutri-title text-2xl font-black leading-tight tracking-tight sm:text-3xl">
               Ola, {profile.nome} 👋
             </p>
-            <p className="text-sm font-medium text-primary">{todayLabel}</p>
-            <p className="text-xs text-white/60">{profileSummary}</p>
+            <p className="text-xs font-medium text-primary">{todayLabel}</p>
+            <p className="text-[0.7rem] text-white/60">{profileSummary}</p>
           </div>
 
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">

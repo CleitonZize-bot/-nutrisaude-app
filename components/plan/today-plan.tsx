@@ -817,11 +817,11 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
                                 <div className="flex flex-col gap-3">
                                   <div className="flex items-start justify-between gap-3">
                                     <div className="min-w-0">
-                                      <p className="text-[1.04rem] font-medium text-slate-900">
+                                      <p className="text-sm font-medium text-slate-900">
                                         {item.nome}
                                       </p>
                                     </div>
-                                    <p className="shrink-0 text-[1.04rem] font-medium text-emerald-500">
+                                    <p className="shrink-0 text-sm font-semibold text-emerald-500">
                                       {item.quantidade}
                                     </p>
                                   </div>

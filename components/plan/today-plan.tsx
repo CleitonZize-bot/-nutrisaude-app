@@ -679,29 +679,58 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
           </div>
         </div>
 
-        <Card className="nutri-surface rounded-[1.4rem] border border-slate-200/80 py-0">
-          <CardContent className="grid grid-cols-5 gap-1.5 px-2 py-2 sm:flex sm:flex-wrap sm:gap-2 sm:px-4 sm:py-3">
+        {/* Navegação fixa no rodapé — visível apenas em mobile */}
+        <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 backdrop-blur-md sm:hidden" style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}>
+          <div className="grid grid-cols-5">
             {TABS.map((tab) => {
               const Icon = tab.icon;
+              const isActive = activeTab === tab.key;
+              return (
+                <button
+                  key={tab.key}
+                  type="button"
+                  className={`flex flex-col items-center gap-0.5 py-2 text-[0.6rem] font-semibold transition-colors ${
+                    isActive
+                      ? "text-emerald-600"
+                      : "text-slate-400"
+                  }`}
+                  onClick={() => {
+                    setActiveTab(tab.key);
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                >
+                  <Icon className={`size-5 ${isActive ? "text-emerald-500" : ""}`} />
+                  {tab.label}
+                  {isActive ? <span className="mt-0.5 h-0.5 w-4 rounded-full bg-emerald-500" /> : null}
+                </button>
+              );
+            })}
+          </div>
+        </nav>
 
+        {/* Tabs para desktop — oculta em mobile */}
+        <div className="hidden rounded-[1.4rem] border border-slate-200/80 bg-white px-4 py-3 sm:block">
+          <div className="flex flex-wrap gap-2">
+            {TABS.map((tab) => {
+              const Icon = tab.icon;
               return (
                 <button
                   key={tab.key}
                   type="button"
                   className={
                     activeTab === tab.key
-                      ? "flex flex-col items-center gap-1 rounded-[0.8rem] bg-slate-800 px-1 py-2.5 text-[0.65rem] font-semibold text-white sm:h-10 sm:flex-row sm:gap-2 sm:rounded-[0.9rem] sm:px-4 sm:py-0 sm:text-sm"
-                      : "flex flex-col items-center gap-1 rounded-[0.8rem] px-1 py-2.5 text-[0.65rem] font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-900 sm:h-10 sm:flex-row sm:gap-2 sm:rounded-[0.9rem] sm:px-4 sm:py-0 sm:text-sm"
+                      ? "flex h-10 items-center gap-2 rounded-[0.9rem] bg-slate-800 px-4 text-sm font-semibold text-white"
+                      : "flex h-10 items-center gap-2 rounded-[0.9rem] px-4 text-sm font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-900"
                   }
                   onClick={() => setActiveTab(tab.key)}
                 >
-                  <Icon className="size-3.5 sm:size-4" />
+                  <Icon className="size-4" />
                   {tab.label}
                 </button>
               );
             })}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {activeTab === "hoje" ? (
           <div className="flex flex-col gap-3">

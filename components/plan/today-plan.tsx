@@ -587,79 +587,65 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
           </Alert>
         ) : null}
 
-        <Card className="overflow-hidden rounded-[1.6rem] border border-blue-900/10 bg-[linear-gradient(180deg,#244d7f_0%,#204a79_100%)] py-0 text-white shadow-[0_22px_48px_rgba(30,64,116,0.18)] sm:rounded-[1.9rem]">
-          <CardHeader className="gap-1.5 px-4 pt-4 sm:px-6 sm:pt-5">
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <Droplets className="text-cyan-200" />
-                <CardTitle className="nutri-title text-xl text-white">
-                  Hidratacao do dia
-                </CardTitle>
-              </div>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon-sm"
-                className="rounded-full bg-white/10 text-white hover:bg-white/16 hover:text-white"
-                onClick={() => updateWater(0)}
-              >
-                <RefreshCw className="size-4" />
-              </Button>
+        <div className="overflow-hidden rounded-2xl border border-blue-900/10 bg-[linear-gradient(180deg,#244d7f_0%,#204a79_100%)] text-white shadow-md">
+          <div className="flex items-center justify-between px-4 pt-3.5 sm:px-5">
+            <div className="flex items-center gap-2">
+              <Droplets className="size-4 text-cyan-200" />
+              <span className="text-sm font-bold text-white">Hidratacao</span>
+              <span className="text-[0.7rem] text-white/60">Meta: {(hydrationMeta / 1000).toFixed(1)}L</span>
             </div>
-            <CardDescription className="text-white/75">
-              Meta: {(hydrationMeta / 1000).toFixed(1)}L
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-3 px-4 pb-4 sm:px-6 sm:pb-5">
-            <div className="rounded-2xl bg-white/10 p-4 backdrop-blur-sm">
-              <div className="mb-3 flex items-center justify-between gap-3">
-                <span className="text-lg font-bold text-white">
-                  {water >= 1000
-                    ? `${(water / 1000).toFixed(2).replace(".", ",")}L`
-                    : `${water}ml`}
-                </span>
-                <Badge className="bg-white/16 text-white hover:bg-white/16">
-                  {hydrationPercent}%
-                </Badge>
-              </div>
-              <Progress value={hydrationPercent} className="w-full" />
-            </div>
+            <button
+              type="button"
+              className="flex size-7 items-center justify-center rounded-full bg-white/10 text-white"
+              onClick={() => updateWater(0)}
+            >
+              <RefreshCw className="size-3" />
+            </button>
+          </div>
 
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              <Button
+          <div className="px-4 py-3 sm:px-5">
+            <div className="mb-2 flex items-center justify-between">
+              <span className="text-sm font-bold">
+                {water >= 1000
+                  ? `${(water / 1000).toFixed(2).replace(".", ",")}L`
+                  : `${water}ml`}
+              </span>
+              <span className="rounded-full bg-white/16 px-2 py-0.5 text-[0.65rem] font-semibold">{hydrationPercent}%</span>
+            </div>
+            <Progress value={hydrationPercent} className="w-full" />
+
+            <div className="mt-3 grid grid-cols-4 gap-2">
+              <button
                 type="button"
-                variant="outline"
-                className="h-11 rounded-full border-white/25 bg-white/8 text-white hover:bg-white/14 hover:text-white"
+                className="rounded-full border border-white/20 bg-white/8 py-1.5 text-[0.7rem] font-semibold text-white active:bg-white/16"
                 onClick={() => updateWater(Math.min(water + 250, hydrationMeta * 2))}
               >
                 +250ml
-              </Button>
-              <Button
+              </button>
+              <button
                 type="button"
-                variant="outline"
-                className="h-11 rounded-full border-white/25 bg-white/8 text-white hover:bg-white/14 hover:text-white"
+                className="rounded-full border border-white/20 bg-white/8 py-1.5 text-[0.7rem] font-semibold text-white active:bg-white/16"
                 onClick={() => updateWater(Math.min(water + 350, hydrationMeta * 2))}
               >
                 +350ml
-              </Button>
-              <Button
+              </button>
+              <button
                 type="button"
-                className="h-11 rounded-full bg-blue-500 text-white hover:bg-blue-400"
+                className="rounded-full bg-blue-500 py-1.5 text-[0.7rem] font-bold text-white active:bg-blue-400"
                 onClick={() => updateWater(Math.min(water + 500, hydrationMeta * 2))}
               >
                 +500ml
-              </Button>
-              <Button
+              </button>
+              <button
                 type="button"
-                variant="outline"
-                className="h-11 rounded-full border-rose-300/40 bg-rose-500/8 text-white hover:bg-rose-500/16 hover:text-white"
+                className="rounded-full border border-rose-300/30 bg-rose-500/10 py-1.5 text-[0.7rem] font-semibold text-white active:bg-rose-500/20"
                 onClick={() => updateWater(Math.max(0, water - 200))}
               >
                 -200ml
-              </Button>
+              </button>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         <Card className="nutri-surface rounded-[1.9rem] border border-slate-200/80 py-0">
           <CardContent className="px-5 py-5 sm:px-6">

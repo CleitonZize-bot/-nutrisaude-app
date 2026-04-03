@@ -954,7 +954,7 @@ export function TodayPlan({
                       <span className="rounded-full border border-emerald-200/60 bg-emerald-50 px-2 py-0.5 text-[0.65rem] font-semibold text-emerald-600">
                         ~{meal.calorias} kcal
                       </span>
-                      {isPremium ? (
+                      {isPrem ? (
                         doneAt ? (
                           <span
                             role="button"

@@ -1118,6 +1118,19 @@ export function TodayPlan({
                                         💡 {receita.dica}
                                       </p>
                                     ) : null}
+
+                                    {/* Adaptações personalizadas por condição */}
+                                    {receita.adaptacoesPersonalizadas?.length > 0 ? (
+                                      <div className="mt-2 space-y-1">
+                                        <p className="text-[0.68rem] font-bold uppercase tracking-wide text-blue-600">Como adaptar para você:</p>
+                                        {receita.adaptacoesPersonalizadas.map((a: { icone: string; texto: string }, i: number) => (
+                                          <div key={i} className="flex items-start gap-1.5 rounded-lg bg-blue-50 px-2.5 py-1.5">
+                                            <span className="shrink-0 text-sm">{a.icone}</span>
+                                            <span className="text-xs leading-snug text-blue-700">{a.texto}</span>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    ) : null}
                                   </div>
                                 ) : null}
                               </div>

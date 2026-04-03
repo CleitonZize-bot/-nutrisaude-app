@@ -2,7 +2,7 @@
   "name": "NutriSaúde — Plano Alimentar Personalizado",
   "short_name": "NutriSaúde",
   "description": "Cardápio diário personalizado para esteatose hepática, diabetes e mais.",
-  "start_url": "/",
+  "start_url": "/plano",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#080f14",

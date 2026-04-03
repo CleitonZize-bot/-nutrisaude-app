@@ -88,44 +88,47 @@ function PreviewCard({
   );
 }
 
+// Executa uma promise com timeout — se demorar demais, retorna o fallback.
+async function comTimeout<T>(promise: Promise<T>, ms: number, fallback: T): Promise<T> {
+  const timer = new Promise<T>((resolve) => setTimeout(() => resolve(fallback), ms));
+  return Promise.race([promise, timer]);
+}
+
 export function LockedPlanShell() {
   const router = useRouter();
   const [status, setStatus] = useState<"loading" | "locked" | "unlocked">("loading");
 
   useEffect(() => {
     async function verificarAcesso() {
+      // 1. Verifica sessão local (sem rede) — instantâneo
       if (!pbEstaLogado()) {
         router.replace("/login");
         return;
       }
 
-      try {
-        await pbRefresh();
-      } catch {
-        // pbRefresh só lança para 401 — token definitivamente inválido.
+      const email = String(getPocketBase().authStore.model?.email || "");
+      if (!email) {
         pbLogout();
         router.replace("/login");
         return;
       }
 
-      try {
-        const email = String(getPocketBase().authStore.model?.email || "");
+      // 2. Verifica assinatura com timeout de 6s — se cair a rede, assume bloqueado
+      //    mas não desloga o usuário.
+      const temAssinatura =
+        pbIgnorarAssinaturaNoAmbienteAtual() ||
+        (await comTimeout(pbVerificarAssinatura(email), 6000, false));
 
-        if (!email) {
+      setStatus(temAssinatura ? "unlocked" : "locked");
+
+      // 3. Renova o token em segundo plano — não bloqueia a tela.
+      pbRefresh().catch((error: unknown) => {
+        const pbError = error as { status?: number };
+        if (pbError?.status === 401) {
           pbLogout();
           router.replace("/login");
-          return;
         }
-
-        const temAssinatura =
-          pbIgnorarAssinaturaNoAmbienteAtual() || (await pbVerificarAssinatura(email));
-
-        setStatus(temAssinatura ? "unlocked" : "locked");
-      } catch {
-        // Erro ao verificar assinatura (rede offline, etc.) — mostra o plano bloqueado
-        // sem deslogar o usuário, pois a sessão local ainda é válida.
-        setStatus("locked");
-      }
+      });
     }
 
     void verificarAcesso();

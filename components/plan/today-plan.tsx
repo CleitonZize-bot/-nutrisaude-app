@@ -521,6 +521,10 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
     router.push("/login");
   }
 
+  function toggleRecipe(key: string) {
+    setOpenRecipes((current) => ({ ...current, [key]: !current[key] }));
+  }
+
   function toggleMeal(chave: string) {
     setOpenMeals((current) => ({
       ...current,

@@ -689,26 +689,25 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
           </CardContent>
         </Card>
 
-        <Card className="nutri-surface rounded-[1.8rem] border border-slate-200/80 py-0">
-          <CardContent className="grid grid-cols-5 gap-2 px-3 py-3 sm:flex sm:flex-wrap sm:gap-2 sm:px-4 sm:py-4">
+        <Card className="nutri-surface rounded-[1.4rem] border border-slate-200/80 py-0">
+          <CardContent className="grid grid-cols-5 gap-1.5 px-2 py-2 sm:flex sm:flex-wrap sm:gap-2 sm:px-4 sm:py-3">
             {TABS.map((tab) => {
               const Icon = tab.icon;
 
               return (
-                <Button
+                <button
                   key={tab.key}
                   type="button"
-                  variant="ghost"
                   className={
                     activeTab === tab.key
-                      ? "flex h-auto min-h-14 flex-col gap-1 rounded-[1rem] bg-slate-800 px-2 py-2 text-[0.72rem] text-white shadow-[0_10px_24px_rgba(15,23,42,0.22)] hover:bg-slate-800 hover:text-white sm:h-11 sm:min-h-0 sm:flex-row sm:gap-2 sm:px-5 sm:py-0 sm:text-sm"
-                      : "flex h-auto min-h-14 flex-col gap-1 rounded-[1rem] px-2 py-2 text-[0.72rem] text-slate-500 hover:bg-slate-100 hover:text-slate-900 sm:h-11 sm:min-h-0 sm:flex-row sm:gap-2 sm:px-5 sm:py-0 sm:text-sm"
+                      ? "flex flex-col items-center gap-1 rounded-[0.8rem] bg-slate-800 px-1 py-2.5 text-[0.65rem] font-semibold text-white sm:h-10 sm:flex-row sm:gap-2 sm:rounded-[0.9rem] sm:px-4 sm:py-0 sm:text-sm"
+                      : "flex flex-col items-center gap-1 rounded-[0.8rem] px-1 py-2.5 text-[0.65rem] font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-900 sm:h-10 sm:flex-row sm:gap-2 sm:rounded-[0.9rem] sm:px-4 sm:py-0 sm:text-sm"
                   }
                   onClick={() => setActiveTab(tab.key)}
                 >
-                  <Icon className="size-4" />
+                  <Icon className="size-3.5 sm:size-4" />
                   {tab.label}
-                </Button>
+                </button>
               );
             })}
           </CardContent>

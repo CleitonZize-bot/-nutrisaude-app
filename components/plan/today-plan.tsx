@@ -94,55 +94,204 @@ type GeneratedPlan = {
   refeicoes: Meal[];
 };
 
-function SubscribeModal({ onClose }: { onClose: () => void }) {
+// Modal principal — aparece ao clicar em feature bloqueada
+function SubscribeModal({ onClose, titulo, descricao }: {
+  onClose: () => void;
+  titulo?: string;
+  descricao?: string;
+}) {
+  const url = process.env.NEXT_PUBLIC_SUBSCRIBE_URL || "#";
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 px-0 pb-0 backdrop-blur-sm sm:items-center sm:px-4 sm:pb-4"
       onClick={onClose}
     >
       <div
-        className="nutri-surface w-full max-w-md rounded-[2rem] border border-white/10 p-0 text-center"
+        className="nutri-surface w-full max-w-lg rounded-t-[2rem] border border-white/10 sm:rounded-[2rem]"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex flex-col items-center gap-4 px-6 pt-7">
+        {/* Handle bar mobile */}
+        <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-slate-200 sm:hidden" />
+
+        <div className="flex flex-col items-center gap-3 px-6 pt-5 text-center">
           <button
             type="button"
             onClick={onClose}
-            className="absolute right-5 top-5 flex size-8 items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200"
+            className="absolute right-4 top-4 flex size-8 items-center justify-center rounded-full bg-slate-100 text-slate-400"
           >
             <X className="size-4" />
           </button>
-          <div className="flex size-16 items-center justify-center rounded-full bg-primary/12 text-primary">
-            <LockKeyhole className="size-8" />
+
+          {/* Ícone com gradiente */}
+          <div className="flex size-16 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 shadow-lg shadow-emerald-200">
+            <span className="text-2xl">🌱</span>
           </div>
-          <p className="nutri-title text-3xl font-black text-slate-900">
-            Assine o NutriSaude para ter acesso completo
-          </p>
-          <p className="max-w-xs text-base leading-7 text-slate-500">
-            Seu perfil ja foi salvo. Para liberar cardapios, receitas, progresso e todas as funcoes, ative sua assinatura.
-          </p>
+
+          <div className="flex flex-col gap-1">
+            <p className="nutri-title text-[1.45rem] font-black leading-tight text-slate-900">
+              {titulo ?? "Voce ja deu um otimo comeco!"}
+            </p>
+            <p className="text-sm leading-relaxed text-slate-500">
+              {descricao ?? "Faca parte do Plano Pro e acelere seus resultados. Cardapios completos, receitas exclusivas e acompanhamento total da sua saude — tudo na palma da mao."}
+            </p>
+          </div>
+
+          {/* Benefícios rápidos */}
+          <div className="w-full rounded-2xl border border-emerald-100 bg-emerald-50/60 px-4 py-3 text-left">
+            <p className="mb-2 text-[0.7rem] font-bold uppercase tracking-wider text-emerald-600">O que voce desbloqueia:</p>
+            <div className="grid grid-cols-2 gap-1.5 text-xs text-slate-700">
+              {[
+                "👨‍🍳 Receitas passo a passo",
+                "🔄 Trocar alimentos",
+                "📅 Cardapio da semana",
+                "🛒 Lista de compras",
+                "📊 Grafico de evolucao",
+                "💊 Controle de saude",
+              ].map((b) => (
+                <div key={b} className="flex items-center gap-1.5">
+                  <span>{b}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
-        <div className="flex flex-col gap-3 px-6 pb-7 pt-5">
-          <a href={subscribeUrl} target="_blank" rel="noreferrer">
+        <div className="flex flex-col gap-2.5 px-6 pb-6 pt-4">
+          <a href={url} target="_blank" rel="noreferrer" className="block">
             <button
               type="button"
-              className="flex h-14 w-full items-center justify-center gap-2 rounded-[1.2rem] bg-primary text-base font-bold text-white shadow-[0_18px_34px_rgba(0,196,114,0.22)] hover:bg-[#00d97e]"
+              className="flex h-14 w-full items-center justify-center gap-2 rounded-[1.2rem] bg-gradient-to-r from-emerald-500 to-emerald-600 text-base font-bold text-white shadow-[0_8px_24px_rgba(16,185,129,0.35)] active:opacity-90"
             >
-              Assinar o NutriSaude
+              Quero o Plano Pro agora
               <ArrowRight className="size-5" />
             </button>
           </a>
           <button
             type="button"
             onClick={onClose}
-            className="h-12 w-full rounded-[1rem] border border-slate-200 bg-white text-sm font-semibold text-slate-500 hover:bg-slate-50"
+            className="h-11 w-full rounded-[1rem] text-sm font-medium text-slate-400"
           >
-            Agora nao
+            Continuar com o plano gratuito
           </button>
         </div>
       </div>
     </div>
+  );
+}
+
+// Popup periódico — aparece de 10 em 10 min para usuários free
+function FreeReminderPopup({ onClose, onUpgrade }: { onClose: () => void; onUpgrade: () => void }) {
+  const mensagens = [
+    {
+      emoji: "🍽️",
+      titulo: "Seu proximo passo esta esperando",
+      texto: "Usuarios Pro seguem receitas completas e chegam mais rapido nos seus objetivos de saude.",
+    },
+    {
+      emoji: "📈",
+      titulo: "Veja sua evolucao em graficos",
+      texto: "Acompanhe seu peso, hidratacao e progresso dia a dia — so no Plano Pro.",
+    },
+    {
+      emoji: "💪",
+      titulo: "Resultados reais pedem um plano completo",
+      texto: "Troque alimentos, planeje a semana e controle sua saude com o Plano Pro.",
+    },
+  ];
+  const msg = mensagens[Math.floor(Math.random() * mensagens.length)];
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 backdrop-blur-sm sm:items-center sm:px-4"
+      onClick={onClose}
+    >
+      <div
+        className="nutri-surface w-full max-w-sm rounded-t-[2rem] border border-white/10 px-5 pb-5 pt-4 sm:rounded-[2rem]"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-slate-200 sm:hidden" />
+
+        <div className="flex items-start gap-3">
+          <span className="text-3xl">{msg.emoji}</span>
+          <div className="flex-1">
+            <p className="text-sm font-bold text-slate-900">{msg.titulo}</p>
+            <p className="mt-0.5 text-xs leading-relaxed text-slate-500">{msg.texto}</p>
+          </div>
+          <button type="button" onClick={onClose} className="text-slate-300">
+            <X className="size-4" />
+          </button>
+        </div>
+
+        <div className="mt-4 flex gap-2">
+          <button
+            type="button"
+            onClick={onUpgrade}
+            className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-emerald-500 py-2.5 text-sm font-bold text-white shadow-sm active:opacity-90"
+          >
+            Ver Plano Pro
+            <ArrowRight className="size-3.5" />
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-xl border border-slate-200 px-4 py-2.5 text-xs font-medium text-slate-400"
+          >
+            Depois
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Banner de trial com contagem regressiva
+function TrialBanner({ dias, onUpgrade }: { dias: number; onUpgrade: () => void }) {
+  const urgente = dias <= 1;
+  return (
+    <div className={`flex items-center gap-3 rounded-xl px-4 py-3 ${
+      urgente
+        ? "bg-amber-50 border border-amber-200"
+        : "bg-emerald-50 border border-emerald-200"
+    }`}>
+      <span className="text-xl">{urgente ? "⏰" : "🎁"}</span>
+      <div className="flex-1 min-w-0">
+        <p className={`text-xs font-bold ${urgente ? "text-amber-700" : "text-emerald-700"}`}>
+          {urgente
+            ? "Ultimo dia de acesso completo!"
+            : `${dias} dia${dias > 1 ? "s" : ""} restante${dias > 1 ? "s" : ""} de acesso gratuito`}
+        </p>
+        <p className="text-[0.65rem] text-slate-500">Assine para manter todos os recursos</p>
+      </div>
+      <button
+        type="button"
+        onClick={onUpgrade}
+        className={`shrink-0 rounded-lg px-3 py-1.5 text-[0.7rem] font-bold text-white ${
+          urgente ? "bg-amber-500" : "bg-emerald-500"
+        }`}
+      >
+        Assinar
+      </button>
+    </div>
+  );
+}
+
+// Lock inline para features premium dentro do conteúdo
+function InlineLock({ mensagem, onUnlock }: { mensagem: string; onUnlock: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onUnlock}
+      className="flex w-full items-center gap-3 rounded-xl border border-dashed border-emerald-300 bg-emerald-50/50 px-4 py-3 text-left active:bg-emerald-50"
+    >
+      <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-emerald-100">
+        <LockKeyhole className="size-4 text-emerald-600" />
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-xs font-semibold text-emerald-700">{mensagem}</p>
+        <p className="text-[0.65rem] text-emerald-500">Disponivel no Plano Pro — toque para saber mais</p>
+      </div>
+      <ArrowRight className="size-4 shrink-0 text-emerald-400" />
+    </button>
   );
 }
 

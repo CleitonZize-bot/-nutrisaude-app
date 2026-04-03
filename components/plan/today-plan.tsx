@@ -564,12 +564,15 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
     <main className="min-h-screen bg-[#f6fbf8] px-3 py-4 text-slate-900 sm:px-6 sm:py-8 lg:px-8">
       <div className="mx-auto flex max-w-6xl flex-col gap-3 sm:gap-5">
         <div className="nutri-dark-panel flex flex-col gap-4 rounded-[1.6rem] px-4 py-5 text-white sm:rounded-[2rem] sm:px-8 sm:py-8">
-          <div className="flex flex-col gap-1">
-            <p className="nutri-title text-2xl font-black leading-tight tracking-tight sm:text-3xl">
-              Ola, {profile.nome} 👋
-            </p>
-            <p className="text-xs font-medium text-primary">{todayLabel}</p>
-            <p className="text-[0.7rem] text-white/60">{profileSummary}</p>
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex flex-col gap-1">
+              <p className="nutri-title text-2xl font-black leading-tight tracking-tight sm:text-3xl">
+                Ola, {profile.nome} 👋
+              </p>
+              <p className="text-xs font-medium text-primary">{todayLabel}</p>
+              <p className="text-[0.7rem] text-white/60">{profileSummary}</p>
+            </div>
+            <FontSizeControl />
           </div>
 
           <div className="grid grid-cols-4 gap-2">

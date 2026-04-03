@@ -493,14 +493,17 @@ export function OnboardingFlow() {
                   })}
                 </div>
 
-                <Button
+                <button
                   type="button"
-                  variant="outline"
-                  className="h-14 rounded-2xl border-dashed border-slate-300 text-base font-semibold"
                   onClick={() => setCondicoes([])}
+                  className={`h-14 rounded-2xl border-2 text-base font-semibold transition-all ${
+                    condicoes.length === 0
+                      ? "border-primary bg-primary/8 text-primary shadow-lg shadow-primary/10"
+                      : "border-dashed border-slate-300 bg-white text-slate-600 hover:border-primary/40 hover:bg-primary/[0.03]"
+                  }`}
                 >
-                  Nenhuma das anteriores
-                </Button>
+                  {condicoes.length === 0 ? "✓ " : ""}Nenhuma das anteriores
+                </button>
 
                 <div className="flex flex-col gap-3 sm:flex-row">
                   <Button type="button" variant="outline" size="lg" className="h-14 rounded-2xl" onClick={() => setStep(2)}>

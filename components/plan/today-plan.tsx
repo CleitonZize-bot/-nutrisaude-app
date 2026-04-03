@@ -527,6 +527,10 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
     setOpenRecipes((current) => ({ ...current, [key]: !current[key] }));
   }
 
+  function toggleSubs(key: string) {
+    setOpenSubs((current) => ({ ...current, [key]: !current[key] }));
+  }
+
   function toggleMeal(chave: string) {
     setOpenMeals((current) => ({
       ...current,

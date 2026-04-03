@@ -26,9 +26,11 @@ import {
 import { TodayPlan } from "@/components/plan/today-plan";
 import {
   getPocketBase,
+  pbDiasRestantesTrial,
   pbEstaLogado,
   pbIgnorarAssinaturaNoAmbienteAtual,
   pbLogout,
+  pbObterStatusAcesso,
   pbRefresh,
   pbVerificarAssinatura,
 } from "@/lib/pocketbase";

@@ -98,32 +98,33 @@ async function comTimeout<T>(promise: Promise<T>, ms: number, fallback: T): Prom
 
 export function LockedPlanShell() {
   const router = useRouter();
-  const [status, setStatus] = useState<"loading" | "locked" | "unlocked">("loading");
+  const [status, setStatus] = useState<"loading" | "premium" | "trial" | "free">("loading");
+  const [diasRestantes, setDiasRestantes] = useState(0);
 
   useEffect(() => {
     async function verificarAcesso() {
-      // 1. Verifica sessão local (sem rede) — instantâneo
       if (!pbEstaLogado()) {
         router.replace("/login");
         return;
       }
 
-      const email = String(getPocketBase().authStore.model?.email || "");
+      const email = String(getPocketBase().authStore.record?.email || getPocketBase().authStore.model?.email || "");
       if (!email) {
         pbLogout();
         router.replace("/login");
         return;
       }
 
-      // 2. Verifica assinatura com timeout de 6s — se cair a rede, assume bloqueado
-      //    mas não desloga o usuário.
       const temAssinatura =
         pbIgnorarAssinaturaNoAmbienteAtual() ||
         (await comTimeout(pbVerificarAssinatura(email), 6000, false));
 
-      setStatus(temAssinatura ? "unlocked" : "locked");
+      const acesso = pbObterStatusAcesso(temAssinatura);
+      setStatus(acesso);
+      if (acesso === "trial") {
+        setDiasRestantes(pbDiasRestantesTrial());
+      }
 
-      // 3. Renova o token em segundo plano — não bloqueia a tela.
       pbRefresh().catch((error: unknown) => {
         const pbError = error as { status?: number };
         if (pbError?.status === 401) {
@@ -136,12 +137,16 @@ export function LockedPlanShell() {
     void verificarAcesso();
   }, [router]);
 
-  if (status === "unlocked") {
-    return <TodayPlan isPremium={true} />;
+  if (status === "premium") {
+    return <TodayPlan acesso="premium" />;
   }
 
-  if (status === "locked") {
-    return <TodayPlan isPremium={false} />;
+  if (status === "trial") {
+    return <TodayPlan acesso="trial" diasRestantes={diasRestantes} />;
+  }
+
+  if (status === "free") {
+    return <TodayPlan acesso="free" />;
   }
 
   if (status === "loading") {

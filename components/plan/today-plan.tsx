@@ -781,6 +781,7 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
                             const receita = obterReceita(item.nome);
                             const recipeKey = `${meal.chave}-${itemIndex}`;
                             const isRecipeOpen = openRecipes[recipeKey] ?? false;
+                            const isSubsOpen = openSubs[recipeKey] ?? false;
 
                             return (
                               <div

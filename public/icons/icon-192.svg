@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
+  <rect width="192" height="192" rx="40" fill="#080f14"/>
+  <circle cx="96" cy="75" r="35" fill="#00c472" opacity="0.2"/>
+  <text x="96" y="95" text-anchor="middle" font-size="60">🥗</text>
+  <text x="96" y="148" text-anchor="middle" font-family="Arial,sans-serif" font-weight="900" font-size="22" fill="#ffffff">NutriSaúde</text>
+</svg>

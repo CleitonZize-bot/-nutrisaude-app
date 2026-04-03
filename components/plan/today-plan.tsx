@@ -545,8 +545,8 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
   }
 
   return (
-    <main className="min-h-screen bg-[#f6fbf8] px-4 py-6 text-slate-900 sm:px-6 sm:py-8 lg:px-8">
-      <div className="mx-auto flex max-w-6xl flex-col gap-4 sm:gap-6">
+    <main className="min-h-screen bg-[#f6fbf8] px-3 py-4 text-slate-900 sm:px-6 sm:py-8 lg:px-8">
+      <div className="mx-auto flex max-w-6xl flex-col gap-3 sm:gap-5">
         <div className="nutri-dark-panel flex flex-col gap-4 rounded-[1.6rem] px-4 py-5 text-white sm:rounded-[2rem] sm:px-8 sm:py-8">
           <div className="flex flex-col gap-1">
             <p className="nutri-title text-2xl font-black leading-tight tracking-tight sm:text-3xl">

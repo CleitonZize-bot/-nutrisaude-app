@@ -23,7 +23,7 @@ routerAdd("POST", "/api/cakto-webhook", (e) => {
 
   const customer = body.data && body.data.customer ? body.data.customer : {};
   const email    = String(customer.email || "").trim().toLowerCase();
-  const nome     = customer.name || "";
+  const nome     = String(customer.name || "").trim();
   const event    = body.event || "";
 
   if (!email) return e.json(400, { error: "no email" });

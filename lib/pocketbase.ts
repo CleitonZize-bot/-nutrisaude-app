@@ -12,6 +12,7 @@ export type NutrisaudeProfile = {
   idade: number;
   sexo: string;
   objetivo: string;
+  atividade?: string;
   condicoes: string[];
 };
 

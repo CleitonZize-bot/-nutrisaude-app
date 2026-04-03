@@ -136,10 +136,6 @@ export function LockedPlanShell() {
     return <TodayPlan acesso="premium" />;
   }
 
-  if (status === "free_period") {
-    return <TodayPlan acesso="free_period" diasRestantes={diasRestantes} />;
-  }
-
   if (status === "free") {
     return <TodayPlan acesso="free" />;
   }

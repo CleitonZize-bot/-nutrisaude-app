@@ -787,14 +787,53 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
                                 key={recipeKey}
                                 className="border-b border-slate-100 pb-3 last:border-b-0 last:pb-0"
                               >
-                                {/* Nome + quantidade */}
-                                <div className="flex items-baseline justify-between gap-2">
-                                  <p className="text-[0.82rem] font-semibold text-slate-800">{item.nome}</p>
-                                  <p className="shrink-0 text-[0.82rem] font-bold text-emerald-500">{item.quantidade}</p>
+                                {/* Nome + quantidade + botão trocar */}
+                                <div className="flex items-center gap-1.5">
+                                  <div className="flex flex-1 items-baseline justify-between gap-2 min-w-0">
+                                    <p className="text-[0.82rem] font-semibold text-slate-800">{item.nome}</p>
+                                    <p className="shrink-0 text-[0.82rem] font-bold text-emerald-500">{item.quantidade}</p>
+                                  </div>
+                                  {substitutions.length > 0 ? (
+                                    <button
+                                      type="button"
+                                      className={`flex size-7 shrink-0 items-center justify-center rounded-lg border transition-colors ${
+                                        isSubsOpen
+                                          ? "border-emerald-300 bg-emerald-50 text-emerald-600"
+                                          : "border-slate-200 bg-slate-50 text-slate-400 active:bg-emerald-50 active:text-emerald-600"
+                                      }`}
+                                      onClick={() => toggleSubs(recipeKey)}
+                                      title="Substituir alimento"
+                                    >
+                                      <Repeat2 className="size-3.5" />
+                                    </button>
+                                  ) : null}
                                 </div>
 
                                 {alert ? (
                                   <p className="mt-1 text-xs leading-snug text-red-500">⚠ {alert}</p>
+                                ) : null}
+
+                                {/* Painel de substituições — aparece ao clicar no ícone */}
+                                {isSubsOpen && substitutions.length > 0 ? (
+                                  <div className="mt-2 rounded-xl border border-emerald-200 bg-emerald-50/50 px-3 py-2.5">
+                                    <p className="mb-1.5 text-[0.68rem] font-semibold uppercase tracking-wide text-emerald-600">
+                                      Substituir por:
+                                    </p>
+                                    <div className="flex flex-wrap gap-1.5">
+                                      {substitutions.slice(0, 6).map((sub) => (
+                                        <button
+                                          key={`${item.nome}-${sub.indice}`}
+                                          type="button"
+                                          className="rounded-full border border-emerald-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 active:bg-emerald-100 active:text-emerald-800"
+                                          onClick={() =>
+                                            replaceItem(meal.chave, itemIndex, item.grupoId!, sub.indice)
+                                          }
+                                        >
+                                          {sub.nome}
+                                        </button>
+                                      ))}
+                                    </div>
+                                  </div>
                                 ) : null}
 
                                 {/* Botão "Como preparar" — destaque visual */}
@@ -847,27 +886,6 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
                                         💡 {receita.dica}
                                       </p>
                                     ) : null}
-                                  </div>
-                                ) : null}
-
-                                {/* Substituições */}
-                                {substitutions.length > 0 ? (
-                                  <div className="mt-2">
-                                    <p className="mb-1 text-[0.68rem] font-semibold uppercase tracking-wide text-slate-400">Substituir por:</p>
-                                    <div className="flex flex-wrap gap-1.5">
-                                      {substitutions.slice(0, 5).map((sub) => (
-                                        <button
-                                          key={`${item.nome}-${sub.indice}`}
-                                          type="button"
-                                          className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-700 active:bg-emerald-50 active:text-emerald-700 active:border-emerald-300"
-                                          onClick={() =>
-                                            replaceItem(meal.chave, itemIndex, item.grupoId!, sub.indice)
-                                          }
-                                        >
-                                          {sub.nome}
-                                        </button>
-                                      ))}
-                                    </div>
                                   </div>
                                 ) : null}
                               </div>

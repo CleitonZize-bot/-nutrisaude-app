@@ -18,7 +18,9 @@ export function RegisterForm() {
   const router = useRouter();
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
+  const [emailConfirm, setEmailConfirm] = useState("");
   const [senha, setSenha] = useState("");
+  const [senhaConfirm, setSenhaConfirm] = useState("");
   const [erro, setErro] = useState("");
   const [carregando, setCarregando] = useState(false);
 
@@ -26,13 +28,23 @@ export function RegisterForm() {
     event.preventDefault();
     setErro("");
 
-    if (!nome.trim() || !email.trim() || !senha) {
+    if (!nome.trim() || !email.trim() || !emailConfirm.trim() || !senha || !senhaConfirm) {
       setErro("Preencha todos os campos.");
+      return;
+    }
+
+    if (email.trim().toLowerCase() !== emailConfirm.trim().toLowerCase()) {
+      setErro("Os e-mails nao coincidem. Verifique e tente novamente.");
       return;
     }
 
     if (senha.length < 8) {
       setErro("Senha deve ter pelo menos 8 caracteres.");
+      return;
+    }
+
+    if (senha !== senhaConfirm) {
+      setErro("As senhas nao coincidem. Verifique e tente novamente.");
       return;
     }
 
@@ -102,6 +114,28 @@ export function RegisterForm() {
         </Field>
 
         <Field>
+          <FieldLabel htmlFor="email-confirm">Confirme o e-mail</FieldLabel>
+          <FieldContent>
+            <Input
+              id="email-confirm"
+              name="email-confirm"
+              type="email"
+              placeholder="Repita seu e-mail"
+              autoComplete="off"
+              value={emailConfirm}
+              onChange={(event) => setEmailConfirm(event.target.value)}
+              className={`h-12 rounded-xl bg-white ${
+                emailConfirm && email.toLowerCase() !== emailConfirm.toLowerCase()
+                  ? "border-red-400 focus:border-red-400"
+                  : emailConfirm && email.toLowerCase() === emailConfirm.toLowerCase()
+                  ? "border-emerald-400"
+                  : ""
+              }`}
+            />
+          </FieldContent>
+        </Field>
+
+        <Field>
           <FieldLabel htmlFor="password">Senha</FieldLabel>
           <FieldContent>
             <Input
@@ -113,6 +147,28 @@ export function RegisterForm() {
               value={senha}
               onChange={(event) => setSenha(event.target.value)}
               className="h-12 rounded-xl bg-white"
+            />
+          </FieldContent>
+        </Field>
+
+        <Field>
+          <FieldLabel htmlFor="password-confirm">Confirme a senha</FieldLabel>
+          <FieldContent>
+            <Input
+              id="password-confirm"
+              name="password-confirm"
+              type="password"
+              placeholder="Repita sua senha"
+              autoComplete="new-password"
+              value={senhaConfirm}
+              onChange={(event) => setSenhaConfirm(event.target.value)}
+              className={`h-12 rounded-xl bg-white ${
+                senhaConfirm && senha !== senhaConfirm
+                  ? "border-red-400 focus:border-red-400"
+                  : senhaConfirm && senha === senhaConfirm
+                  ? "border-emerald-400"
+                  : ""
+              }`}
             />
           </FieldContent>
         </Field>

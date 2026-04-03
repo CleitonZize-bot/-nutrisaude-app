@@ -535,62 +535,68 @@ export function TodayPlan({ isNewPlan = false, isPremium = true }: { isNewPlan?:
   );
 
   if (loading || !profile || !plan) {
-    return <main className="min-h-screen bg-[#eef4f9]" />;
+    return (
+      <main className="min-h-screen bg-[#f6fbf8]">
+        <div className="mx-auto max-w-6xl px-4 py-8">
+          <div className="h-48 animate-pulse rounded-[2rem] bg-slate-200/70" />
+        </div>
+      </main>
+    );
   }
 
   return (
-    <main className="min-h-screen bg-[#eef4f9] px-3 py-5 text-slate-900 sm:px-6 sm:py-8 lg:px-8">
-      <div className="mx-auto flex max-w-6xl flex-col gap-5 sm:gap-6">
-        <div className="nutri-dark-panel flex flex-col gap-5 rounded-[1.9rem] px-5 py-5 text-white sm:rounded-[2rem] sm:px-8 sm:py-6">
-          <div className="flex flex-col gap-2">
-            <p className="nutri-title max-w-[18rem] text-[2.1rem] leading-[1.04] font-black tracking-tight sm:max-w-none sm:text-2xl">
-              Ola, {profile.nome}
+    <main className="min-h-screen bg-[#f6fbf8] px-4 py-6 text-slate-900 sm:px-6 sm:py-8 lg:px-8">
+      <div className="mx-auto flex max-w-6xl flex-col gap-4 sm:gap-6">
+        <div className="nutri-dark-panel flex flex-col gap-5 rounded-[2rem] px-5 py-6 text-white sm:px-8 sm:py-8">
+          <div className="flex flex-col gap-1.5">
+            <p className="nutri-title text-[1.85rem] font-black leading-tight tracking-tight sm:text-3xl">
+              Ola, {profile.nome} 👋
             </p>
-            <p className="text-sm text-primary">{todayLabel}</p>
-            <p className="text-sm text-white/72">{profileSummary}</p>
+            <p className="text-sm font-medium text-primary">{todayLabel}</p>
+            <p className="text-xs text-white/60">{profileSummary}</p>
           </div>
 
-          <div className="grid grid-cols-4 gap-2 sm:gap-3">
-            <Card className="border-white/10 bg-white/6 py-0 text-white ring-0 backdrop-blur-sm">
-              <CardContent className="px-3 py-4 text-center sm:px-4 sm:py-5">
-                <p className="text-[2rem] leading-none font-black text-primary">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <Card className="border-white/10 bg-white/8 py-0 text-white ring-0 backdrop-blur-sm">
+              <CardContent className="px-4 py-4 text-center sm:px-4 sm:py-5">
+                <p className="text-2xl font-black leading-none text-primary sm:text-[2rem]">
                   {plan.tdee.toLocaleString("pt-BR")}
                 </p>
-                <p className="mt-3 text-[0.66rem] uppercase tracking-[0.2em] text-white/62">
+                <p className="mt-2 text-[0.65rem] uppercase tracking-widest text-white/55">
                   kcal/dia
                 </p>
               </CardContent>
             </Card>
 
-            <Card className="border-white/10 bg-white/6 py-0 text-white ring-0 backdrop-blur-sm">
-              <CardContent className="px-3 py-4 text-center sm:px-4 sm:py-5">
-                <p className="text-[2rem] leading-none font-black text-primary">
-                  {plan.macros.proteina}
+            <Card className="border-white/10 bg-white/8 py-0 text-white ring-0 backdrop-blur-sm">
+              <CardContent className="px-4 py-4 text-center sm:px-4 sm:py-5">
+                <p className="text-2xl font-black leading-none text-primary sm:text-[2rem]">
+                  {plan.macros.proteina}g
                 </p>
-                <p className="mt-3 text-[0.66rem] uppercase tracking-[0.2em] text-white/62">
-                  g proteina
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-white/10 bg-white/6 py-0 text-white ring-0 backdrop-blur-sm">
-              <CardContent className="px-3 py-4 text-center sm:px-4 sm:py-5">
-                <p className="text-[2rem] leading-none font-black text-primary">
-                  {plan.macros.carbo}
-                </p>
-                <p className="mt-3 text-[0.66rem] uppercase tracking-[0.2em] text-white/62">
-                  g carboidrato
+                <p className="mt-2 text-[0.65rem] uppercase tracking-widest text-white/55">
+                  proteina
                 </p>
               </CardContent>
             </Card>
 
-            <Card className="border-white/10 bg-white/6 py-0 text-white ring-0 backdrop-blur-sm">
-              <CardContent className="px-3 py-4 text-center sm:px-4 sm:py-5">
-                <p className="text-[2rem] leading-none font-black text-primary">
-                  {plan.macros.gordura}
+            <Card className="border-white/10 bg-white/8 py-0 text-white ring-0 backdrop-blur-sm">
+              <CardContent className="px-4 py-4 text-center sm:px-4 sm:py-5">
+                <p className="text-2xl font-black leading-none text-primary sm:text-[2rem]">
+                  {plan.macros.carbo}g
                 </p>
-                <p className="mt-3 text-[0.66rem] uppercase tracking-[0.2em] text-white/62">
-                  g gordura
+                <p className="mt-2 text-[0.65rem] uppercase tracking-widest text-white/55">
+                  carbo
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-white/10 bg-white/8 py-0 text-white ring-0 backdrop-blur-sm">
+              <CardContent className="px-4 py-4 text-center sm:px-4 sm:py-5">
+                <p className="text-2xl font-black leading-none text-primary sm:text-[2rem]">
+                  {plan.macros.gordura}g
+                </p>
+                <p className="mt-2 text-[0.65rem] uppercase tracking-widest text-white/55">
+                  gordura
                 </p>
               </CardContent>
             </Card>

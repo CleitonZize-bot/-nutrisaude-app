@@ -757,6 +757,11 @@ export function TodayPlan({
         </div>
 
 
+        {/* Dica do dia personalizada */}
+        {profile ? (
+          <DicaDoDia condicoes={profile.condicoes || []} nome={profile.nome} />
+        ) : null}
+
         {healthAlerts.length > 0 ? (
           <Alert className="rounded-[1.4rem] border-amber-300 bg-amber-50/95 text-amber-950 shadow-[0_14px_34px_rgba(245,158,11,0.08)]">
             <ShieldAlert />

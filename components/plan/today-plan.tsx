@@ -101,7 +101,8 @@ function SubscribeModal({ onClose, titulo, descricao }: {
   titulo?: string;
   descricao?: string;
 }) {
-  const url = process.env.NEXT_PUBLIC_SUBSCRIBE_URL || "#";
+  const router = useRouter();
+  const url = "/assinar";
   return (
     <div
       className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 px-0 pb-0 backdrop-blur-sm sm:items-center sm:px-4 sm:pb-4"

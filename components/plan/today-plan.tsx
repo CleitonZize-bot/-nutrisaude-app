@@ -159,15 +159,14 @@ function SubscribeModal({ onClose, titulo, descricao }: {
         </div>
 
         <div className="flex flex-col gap-2.5 px-6 pb-6 pt-4">
-          <a href={url} target="_blank" rel="noreferrer" className="block">
-            <button
-              type="button"
-              className="flex h-14 w-full items-center justify-center gap-2 rounded-[1.2rem] bg-gradient-to-r from-emerald-500 to-emerald-600 text-base font-bold text-white shadow-[0_8px_24px_rgba(16,185,129,0.35)] active:opacity-90"
-            >
-              Quero o Plano Pro agora
-              <ArrowRight className="size-5" />
-            </button>
-          </a>
+          <button
+            type="button"
+            onClick={() => router.push(url)}
+            className="flex h-14 w-full items-center justify-center gap-2 rounded-[1.2rem] bg-gradient-to-r from-emerald-500 to-emerald-600 text-base font-bold text-white shadow-[0_8px_24px_rgba(16,185,129,0.35)] active:opacity-90"
+          >
+            Quero o Plano Pro agora
+            <ArrowRight className="size-5" />
+          </button>
           <button
             type="button"
             onClick={onClose}

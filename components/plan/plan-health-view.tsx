@@ -3,6 +3,7 @@
 import { useMemo, useRef, useState, type ChangeEvent } from "react";
 import Link from "next/link";
 import {
+  Activity,
   ClipboardList,
   Download,
   Droplet,
@@ -13,6 +14,7 @@ import {
   Stethoscope,
   Upload,
 } from "lucide-react";
+import { LembreteAgua } from "@/components/plan/lembrete-agua";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";

@@ -16,6 +16,7 @@ import {
   Pill,
   RefreshCw,
   Repeat2,
+  Share2,
   ShieldAlert,
   X,
 } from "lucide-react";

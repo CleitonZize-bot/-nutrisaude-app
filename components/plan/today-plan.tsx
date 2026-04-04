@@ -1207,7 +1207,7 @@ export function TodayPlan({
         ) : null}
 
         {activeTab === "saude" ? (
-          isPrem ? <PlanHealthView healthData={healthData} /> : (
+          isPrem ? <PlanHealthView healthData={healthData} perfil={profile} /> : (
             <InlineLock
               mensagem="Diario de saude, exames e controle de medicamentos"
               onUnlock={() => setShowSubscribeModal(true)}

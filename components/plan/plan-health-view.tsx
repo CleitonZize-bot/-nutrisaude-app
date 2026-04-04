@@ -35,6 +35,7 @@ import {
 
 type PlanHealthViewProps = {
   healthData: NutrisaudeStoredData;
+  perfil?: { peso?: number; altura?: number } | null;
 };
 
 type DiarioEntry = {

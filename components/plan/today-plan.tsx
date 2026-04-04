@@ -725,6 +725,38 @@ export function TodayPlan({
     })
   );
 
+  function compartilharWhatsApp() {
+    if (!plan || !profile) return;
+
+    const linhas: string[] = [];
+    linhas.push(`🥗 *Meu cardápio de hoje — NutriSaúde*`);
+    linhas.push(`📅 ${todayLabel}`);
+    if (profile.condicoes?.filter((c) => c !== "nenhum").length > 0) {
+      linhas.push(`⚕️ Perfil: ${profile.condicoes.filter((c) => c !== "nenhum").join(", ")}`);
+    }
+    linhas.push(`🔥 ${plan.tdee} kcal | 🥩 ${plan.macros.proteina}g prot. | 🍚 ${plan.macros.carbo}g carb. | 🫒 ${plan.macros.gordura}g gord.`);
+    linhas.push("");
+
+    for (const meal of plan.refeicoes) {
+      linhas.push(`${meal.icone} *${meal.nome}* (${meal.horario}) — ~${meal.calorias} kcal`);
+      for (const item of meal.itens) {
+        linhas.push(`   • ${item.nome} — ${item.quantidade}`);
+      }
+      linhas.push("");
+    }
+
+    const aguaL = water >= 1000
+      ? `${(water / 1000).toFixed(1).replace(".", ",")}L`
+      : `${water}ml`;
+    linhas.push(`💧 Água hoje: ${aguaL} de ${(hydrationMeta / 1000).toFixed(1).replace(".", ",")}L`);
+    linhas.push("");
+    linhas.push(`_Gerado pelo NutriSaúde_`);
+
+    const texto = linhas.join("\n");
+    const url = `https://wa.me/?text=${encodeURIComponent(texto)}`;
+    window.open(url, "_blank");
+  }
+
   if (loading || !profile || !plan) {
     return (
       <main className="min-h-screen bg-[#f6fbf8]">

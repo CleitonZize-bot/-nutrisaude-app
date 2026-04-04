@@ -56,24 +56,45 @@ const OBJETIVOS = [
   },
 ];
 
+const NIVEIS_ATIVIDADE = [
+  {
+    value: "sedentario",
+    icon: "🪑",
+    title: "Sedentario",
+    description: "Fico em casa ou trabalho sentado a maior parte do dia.",
+  },
+  {
+    value: "leve",
+    icon: "🚶",
+    title: "Levemente ativo",
+    description: "Caminhadas, tarefas do lar ou exercicio leve 1-2x por semana.",
+  },
+  {
+    value: "ativo",
+    icon: "🏃",
+    title: "Bem ativo",
+    description: "Exercicio regular 3 ou mais vezes por semana.",
+  },
+];
+
 const CONDICOES = [
   {
     value: "esteatose",
     icon: "🫀",
     title: "Esteatose Hepatica",
-    description: "Evitar gorduras saturadas, acucar e alcool.",
+    description: "Gordura no figado — evitar gorduras saturadas, acucar e alcool.",
   },
   {
     value: "diabetes",
     icon: "🩸",
     title: "Diabetes",
-    description: "Controle de glicemia e menos carboidratos refinados.",
+    description: "Controle de glicemia e reducao de carboidratos refinados.",
   },
   {
     value: "hipertensao",
     icon: "💓",
     title: "Hipertensao",
-    description: "Reduzir sodio, embutidos e industrializados.",
+    description: "Pressao alta — reduzir sodio, embutidos e industrializados.",
   },
   {
     value: "colesterol",
@@ -88,6 +109,18 @@ const CONDICOES = [
     description: "Evitar alimentos acidos, condimentados e frituras.",
   },
   {
+    value: "tireoide",
+    icon: "🦋",
+    title: "Tireoide (hipo/hiper)",
+    description: "Cuidado com alimentos goitrogenicos como soja e brassicas cruas.",
+  },
+  {
+    value: "gota",
+    icon: "🦴",
+    title: "Gota / Acido urico alto",
+    description: "Reduzir purinas: carnes vermelhas, frutos do mar e alcool.",
+  },
+  {
     value: "lactose",
     icon: "🥛",
     title: "Intolerancia a lactose",
@@ -97,22 +130,14 @@ const CONDICOES = [
     value: "celiaca",
     icon: "🌾",
     title: "Doenca celiaca / gluten",
-    description: "Evitar trigo, cevada e centeio.",
+    description: "Evitar trigo, cevada e centeio completamente.",
   },
   {
     value: "anemia",
     icon: "💊",
     title: "Anemia",
-    description: "Priorizar ferro e vitamina C.",
+    description: "Priorizar ferro, vitamina C e B12 na alimentacao.",
   },
-];
-
-const CALCULO_PASSOS = [
-  "Analisando seu perfil",
-  "Calculando calorias e macros",
-  "Selecionando alimentos ideais",
-  "Verificando restricoes de saude",
-  "Montando seu cardapio",
 ];
 
 type Step = 1 | 2 | 3 | 4;
@@ -131,6 +156,7 @@ export function OnboardingFlow() {
   const [idade, setIdade] = useState("");
   const [sexo, setSexo] = useState("");
   const [objetivo, setObjetivo] = useState("");
+  const [atividade, setAtividade] = useState("");
   const [condicoes, setCondicoes] = useState<string[]>([]);
 
   useEffect(() => {
@@ -138,57 +164,57 @@ export function OnboardingFlow() {
       const perfilServidor = await pbCarregarPerfilServidor();
       const local = carregarDadosLocais()?.perfil;
       const perfil = perfilServidor || local;
-
       if (!perfil) return;
-
       setNome(perfil.nome || "");
       setPeso(perfil.peso ? String(perfil.peso) : "");
       setAltura(perfil.altura ? String(perfil.altura) : "");
       setIdade(perfil.idade ? String(perfil.idade) : "");
       setSexo(perfil.sexo || "");
       setObjetivo(perfil.objetivo || "");
+      setAtividade(perfil.atividade || "");
       setCondicoes(
         perfil.condicoes && perfil.condicoes[0] !== "nenhum" ? perfil.condicoes : []
       );
     }
-
     preencher();
   }, []);
+
+  const primeiroNome = nome.trim().split(" ")[0];
+
+  const calculoPasoss = [
+    `Analisando o perfil de ${primeiroNome || "voce"}`,
+    "Calculando calorias e macronutrientes",
+    "Selecionando alimentos ideais",
+    "Verificando restricoes de saude",
+    "Montando seu cardapio personalizado",
+  ];
 
   useEffect(() => {
     if (step !== 4) return;
 
-    const timers = CALCULO_PASSOS.map((_, index) =>
+    const timers = calculoPasoss.map((_, index) =>
       window.setTimeout(() => {
         setPassoAtivo(index);
-        setProgress(Math.round(((index + 1) / CALCULO_PASSOS.length) * 100));
+        setProgress(Math.round(((index + 1) / calculoPasoss.length) * 100));
       }, 320 + index * 340)
     );
 
     const redirectTimer = window.setTimeout(() => {
-      startTransition(() => {
-        router.push("/plano");
-      });
+      startTransition(() => router.push("/plano"));
     }, 2400);
 
     return () => {
-      timers.forEach((timer) => window.clearTimeout(timer));
-      window.clearTimeout(redirectTimer);
+      timers.forEach(clearTimeout);
+      clearTimeout(redirectTimer);
     };
-  }, [router, step]);
-
-  function validarDadosBasicos() {
-    if (!nome.trim() || !peso || !altura || !idade || !sexo) {
-      setErro("Preencha todos os campos para continuar.");
-      return false;
-    }
-
-    return true;
-  }
+  }, [router, step]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function irParaObjetivo() {
     setErro("");
-    if (!validarDadosBasicos()) return;
+    if (!nome.trim() || !peso || !altura || !idade || !sexo) {
+      setErro("Preencha todos os campos para continuar.");
+      return;
+    }
     setStep(2);
   }
 
@@ -197,17 +223,17 @@ export function OnboardingFlow() {
       setErro("Escolha um objetivo para continuar.");
       return;
     }
-
+    if (!atividade) {
+      setErro("Informe seu nivel de atividade fisica.");
+      return;
+    }
     setErro("");
     setStep(3);
   }
 
   function toggleCondicao(valor: string, checked: boolean) {
     setCondicoes((current) => {
-      if (checked) {
-        return current.includes(valor) ? current : [...current, valor];
-      }
-
+      if (checked) return current.includes(valor) ? current : [...current, valor];
       return current.filter((item) => item !== valor);
     });
   }
@@ -222,11 +248,11 @@ export function OnboardingFlow() {
       idade: Number(idade),
       sexo,
       objetivo,
+      atividade,
       condicoes: condicoes.length > 0 ? condicoes : ["nenhum"],
     };
 
     setLoading(true);
-
     try {
       salvarPerfilLocal(perfil);
       await pbSalvarPerfil(perfil);
@@ -236,6 +262,8 @@ export function OnboardingFlow() {
       setLoading(false);
     }
   }
+
+  const stepLabels = ["Seus dados", "Objetivo e atividade", "Condicoes de saude", ""];
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#eef4f9] px-4 py-8 text-slate-900 sm:px-6 lg:px-8">
@@ -256,7 +284,10 @@ export function OnboardingFlow() {
             {step !== 4 ? (
               <div className="flex flex-col gap-3">
                 <Progress value={(step / 4) * 100} className="w-full" />
-                <p className="text-sm font-medium text-slate-500">Passo {step} de 4</p>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-slate-500">Passo {step} de 4</span>
+                  <span className="font-semibold text-emerald-600">{stepLabels[step - 1]}</span>
+                </div>
               </div>
             ) : null}
           </CardHeader>
@@ -270,6 +301,7 @@ export function OnboardingFlow() {
               </Alert>
             ) : null}
 
+            {/* ── STEP 1 — Dados básicos ── */}
             {step === 1 ? (
               <div className="flex flex-col gap-8">
                 <div className="flex flex-col gap-3">
@@ -277,7 +309,7 @@ export function OnboardingFlow() {
                     Seus dados
                   </CardTitle>
                   <CardDescription className="max-w-2xl text-lg leading-8 text-slate-500">
-                    Precisamos dessas informacoes para calcular suas necessidades nutricionais.
+                    Precisamos dessas informacoes para calcular suas necessidades nutricionais com precisao.
                   </CardDescription>
                 </div>
 
@@ -293,7 +325,7 @@ export function OnboardingFlow() {
                       <Input
                         id="nome"
                         value={nome}
-                        onChange={(event) => setNome(event.target.value)}
+                        onChange={(e) => setNome(e.target.value)}
                         placeholder="Seu nome"
                         className="h-16 rounded-2xl border-slate-200 bg-white px-6 text-xl"
                       />
@@ -313,7 +345,7 @@ export function OnboardingFlow() {
                           id="peso"
                           type="number"
                           value={peso}
-                          onChange={(event) => setPeso(event.target.value)}
+                          onChange={(e) => setPeso(e.target.value)}
                           placeholder="Ex: 80"
                           className="h-16 rounded-2xl border-slate-200 bg-white px-6 text-xl"
                         />
@@ -332,7 +364,7 @@ export function OnboardingFlow() {
                           id="altura"
                           type="number"
                           value={altura}
-                          onChange={(event) => setAltura(event.target.value)}
+                          onChange={(e) => setAltura(e.target.value)}
                           placeholder="Ex: 170"
                           className="h-16 rounded-2xl border-slate-200 bg-white px-6 text-xl"
                         />
@@ -353,7 +385,7 @@ export function OnboardingFlow() {
                           id="idade"
                           type="number"
                           value={idade}
-                          onChange={(event) => setIdade(event.target.value)}
+                          onChange={(e) => setIdade(e.target.value)}
                           placeholder="Ex: 45"
                           className="h-16 rounded-2xl border-slate-200 bg-white px-6 text-xl"
                         />
@@ -370,7 +402,7 @@ export function OnboardingFlow() {
                       <FieldContent>
                         <ToggleGroup
                           value={sexo ? [sexo] : []}
-                          onValueChange={(value) => setSexo(value[0] || "")}
+                          onValueChange={(v) => setSexo(v[0] || "")}
                           className="grid w-full grid-cols-2 gap-4"
                         >
                           <ToggleGroupItem
@@ -402,55 +434,99 @@ export function OnboardingFlow() {
               </div>
             ) : null}
 
+            {/* ── STEP 2 — Objetivo + Atividade ── */}
             {step === 2 ? (
               <div className="flex flex-col gap-8">
                 <div className="flex flex-col gap-3">
                   <CardTitle className="nutri-title text-4xl font-black tracking-tight text-slate-800">
-                    Qual e o seu objetivo?
+                    {primeiroNome ? `Otimo, ${primeiroNome}!` : "Otimo!"} Agora o seu objetivo
                   </CardTitle>
                   <CardDescription className="max-w-2xl text-lg leading-8 text-slate-500">
-                    Escolha a opcao que melhor descreve o que voce quer alcancar.
+                    Essas informacoes definem suas calorias e macronutrientes diarios ideais.
                   </CardDescription>
                 </div>
 
-                <div className="grid gap-4">
-                  {OBJETIVOS.map((item) => {
-                    const selecionado = objetivo === item.value;
-
-                    return (
-                      <button
-                        key={item.value}
-                        type="button"
-                        onClick={() => setObjetivo(item.value)}
-                        className={`rounded-[1.75rem] border px-6 py-6 text-left transition-all ${
-                          selecionado
-                            ? "border-primary bg-primary/8 shadow-lg shadow-primary/10"
-                            : "border-slate-200 bg-white hover:border-primary/40 hover:bg-primary/[0.03]"
-                        }`}
-                      >
-                        <div className="flex items-start gap-4">
-                          <div className="text-4xl">{item.icon}</div>
-                          <div className="flex flex-col gap-2">
-                            <p className="text-xl font-bold text-slate-800">{item.title}</p>
-                            <p className="text-base leading-7 text-slate-500">{item.description}</p>
+                <div>
+                  <p className="mb-3 text-base font-bold text-slate-700">Qual e o seu objetivo principal?</p>
+                  <div className="grid gap-4">
+                    {OBJETIVOS.map((item) => {
+                      const sel = objetivo === item.value;
+                      return (
+                        <button
+                          key={item.value}
+                          type="button"
+                          onClick={() => setObjetivo(item.value)}
+                          className={`rounded-[1.75rem] border px-6 py-6 text-left transition-all ${
+                            sel
+                              ? "border-primary bg-primary/8 shadow-lg shadow-primary/10"
+                              : "border-slate-200 bg-white hover:border-primary/40 hover:bg-primary/[0.03]"
+                          }`}
+                        >
+                          <div className="flex items-start gap-4">
+                            <div className="text-4xl">{item.icon}</div>
+                            <div className="flex flex-col gap-1">
+                              <p className="text-xl font-bold text-slate-800">{item.title}</p>
+                              <p className="text-base leading-7 text-slate-500">{item.description}</p>
+                            </div>
+                            {sel ? (
+                              <div className="ml-auto flex size-7 shrink-0 items-center justify-center rounded-full bg-primary">
+                                <Check className="size-4 text-white" />
+                              </div>
+                            ) : null}
                           </div>
-                        </div>
-                      </button>
-                    );
-                  })}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div>
+                  <p className="mb-3 text-base font-bold text-slate-700">Qual e o seu nivel de atividade fisica?</p>
+                  <p className="mb-4 text-sm text-slate-500">Isso afeta diretamente quantas calorias voce precisa por dia.</p>
+                  <div className="grid gap-3">
+                    {NIVEIS_ATIVIDADE.map((item) => {
+                      const sel = atividade === item.value;
+                      return (
+                        <button
+                          key={item.value}
+                          type="button"
+                          onClick={() => setAtividade(item.value)}
+                          className={`rounded-[1.75rem] border px-5 py-4 text-left transition-all ${
+                            sel
+                              ? "border-primary bg-primary/8 shadow-lg shadow-primary/10"
+                              : "border-slate-200 bg-white hover:border-primary/40 hover:bg-primary/[0.03]"
+                          }`}
+                        >
+                          <div className="flex items-center gap-4">
+                            <div className="text-3xl">{item.icon}</div>
+                            <div className="flex flex-col gap-0.5 flex-1">
+                              <p className="text-lg font-bold text-slate-800">{item.title}</p>
+                              <p className="text-sm text-slate-500">{item.description}</p>
+                            </div>
+                            {sel ? (
+                              <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary">
+                                <Check className="size-4 text-white" />
+                              </div>
+                            ) : null}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
 
                 <div className="flex flex-col gap-3 sm:flex-row">
-                  <Button type="button" variant="outline" size="lg" className="h-14 rounded-2xl" onClick={() => setStep(1)}>
+                  <Button type="button" variant="outline" size="lg" className="h-14 rounded-2xl" onClick={() => { setErro(""); setStep(1); }}>
                     Voltar
                   </Button>
-                  <Button type="button" size="lg" className="h-14 rounded-2xl text-lg font-bold" onClick={irParaSaude}>
+                  <Button type="button" size="lg" className="h-14 flex-1 rounded-2xl text-lg font-bold" onClick={irParaSaude}>
                     Continuar
                   </Button>
                 </div>
               </div>
             ) : null}
 
+            {/* ── STEP 3 — Condições de saúde ── */}
             {step === 3 ? (
               <div className="flex flex-col gap-8">
                 <div className="flex flex-col gap-3">
@@ -458,18 +534,17 @@ export function OnboardingFlow() {
                     Voce tem alguma condicao de saude?
                   </CardTitle>
                   <CardDescription className="max-w-3xl text-lg leading-8 text-slate-500">
-                    Pode selecionar mais de uma. Usaremos isso para adaptar seu plano e alertar sobre alimentos prejudiciais.
+                    Pode marcar mais de uma. Seu cardapio e receitas serao adaptados automaticamente e voce recebera alertas sobre alimentos prejudiciais.
                   </CardDescription>
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-2">
                   {CONDICOES.map((item) => {
                     const checked = condicoes.includes(item.value);
-
                     return (
                       <label
                         key={item.value}
-                        className={`flex gap-4 rounded-[1.75rem] border px-5 py-5 transition-all ${
+                        className={`flex cursor-pointer gap-4 rounded-[1.75rem] border px-5 py-5 transition-all ${
                           checked
                             ? "border-primary bg-primary/8 shadow-lg shadow-primary/10"
                             : "border-slate-200 bg-white hover:border-primary/40 hover:bg-primary/[0.03]"
@@ -478,12 +553,12 @@ export function OnboardingFlow() {
                         <div className="pt-1">
                           <Checkbox
                             checked={checked}
-                            onCheckedChange={(value) => toggleCondicao(item.value, Boolean(value))}
+                            onCheckedChange={(v) => toggleCondicao(item.value, Boolean(v))}
                           />
                         </div>
                         <div className="flex flex-1 gap-4">
                           <div className="text-3xl">{item.icon}</div>
-                          <div className="flex flex-col gap-2">
+                          <div className="flex flex-col gap-1">
                             <p className="text-lg font-bold text-slate-800">{item.title}</p>
                             <p className="text-sm leading-6 text-slate-500">{item.description}</p>
                           </div>
@@ -505,23 +580,33 @@ export function OnboardingFlow() {
                   {condicoes.length === 0 ? "✓ " : ""}Nenhuma das anteriores
                 </button>
 
+                {condicoes.length > 0 ? (
+                  <div className="flex items-center gap-3 rounded-2xl bg-emerald-50 px-4 py-3">
+                    <span className="text-lg">✅</span>
+                    <p className="text-sm font-medium text-emerald-700">
+                      {condicoes.length} condicao{condicoes.length > 1 ? "oes" : ""} selecionada{condicoes.length > 1 ? "s" : ""} — seu cardapio e receitas serao adaptados.
+                    </p>
+                  </div>
+                ) : null}
+
                 <div className="flex flex-col gap-3 sm:flex-row">
-                  <Button type="button" variant="outline" size="lg" className="h-14 rounded-2xl" onClick={() => setStep(2)}>
+                  <Button type="button" variant="outline" size="lg" className="h-14 rounded-2xl" onClick={() => { setErro(""); setStep(2); }}>
                     Voltar
                   </Button>
                   <Button
                     type="button"
                     size="lg"
                     disabled={loading}
-                    className="h-14 rounded-2xl text-lg font-bold"
+                    className="h-14 flex-1 rounded-2xl text-lg font-bold shadow-[0_20px_50px_rgba(0,196,114,0.22)]"
                     onClick={finalizar}
                   >
-                    {loading ? "Gerando seu plano..." : "Gerar meu cardapio"}
+                    {loading ? "Gerando seu plano..." : "Gerar meu cardapio ✨"}
                   </Button>
                 </div>
               </div>
             ) : null}
 
+            {/* ── STEP 4 — Loading animado ── */}
             {step === 4 ? (
               <div className="flex flex-col items-center gap-8 px-2 py-6 text-center">
                 <div className="text-7xl">🧬</div>
@@ -530,7 +615,7 @@ export function OnboardingFlow() {
                     Calculando seu plano...
                   </CardTitle>
                   <CardDescription className="text-lg text-slate-500">
-                    Personalizando para o seu corpo
+                    Personalizando para o seu corpo e suas condicoes de saude
                   </CardDescription>
                 </div>
 
@@ -539,10 +624,9 @@ export function OnboardingFlow() {
                 </div>
 
                 <div className="flex w-full max-w-2xl flex-col gap-3">
-                  {CALCULO_PASSOS.map((passo, index) => {
+                  {calculoPasoss.map((passo, index) => {
                     const ativo = index === passoAtivo;
                     const feito = index < passoAtivo;
-
                     return (
                       <div
                         key={passo}
@@ -551,7 +635,7 @@ export function OnboardingFlow() {
                         }`}
                       >
                         <div
-                          className={`flex size-9 items-center justify-center rounded-full text-sm font-bold ${
+                          className={`flex size-9 shrink-0 items-center justify-center rounded-full text-sm font-bold ${
                             ativo || feito ? "bg-primary text-primary-foreground" : "bg-slate-200 text-slate-500"
                           }`}
                         >

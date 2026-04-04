@@ -101,8 +101,7 @@ function SubscribeModal({ onClose, titulo, descricao }: {
   titulo?: string;
   descricao?: string;
 }) {
-  const router = useRouter();
-  const url = "/assinar";
+  const url = process.env.NEXT_PUBLIC_SUBSCRIBE_URL || "#";
   return (
     <div
       className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 px-0 pb-0 backdrop-blur-sm sm:items-center sm:px-4 sm:pb-4"
@@ -156,17 +155,28 @@ function SubscribeModal({ onClose, titulo, descricao }: {
               ))}
             </div>
           </div>
+
+          {/* Preço persuasivo */}
+          <div className="w-full rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3 text-center">
+            <p className="text-xs text-slate-500">Tudo isso por apenas</p>
+            <p className="nutri-title text-3xl font-black text-slate-900">
+              R$ 23<span className="text-xl">,99</span>
+              <span className="text-sm font-semibold text-slate-400">/mês</span>
+            </p>
+            <p className="mt-0.5 text-[0.7rem] text-slate-400">Menos de R$ 0,80 por dia · Cancele quando quiser</p>
+          </div>
         </div>
 
         <div className="flex flex-col gap-2.5 px-6 pb-6 pt-4">
-          <button
-            type="button"
-            onClick={() => router.push(url)}
-            className="flex h-14 w-full items-center justify-center gap-2 rounded-[1.2rem] bg-gradient-to-r from-emerald-500 to-emerald-600 text-base font-bold text-white shadow-[0_8px_24px_rgba(16,185,129,0.35)] active:opacity-90"
-          >
-            Quero o Plano Pro agora
-            <ArrowRight className="size-5" />
-          </button>
+          <a href={url} target="_blank" rel="noreferrer" className="block">
+            <button
+              type="button"
+              className="flex h-14 w-full items-center justify-center gap-2 rounded-[1.2rem] bg-gradient-to-r from-emerald-500 to-emerald-600 text-base font-bold text-white shadow-[0_8px_24px_rgba(16,185,129,0.35)] active:opacity-90"
+            >
+              Quero o Plano Pro agora
+              <ArrowRight className="size-5" />
+            </button>
+          </a>
           <button
             type="button"
             onClick={onClose}

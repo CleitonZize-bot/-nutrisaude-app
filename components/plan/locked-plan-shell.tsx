@@ -298,12 +298,12 @@ export function LockedPlanShell() {
               </CardHeader>
 
               <CardContent className="flex flex-col gap-4 px-6 pb-7">
-                <Link href="/assinar">
+                <a href={subscribeUrl} target="_blank" rel="noreferrer">
                   <Button className="h-14 w-full rounded-[1.2rem] text-base font-bold shadow-[0_18px_34px_rgba(0,196,114,0.22)]">
-                    Ver planos e assinar
+                    Assinar o NutriSaude
                     <ArrowRight />
                   </Button>
-                </Link>
+                </a>
 
                 <Button
                   type="button"

@@ -34,6 +34,7 @@ import {
   pbVerificarAssinatura,
 } from "@/lib/pocketbase";
 
+const subscribeUrl = process.env.NEXT_PUBLIC_SUBSCRIBE_URL || "#";
 
 const TAB_PREVIEW = [
   { label: "Hoje", icon: CalendarDays, active: true },

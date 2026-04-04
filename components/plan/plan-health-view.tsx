@@ -635,6 +635,89 @@ export function PlanHealthView({ healthData, perfil }: PlanHealthViewProps) {
         </CardContent>
       </Card>
 
+      {/* ── Calculadora de IMC ── */}
+      <Card className="nutri-surface rounded-[1.9rem] border border-slate-200/80 py-0">
+        <CardHeader className="gap-2 px-6 pt-6">
+          <div className="flex items-center gap-3">
+            <Activity className="text-emerald-500" />
+            <div>
+              <CardTitle>Calculadora de IMC</CardTitle>
+              <CardDescription>Indice de Massa Corporal — avalie seu peso atual.</CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-4 px-6 pb-6">
+          <div className="grid grid-cols-2 gap-3">
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-semibold text-slate-600">Peso (kg)</label>
+              <input
+                type="number"
+                value={imcPeso}
+                onChange={(e) => setImcPeso(e.target.value)}
+                placeholder="Ex: 75"
+                className="h-12 rounded-2xl border border-slate-200 bg-white px-4 text-base outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
+              />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-semibold text-slate-600">Altura (cm)</label>
+              <input
+                type="number"
+                value={imcAltura}
+                onChange={(e) => setImcAltura(e.target.value)}
+                placeholder="Ex: 168"
+                className="h-12 rounded-2xl border border-slate-200 bg-white px-4 text-base outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
+              />
+            </div>
+          </div>
+
+          {imcValor && imcInfo ? (
+            <div className={`flex flex-col gap-2 rounded-2xl ${imcInfo.bg} px-4 py-4`}>
+              <div className="flex items-center justify-between">
+                <p className={`text-2xl font-black ${imcInfo.cor}`}>{imcValor.toFixed(1)}</p>
+                <span className={`rounded-full border px-3 py-1 text-xs font-bold ${imcInfo.cor} border-current bg-white`}>
+                  {imcInfo.label}
+                </span>
+              </div>
+              {/* Barra visual */}
+              <div className="relative h-3 w-full overflow-hidden rounded-full bg-white/70">
+                <div
+                  className="absolute left-0 top-0 h-full rounded-full bg-gradient-to-r from-blue-400 via-emerald-400 via-amber-400 to-red-500"
+                  style={{ width: "100%" }}
+                />
+                <div
+                  className="absolute top-0 h-full w-1 rounded-full bg-slate-800 shadow"
+                  style={{ left: `${Math.min(Math.max(((imcValor - 15) / 25) * 100, 0), 100)}%` }}
+                />
+              </div>
+              <div className="flex justify-between text-[0.6rem] font-medium text-slate-500">
+                <span>15</span><span>18.5</span><span>25</span><span>30</span><span>35</span><span>40</span>
+              </div>
+              <p className="text-xs text-slate-600">{imcInfo.detalhe}</p>
+            </div>
+          ) : (
+            <p className="rounded-2xl bg-slate-50 px-4 py-3 text-xs text-slate-400 text-center">
+              Preencha peso e altura para calcular seu IMC automaticamente.
+            </p>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* ── Lembretes de Água ── */}
+      <Card className="nutri-surface rounded-[1.9rem] border border-slate-200/80 py-0">
+        <CardHeader className="gap-2 px-6 pt-6">
+          <div className="flex items-center gap-3">
+            <Droplet className="text-cyan-500" />
+            <div>
+              <CardTitle>Lembretes de agua</CardTitle>
+              <CardDescription>Receba notificacoes no celular para nao esquecer de se hidratar.</CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="px-6 pb-6">
+          <LembreteAgua />
+        </CardContent>
+      </Card>
+
       <Card className="nutri-surface rounded-[1.9rem] border border-slate-200/80 py-0">
         <CardHeader className="gap-2 px-6 pt-6">
           <div className="flex items-center gap-3">

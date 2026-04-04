@@ -295,26 +295,6 @@ function InlineLock({ mensagem, onUnlock }: { mensagem: string; onUnlock: () => 
   );
 }
 
-function PremiumTabLock({ onUnlock }: { onUnlock: () => void }) {
-  return (
-    <button type="button" onClick={onUnlock} className="block w-full text-left">
-      <div className="flex flex-col items-center gap-4 rounded-[1.9rem] bg-slate-900/90 px-6 py-12 text-center backdrop-blur-sm">
-        <div className="flex size-14 items-center justify-center rounded-full bg-primary/15">
-          <LockKeyhole className="size-7 text-primary" />
-        </div>
-        <div className="flex flex-col gap-2">
-          <p className="nutri-title text-2xl font-black text-white">
-            Clique para desbloquear
-          </p>
-          <p className="text-sm text-white/70">
-            Receitas, cardapios e todas as funcoes do aplicativo
-          </p>
-        </div>
-      </div>
-    </button>
-  );
-}
-
 const HEALTH_MESSAGES: Record<string, { titulo: string; texto: string }> = {
   esteatose: {
     titulo: "Esteatose Hepatica",
@@ -705,10 +685,18 @@ export function TodayPlan({
   }
 
   function toggleRecipe(key: string) {
+    if (!isPrem) {
+      setShowSubscribeModal(true);
+      return;
+    }
     setOpenRecipes((current) => ({ ...current, [key]: !current[key] }));
   }
 
   function toggleSubs(key: string) {
+    if (!isPrem) {
+      setShowSubscribeModal(true);
+      return;
+    }
     setOpenSubs((current) => ({ ...current, [key]: !current[key] }));
   }
 
@@ -974,7 +962,7 @@ export function TodayPlan({
                   {/* Conteúdo expandido */}
                   {isOpen ? (
                     <div className="relative border-t border-slate-100 px-4 pb-4 pt-3">
-                      <div className={isPrem ? undefined : "pointer-events-none select-none blur-sm"}>
+                      <div>
                         {hasAlert ? (
                           <div className="mb-3 flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 px-3 py-2.5 text-xs leading-snug text-red-600">
                             <ShieldAlert className="mt-0.5 size-3.5 shrink-0" />
@@ -1009,7 +997,9 @@ export function TodayPlan({
                                     <button
                                       type="button"
                                       className={`flex shrink-0 items-center gap-1 rounded-full border px-2.5 py-1 text-[0.7rem] font-semibold transition-colors ${
-                                        isSubsOpen
+                                        !isPrem
+                                          ? "border-emerald-200 bg-slate-50 text-slate-400"
+                                          : isSubsOpen
                                           ? "border-emerald-400 bg-emerald-100 text-emerald-700"
                                           : "border-emerald-300 bg-emerald-50 text-emerald-600 active:bg-emerald-100"
                                       }`}
@@ -1037,9 +1027,13 @@ export function TodayPlan({
                                           key={`${item.nome}-${sub.indice}`}
                                           type="button"
                                           className="rounded-full border border-emerald-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 active:bg-emerald-100 active:text-emerald-800"
-                                          onClick={() =>
-                                            replaceItem(meal.chave, itemIndex, item.grupoId!, sub.indice)
-                                          }
+                                          onClick={() => {
+                                            if (!isPrem) {
+                                              setShowSubscribeModal(true);
+                                              return;
+                                            }
+                                            replaceItem(meal.chave, itemIndex, item.grupoId!, sub.indice);
+                                          }}
                                         >
                                           {sub.nome}
                                         </button>
@@ -1053,7 +1047,9 @@ export function TodayPlan({
                                   <button
                                     type="button"
                                     className={`mt-2 flex w-full items-center gap-2 rounded-xl border px-3 py-2 text-left text-xs font-semibold transition-colors ${
-                                      isRecipeOpen
+                                      !isPrem
+                                        ? "border-amber-200 bg-slate-50 text-slate-500"
+                                        : isRecipeOpen
                                         ? "border-amber-300 bg-amber-50 text-amber-700"
                                         : "border-amber-200 bg-amber-50/50 text-amber-600 active:bg-amber-50"
                                     }`}
@@ -1153,16 +1149,12 @@ export function TodayPlan({
                       </div>
 
                       {!isPrem ? (
-                        <button
-                          type="button"
-                          onClick={() => setShowSubscribeModal(true)}
-                          className="absolute inset-3 flex items-center justify-center"
-                        >
-                          <div className="w-full rounded-xl bg-slate-900/90 px-5 py-4 text-center backdrop-blur-sm">
-                            <p className="text-sm font-bold text-white">🌱 Voce ja deu um otimo comeco!</p>
-                            <p className="mt-1 text-xs leading-relaxed text-white/80">Faca parte do Plano Pro e veja as receitas completas</p>
-                          </div>
-                        </button>
+                        <div className="mt-3 border-t border-slate-100 pt-3">
+                          <InlineLock
+                            mensagem="Receitas passo a passo e troca de alimentos continuam no Plano Pro"
+                            onUnlock={() => setShowSubscribeModal(true)}
+                          />
+                        </div>
                       ) : null}
                     </div>
                   ) : null}

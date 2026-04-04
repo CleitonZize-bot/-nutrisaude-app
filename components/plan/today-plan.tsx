@@ -947,6 +947,16 @@ export function TodayPlan({
 
         {activeTab === "hoje" ? (
           <div className="flex flex-col gap-3">
+            {/* Botão compartilhar WhatsApp */}
+            <button
+              type="button"
+              onClick={compartilharWhatsApp}
+              className="flex items-center justify-center gap-2 rounded-2xl border border-[#25D366]/30 bg-[#25D366]/8 px-4 py-3 text-sm font-semibold text-[#128C7E] active:bg-[#25D366]/15"
+            >
+              <Share2 className="size-4" />
+              Compartilhar cardápio no WhatsApp
+            </button>
+
             {plan.refeicoes.map((meal) => {
               const doneAt = checkins[meal.chave];
               const hasAlert = meal.itens.some((item) =>

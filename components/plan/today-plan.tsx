@@ -440,8 +440,6 @@ function recomputeMeal(meal: Meal, items: MealItem[]): Meal {
   };
 }
 
-const subscribeUrl = process.env.NEXT_PUBLIC_SUBSCRIBE_URL || "#";
-
 type AcessoType = "premium" | "free";
 
 export function TodayPlan({

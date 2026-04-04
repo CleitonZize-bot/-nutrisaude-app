@@ -239,6 +239,14 @@ export function PlanHealthView({ healthData, perfil }: PlanHealthViewProps) {
   const [remedios, setRemedios] = useState<RemedioEntry[]>(() => parseRemedios(healthData.remedios));
   const [feedback, setFeedback] = useState("");
 
+  // IMC
+  const [imcPeso, setImcPeso] = useState(perfil?.peso ? String(perfil.peso) : "");
+  const [imcAltura, setImcAltura] = useState(perfil?.altura ? String(perfil.altura) : "");
+  const imcValor = imcPeso && imcAltura
+    ? calcularIMC(Number(imcPeso), Number(imcAltura))
+    : null;
+  const imcInfo = imcValor ? classificarIMC(imcValor) : null;
+
   const todayEntry = diarioMap[todayKey];
 
   const [energia, setEnergia] = useState(todayEntry?.energia ?? 0);

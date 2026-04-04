@@ -213,7 +213,21 @@ function ScaleField({
   );
 }
 
-export function PlanHealthView({ healthData }: PlanHealthViewProps) {
+function calcularIMC(peso: number, alturaCm: number) {
+  const alturaM = alturaCm / 100;
+  return peso / (alturaM * alturaM);
+}
+
+function classificarIMC(imc: number): { label: string; cor: string; bg: string; detalhe: string } {
+  if (imc < 18.5) return { label: "Abaixo do peso",   cor: "text-blue-600",   bg: "bg-blue-50",   detalhe: "Procure um nutricionista para ganho de peso saudavel." };
+  if (imc < 25)   return { label: "Peso normal",       cor: "text-emerald-600",bg: "bg-emerald-50", detalhe: "Parabens! Continue mantendo seus habitos saudaveis." };
+  if (imc < 30)   return { label: "Sobrepeso",         cor: "text-amber-600",  bg: "bg-amber-50",   detalhe: "Pequenas mudancas na alimentacao ja trazem grande impacto." };
+  if (imc < 35)   return { label: "Obesidade grau 1",  cor: "text-orange-600", bg: "bg-orange-50",  detalhe: "Seu plano alimentar esta ajudando. Siga em frente!" };
+  if (imc < 40)   return { label: "Obesidade grau 2",  cor: "text-red-600",    bg: "bg-red-50",     detalhe: "Converse com seu medico para um acompanhamento completo." };
+  return             { label: "Obesidade grau 3",       cor: "text-red-700",    bg: "bg-red-50",     detalhe: "Procure acompanhamento medico especializado." };
+}
+
+export function PlanHealthView({ healthData, perfil }: PlanHealthViewProps) {
   const importInputRef = useRef<HTMLInputElement | null>(null);
   const todayKey = useMemo(() => localDateKey(), []);
   const todayLabel = useMemo(() => localDateLabel(), []);

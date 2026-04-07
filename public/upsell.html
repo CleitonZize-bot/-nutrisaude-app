@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Oferta Exclusiva — NutriSaúde App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================================
+       RESET & BASE — Mobile-first
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #0a0a0f;
+      color: #e0e0e0;
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img { max-width: 100%; display: block; }
+
+    /* ============================================================
+       VARIÁVEIS
+    ============================================================ */
+    :root {
+      --green: #00e676;
+      --green-dark: #00c853;
+      --green-glow: rgba(0, 230, 118, 0.25);
+      --yellow: #ffd600;
+      --yellow-glow: rgba(255, 214, 0, 0.2);
+      --red: #ff5252;
+      --orange: #ff9100;
+      --bg-card: #141420;
+      --bg-card-light: #1a1a2e;
+      --border: #2a2a3e;
+      --text-muted: #8888a0;
+      --max-w: 480px;
+    }
+
+    /* ============================================================
+       LAYOUT
+    ============================================================ */
+    .page {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 16px 60px;
+    }
+
+    /* ============================================================
+       SEÇÃO 1 — COMPRA CONFIRMADA
+    ============================================================ */
+    .confirmed-banner {
+      background: linear-gradient(135deg, #0d2818 0%, #0a1f14 100%);
+      border: 1px solid #1b5e2066;
+      border-radius: 16px;
+      padding: 24px 20px;
+      text-align: center;
+      margin-top: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .confirmed-banner::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--green), transparent);
+    }
+
+    .confirmed-icon {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, var(--green), var(--green-dark));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 32px;
+      box-shadow: 0 0 30px var(--green-glow);
+      animation: pulse-green 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-green {
+      0%, 100% { box-shadow: 0 0 20px var(--green-glow); }
+      50% { box-shadow: 0 0 40px var(--green-glow), 0 0 60px rgba(0,230,118,0.1); }
+    }
+
+    .confirmed-banner h1 {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--green);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .confirmed-banner p {
+      font-size: 14px;
+      color: #a0a0b0;
+    }
+
+    .confirmed-banner .product-name {
+      color: #fff;
+      font-weight: 700;
+      display: block;
+      margin-top: 4px;
+      font-size: 15px;
+    }
+
+    /* ============================================================
+       SEÇÃO 2 — ESPERA! ATENÇÃO
+    ============================================================ */
+    .attention-block {
+      text-align: center;
+      margin-top: 32px;
+      padding: 0 8px;
+    }
+
+    .attention-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #ff6d00, #ff9100);
+      color: #000;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 5px 14px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 16px;
+      animation: shake 3s ease-in-out infinite;
+    }
+
+    @keyframes shake {
+      0%, 90%, 100% { transform: translateX(0); }
+      92% { transform: translateX(-3px); }
+      94% { transform: translateX(3px); }
+      96% { transform: translateX(-3px); }
+      98% { transform: translateX(3px); }
+    }
+
+    .attention-block h2 {
+      font-size: 24px;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.25;
+      margin-bottom: 12px;
+    }
+
+    .attention-block h2 span {
+      color: var(--yellow);
+      text-shadow: 0 0 20px var(--yellow-glow);
+    }
+
+    .attention-block .subtitle {
+      font-size: 14px;
+      color: #9999b0;
+      max-width: 360px;
+      margin: 0 auto;
+    }
+
+    /* ============================================================
+       SEÇÃO 3 — VÍDEO (9:16)
+    ============================================================ */
+    .video-section {
+      margin-top: 28px;
+      padding: 0 12px;
+    }
+
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 320px;
+      margin: 0 auto;
+      aspect-ratio: 9 / 16;
+      background: var(--bg-card);
+      border-radius: 16px;
+      border: 2px solid var(--border);
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+    }
+
+    .video-wrapper video,
+    .video-wrapper iframe {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border: none;
+    }
+
+    .video-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: var(--text-muted);
+    }
+
+    .video-placeholder .play-icon {
+      width: 64px;
+      height: 64px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      border: 2px solid rgba(255,255,255,0.2);
+    }
+
+    .video-label {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ============================================================
+       SEÇÃO 4 — COMPARAÇÃO: O que você comprou VS O App
+    ============================================================ */
+    .comparison {
+      margin-top: 36px;
+    }
+
+    .comparison-title {
+      text-align: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .compare-card {
+      border-radius: 14px;
+      padding: 20px 18px;
+      margin-bottom: 14px;
+      position: relative;
+    }
+
+    .compare-basic {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      opacity: 0.75;
+    }
+
+    .compare-basic .compare-badge {
+      background: #333;
+      color: #888;
+    }
+
+    .compare-pro {
+      background: linear-gradient(135deg, #0d2818, #0a2015);
+      border: 2px solid var(--green);
+      box-shadow: 0 0 30px var(--green-glow), inset 0 0 30px rgba(0,230,118,0.03);
+    }
+
+    .compare-pro .compare-badge {
+      background: linear-gradient(135deg, var(--green), var(--green-dark));
+      color: #000;
+    }
+
+    .compare-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 14px;
+    }
+
+    .compare-card h3 {
+      font-size: 17px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 14px;
+    }
+
+    .compare-basic h3 {
+      color: #888;
+      text-decoration: line-through;
+      text-decoration-color: #555;
+    }
+
+    .compare-list {
+      list-style: none;
+    }
+
+    .compare-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    .compare-list .icon-check {
+      color: var(--green);
+      font-size: 15px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .compare-list .icon-x {
+      color: var(--red);
+      font-size: 15px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .compare-basic .compare-list li {
+      color: #666;
+    }
+
+    .compare-pro .compare-list li {
+      color: #c8e6c9;
+    }
+
+    .vs-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 4px 0;
+    }
+
+    .vs-circle {
+      width: 40px;
+      height: 40px;
+      background: var(--bg-card-light);
+      border: 2px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--yellow);
+    }
+
+    /* ============================================================
+       SEÇÃO 5 — FUNCIONALIDADES DO APP
+    ============================================================ */
+    .features {
+      margin-top: 36px;
+    }
+
+    .features-title {
+      text-align: center;
+      font-size: 20px;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .features-subtitle {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .feature-item {
+      display: flex;
+      gap: 14px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 10px;
+      transition: border-color 0.2s;
+    }
+
+    .feature-item:hover {
+      border-color: #3a3a5e;
+    }
+
+    .feature-icon {
+      width: 42px;
+      height: 42px;
+      background: var(--bg-card-light);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .feature-text h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 3px;
+    }
+
+    .feature-text p {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* ============================================================
+       SEÇÃO 6 — CONDIÇÕES ATENDIDAS
+    ============================================================ */
+    .conditions {
+      margin-top: 32px;
+      text-align: center;
+    }
+
+    .conditions-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 14px;
+    }
+
+    .conditions-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .cond-tag {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #c8c8d8;
+      white-space: nowrap;
+    }
+
+    /* ============================================================
+       SEÇÃO 7 — PREÇO + CTA
+    ============================================================ */
+    .pricing {
+      margin-top: 36px;
+      background: linear-gradient(135deg, #0d2818 0%, #0a1a12 100%);
+      border: 2px solid var(--green);
+      border-radius: 20px;
+      padding: 28px 20px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 0 40px var(--green-glow);
+    }
+
+    .pricing::before {
+      content: 'OFERTA EXCLUSIVA';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, var(--green), var(--green-dark));
+      color: #000;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 16px;
+      border-radius: 20px;
+      letter-spacing: 1.5px;
+    }
+
+    .pricing .old-price {
+      font-size: 16px;
+      color: var(--red);
+      text-decoration: line-through;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .pricing .new-price {
+      font-size: 44px;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .pricing .new-price .currency {
+      font-size: 22px;
+      vertical-align: super;
+      margin-right: 2px;
+    }
+
+    .pricing .new-price .cents {
+      font-size: 22px;
+      vertical-align: super;
+    }
+
+    .pricing .new-price .period {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .pricing .savings {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0,230,118,0.1);
+      border: 1px solid rgba(0,230,118,0.2);
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--green);
+      margin-top: 8px;
+      margin-bottom: 20px;
+    }
+
+    .pricing .daily-cost {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .cta-button {
+      display: block;
+      width: 100%;
+      padding: 18px 24px;
+      background: linear-gradient(135deg, var(--green), var(--green-dark));
+      color: #000;
+      font-size: 16px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      box-shadow: 0 4px 20px var(--green-glow);
+      transition: all 0.2s;
+      animation: cta-pulse 2.5s ease-in-out infinite;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 30px var(--green-glow);
+    }
+
+    @keyframes cta-pulse {
+      0%, 100% { box-shadow: 0 4px 20px var(--green-glow); }
+      50% { box-shadow: 0 4px 35px rgba(0,230,118,0.4); }
+    }
+
+    .cta-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 10px;
+    }
+
+    /* ============================================================
+       SEÇÃO 8 — GARANTIA
+    ============================================================ */
+    .guarantee {
+      margin-top: 28px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 18px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .guarantee-icon {
+      font-size: 32px;
+      flex-shrink: 0;
+    }
+
+    .guarantee h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .guarantee p {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ============================================================
+       SEÇÃO 9 — LINK RECUSAR
+    ============================================================ */
+    .decline {
+      text-align: center;
+      margin-top: 20px;
+      padding-bottom: 20px;
+    }
+
+    .decline a {
+      font-size: 12px;
+      color: #555;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    /* ============================================================
+       TIMER FIXO TOPO
+    ============================================================ */
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: linear-gradient(90deg, #1a0a00, #1a1200, #1a0a00);
+      border-bottom: 1px solid #332200;
+      padding: 10px 16px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--yellow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .timer {
+      display: inline-flex;
+      gap: 3px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .timer-block {
+      background: rgba(255,214,0,0.15);
+      border: 1px solid rgba(255,214,0,0.3);
+      border-radius: 6px;
+      padding: 2px 7px;
+      font-size: 14px;
+      font-weight: 800;
+      min-width: 30px;
+      text-align: center;
+    }
+
+    .timer-sep {
+      color: var(--yellow);
+      font-weight: 800;
+      font-size: 14px;
+      padding: 0 1px;
+    }
+
+    /* ============================================================
+       DEPOIMENTOS
+    ============================================================ */
+    .testimonials {
+      margin-top: 32px;
+    }
+
+    .testimonials-title {
+      text-align: center;
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 14px;
+    }
+
+    .testimonial-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 10px;
+    }
+
+    .testimonial-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .testimonial-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--bg-card-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .testimonial-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .testimonial-condition {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .testimonial-stars {
+      color: var(--yellow);
+      font-size: 12px;
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+    }
+
+    .testimonial-text {
+      font-size: 13px;
+      color: #a0a0b0;
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    /* ============================================================
+       SEGUNDO CTA (FLUTUANTE)
+    ============================================================ */
+    .sticky-cta {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: linear-gradient(to top, #0a0a0f 80%, transparent);
+      padding: 12px 16px 16px;
+      display: none;
+    }
+
+    .sticky-cta.visible {
+      display: block;
+    }
+
+    .sticky-cta .cta-button {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      font-size: 14px;
+      padding: 16px 20px;
+    }
+
+    /* ============================================================
+       RESPONSIVO DESKTOP
+    ============================================================ */
+    @media (min-width: 600px) {
+      .page { padding: 0 24px 80px; }
+      .attention-block h2 { font-size: 28px; }
+      .pricing .new-price { font-size: 52px; }
+      .video-wrapper { max-width: 360px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       BARRA TOPO — TIMER DE URGÊNCIA
+  ============================================================ -->
+  <div class="top-bar">
+    <span>Oferta expira em</span>
+    <div class="timer">
+      <span class="timer-block" id="timer-min">15</span>
+      <span class="timer-sep">:</span>
+      <span class="timer-block" id="timer-sec">00</span>
+    </div>
+  </div>
+
+  <div class="page">
+
+    <!-- ============================================================
+         SEÇÃO 1 — COMPRA CONFIRMADA
+    ============================================================ -->
+    <div class="confirmed-banner">
+      <div class="confirmed-icon">&#10003;</div>
+      <h1>Compra Confirmada!</h1>
+      <p>Seu produto foi processado com sucesso.</p>
+      <span class="product-name">
+        <!-- EDITE AQUI: Nome do produto que o cliente comprou -->
+        Cardápios Alimentares Personalizados
+      </span>
+    </div>
+
+    <!-- ============================================================
+         SEÇÃO 2 — CHAMADA DE ATENÇÃO
+    ============================================================ -->
+    <div class="attention-block">
+      <div class="attention-badge">Oportunidade Exclusiva</div>
+      <h2>
+        Mas antes de sair...<br>
+        <span>Desbloqueie o acesso completo</span>
+      </h2>
+      <p class="subtitle">
+        O que você acabou de adquirir é apenas o começo.
+        Existe algo <strong style="color:#fff;">muito mais poderoso</strong> esperando por você.
+      </p>
+    </div>
+
+    <!-- ============================================================
+         SEÇÃO 3 — VÍDEO (9:16)
+    ============================================================ -->
+    <div class="video-section">
+      <div class="video-wrapper">
+        <!-- =============================================
+             SUBSTITUA O PLACEHOLDER PELO SEU VÍDEO:
+
+             OPÇÃO 1 — Vídeo direto:
+             <video src="seu-video.mp4" controls playsinline poster="thumb.jpg"></video>
+
+             OPÇÃO 2 — YouTube/Vimeo embed:
+             <iframe src="https://www.youtube.com/embed/VIDEO_ID" allowfullscreen></iframe>
+
+             OPÇÃO 3 — Panda Video / Vturb:
+             Cole o embed do player aqui
+        ============================================= -->
+        <div class="video-placeholder" id="videoPlaceholder">
+          <div class="play-icon">&#9654;</div>
+          <span style="font-size: 13px; font-weight: 600;">Assista o vídeo</span>
+          <span style="font-size: 11px;">Cole seu vídeo aqui</span>
+        </div>
+      </div>
+      <p class="video-label">Assista até o final e entenda a oportunidade</p>
+    </div>
+
+    <!-- ============================================================
+         SEÇÃO 4 — COMPARAÇÃO
+    ============================================================ -->
+    <div class="comparison">
+      <div class="comparison-title">Entenda a diferença</div>
+
+      <!-- O que você comprou (básico) -->
+      <div class="compare-card compare-basic">
+        <span class="compare-badge">O que você comprou</span>
+        <h3>Cardápio em PDF estático</h3>
+        <ul class="compare-list">
+          <li><span class="icon-check">&#10003;</span> 30 cardápios prontos</li>
+          <li><span class="icon-check">&#10003;</span> 1 plano semanal fixo</li>
+          <li><span class="icon-check">&#10003;</span> 1 lista de substituição</li>
+          <li><span class="icon-x">&#10007;</span> Sem personalização por peso/altura</li>
+          <li><span class="icon-x">&#10007;</span> Sem atualizações futuras</li>
+          <li><span class="icon-x">&#10007;</span> Sem alertas de alimentos perigosos</li>
+          <li><span class="icon-x">&#10007;</span> Sem suporte com nutricionista</li>
+        </ul>
+      </div>
+
+      <div class="vs-divider">
+        <div class="vs-circle">VS</div>
+      </div>
+
+      <!-- O app (premium) -->
+      <div class="compare-card compare-pro">
+        <span class="compare-badge">O que você pode desbloquear agora</span>
+        <h3>NutriSaúde App Inteligente</h3>
+        <ul class="compare-list">
+          <li><span class="icon-check">&#10003;</span> <strong>+150 cardápios</strong> que mudam todo dia automaticamente</li>
+          <li><span class="icon-check">&#10003;</span> Personalizado pelo seu peso, altura, idade e objetivo</li>
+          <li><span class="icon-check">&#10003;</span> <strong>Filtragem inteligente</strong> — NUNCA coloca alimentos ruins para a sua condição</li>
+          <li><span class="icon-check">&#10003;</span> <strong>+137 receitas</strong> com modo de preparo e tempo</li>
+          <li><span class="icon-check">&#10003;</span> Substituição de qualquer alimento com 1 clique</li>
+          <li><span class="icon-check">&#10003;</span> Alertas automáticos por condição de saúde</li>
+          <li><span class="icon-check">&#10003;</span> Compartilhe pelo WhatsApp com 1 toque</li>
+          <li><span class="icon-check">&#10003;</span> Atualizações mensais vitalícias</li>
+          <li><span class="icon-check">&#10003;</span> Acesso VITALÍCIO</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SEÇÃO 5 — FUNCIONALIDADES
+    ============================================================ -->
+    <div class="features">
+      <h3 class="features-title">Como o app funciona</h3>
+      <p class="features-subtitle">Tecnologia que cuida da sua alimentação por você</p>
+
+      <div class="feature-item">
+        <div class="feature-icon">&#129716;</div>
+        <div class="feature-text">
+          <h4>Sabe sua condição</h4>
+          <p>Você informa suas condições de saúde e o app monta tudo automaticamente, sem alimentos proibidos.</p>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-icon">&#127860;</div>
+        <div class="feature-text">
+          <h4>Cardápio novo todo dia</h4>
+          <p>Café, almoço, lanche, jantar e ceia — tudo calculado com calorias, proteínas, carboidratos e gorduras.</p>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-icon">&#128260;</div>
+        <div class="feature-text">
+          <h4>Troque qualquer alimento</h4>
+          <p>Não gosta de algo? Toque e troque por outro equivalente do mesmo grupo nutricional.</p>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-icon">&#9888;&#65039;</div>
+        <div class="feature-text">
+          <h4>Alertas inteligentes</h4>
+          <p>Se um alimento pode ser prejudicial para sua condição, o app avisa e sugere uma alternativa segura.</p>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-icon">&#128220;</div>
+        <div class="feature-text">
+          <h4>+137 receitas com preparo</h4>
+          <p>Cada receita vem com ingredientes, modo de preparo, tempo e adaptações para sua condição de saúde.</p>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-icon">&#128241;</div>
+        <div class="feature-text">
+          <h4>Funciona no celular</h4>
+          <p>Acesse de qualquer lugar, no navegador do celular. Sem precisar baixar nada.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SEÇÃO 6 — CONDIÇÕES ATENDIDAS
+    ============================================================ -->
+    <div class="conditions">
+      <div class="conditions-title">Funciona para quem tem:</div>
+      <div class="conditions-grid">
+        <span class="cond-tag">&#129729; Esteatose Hepática</span>
+        <span class="cond-tag">&#129656; Diabetes</span>
+        <span class="cond-tag">&#128147; Hipertensão</span>
+        <span class="cond-tag">&#129729; Colesterol Alto</span>
+        <span class="cond-tag">&#129328; Gastrite/Refluxo</span>
+        <span class="cond-tag">&#129371; Intolerância à Lactose</span>
+        <span class="cond-tag">&#127806; Doença Celíaca</span>
+        <span class="cond-tag">&#128138; Anemia</span>
+        <span class="cond-tag">&#129523; Tireoide</span>
+        <span class="cond-tag">&#129460; Gota</span>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SEÇÃO 7 — DEPOIMENTOS
+    ============================================================ -->
+    <div class="testimonials">
+      <div class="testimonials-title">O que nossos usuários dizem</div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">&#128105;</div>
+          <div>
+            <div class="testimonial-name">Maria S.</div>
+            <div class="testimonial-condition">Diabetes tipo 2</div>
+          </div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="testimonial-text">"Antes eu vivia perdida sem saber o que comer. Agora abro o app e já está tudo pronto, sem nenhum alimento que me faz mal. Minha glicose estabilizou em 3 semanas."</div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">&#128104;</div>
+          <div>
+            <div class="testimonial-name">José R.</div>
+            <div class="testimonial-condition">Esteatose hepática</div>
+          </div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="testimonial-text">"Meu médico pediu para eu mudar a alimentação urgente. Com o app ficou muito fácil, o cardápio muda todo dia e nunca repete. Meu fígado já melhorou no exame."</div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">&#128105;</div>
+          <div>
+            <div class="testimonial-name">Ana P.</div>
+            <div class="testimonial-condition">Hipertensão + Colesterol</div>
+          </div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="testimonial-text">"Tenho duas condições e o app filtra tudo certinho para as duas. Não preciso ficar decorando o que pode ou não. Recomendo muito!"</div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SEÇÃO 8 — PREÇO + CTA
+    ============================================================ -->
+    <div class="pricing" id="pricing">
+      <div class="old-price">De R$ 445,00</div>
+      <div class="new-price">
+        <span class="currency">R$</span>23<span class="cents">,99</span>
+        <span class="period">/mês</span>
+      </div>
+      <div class="savings">&#128274; Economia de R$ 421,01</div>
+      <div class="daily-cost">Menos de <strong style="color:#fff;">R$ 0,80 por dia</strong> para cuidar da sua saúde</div>
+
+      <!-- EDITE AQUI: Coloque o link de pagamento do app -->
+      <a href="#LINK_DO_CHECKOUT" class="cta-button" id="ctaMain">
+        &#128274; SIM! QUERO O NUTRISAÚDE APP
+      </a>
+      <p class="cta-sub">Acesso imediato &middot; Cancele quando quiser &middot; Sem fidelidade</p>
+    </div>
+
+    <!-- ============================================================
+         SEÇÃO 9 — GARANTIA
+    ============================================================ -->
+    <div class="guarantee">
+      <div class="guarantee-icon">&#128737;</div>
+      <div>
+        <h4>Garantia de 7 dias</h4>
+        <p>Se nos primeiros 7 dias você sentir que o app não é para você, devolvemos 100% do valor. Sem perguntas, sem burocracia.</p>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SEÇÃO 10 — RECUSAR
+    ============================================================ -->
+    <div class="decline">
+      <a href="#" id="declineLink">Não, obrigado. Prefiro ficar só com os cardápios básicos e sem o app inteligente.</a>
+    </div>
+
+  </div><!-- /.page -->
+
+  <!-- CTA FLUTUANTE (aparece ao rolar) -->
+  <div class="sticky-cta" id="stickyCta">
+    <a href="#LINK_DO_CHECKOUT" class="cta-button">
+      &#128274; QUERO O NUTRISAÚDE APP — R$ 23,99/mês
+    </a>
+  </div>
+
+  <!-- ============================================================
+       SCRIPTS
+  ============================================================ -->
+  <script>
+    /* ---- Timer de urgência ---- */
+    (function() {
+      let total = 15 * 60; // 15 minutos
+      const minEl = document.getElementById('timer-min');
+      const secEl = document.getElementById('timer-sec');
+
+      // Salva no sessionStorage para manter ao recarregar
+      const saved = sessionStorage.getItem('upsell_timer');
+      if (saved) {
+        const remaining = parseInt(saved) - Math.floor((Date.now() - parseInt(sessionStorage.getItem('upsell_start'))) / 1000);
+        if (remaining > 0) total = remaining;
+        else total = 0;
+      } else {
+        sessionStorage.setItem('upsell_start', Date.now());
+        sessionStorage.setItem('upsell_timer', total);
+      }
+
+      function tick() {
+        if (total <= 0) {
+          minEl.textContent = '00';
+          secEl.textContent = '00';
+          return;
+        }
+        total--;
+        const m = Math.floor(total / 60);
+        const s = total % 60;
+        minEl.textContent = String(m).padStart(2, '0');
+        secEl.textContent = String(s).padStart(2, '0');
+      }
+      tick();
+      setInterval(tick, 1000);
+    })();
+
+    /* ---- Sticky CTA ao rolar ---- */
+    (function() {
+      const sticky = document.getElementById('stickyCta');
+      const pricing = document.getElementById('pricing');
+      let lastKnown = 0;
+      let ticking = false;
+
+      function update() {
+        const rect = pricing.getBoundingClientRect();
+        // Mostra o botão flutuante quando o pricing sai da tela
+        if (rect.top < -100 || rect.bottom > window.innerHeight + 200) {
+          sticky.classList.add('visible');
+        } else {
+          sticky.classList.remove('visible');
+        }
+        ticking = false;
+      }
+
+      window.addEventListener('scroll', function() {
+        if (!ticking) {
+          window.requestAnimationFrame(update);
+          ticking = true;
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

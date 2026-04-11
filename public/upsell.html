@@ -1032,8 +1032,11 @@
          3. VIDEO 9:16
     ============================================================ -->
     <div class="video-section">
-      <div class="video-wrapper">
-        <iframe src="https://www.youtube.com/embed/9ZgJ6c2nRSw" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+      <div class="video-wrapper" id="yt-facade" onclick="this.innerHTML='<iframe src=\'https://www.youtube.com/embed/9ZgJ6c2nRSw?autoplay=1&rel=0\' allowfullscreen allow=\'autoplay; encrypted-media\' style=\'width:100%;height:100%;border:none;\'></iframe>';this.style.cursor='default'" style="cursor:pointer;background:#000">
+        <img src="https://i.ytimg.com/vi/9ZgJ6c2nRSw/hqdefault.jpg" alt="Assista o video" width="300" height="533" loading="lazy" style="width:100%;height:100%;object-fit:cover;opacity:.85">
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:64px;height:64px;background:#22c55e;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(34,197,94,.45);pointer-events:none">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><polygon points="5,3 19,12 5,21"/></svg>
+        </div>
       </div>
       <p class="video-caption">&#128266; Ative o som e assista ate o final</p>
     </div>

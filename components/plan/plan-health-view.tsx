@@ -297,6 +297,61 @@ export function PlanHealthView({ healthData, perfil }: PlanHealthViewProps) {
     setFeedback("Registro de hoje salvo com sucesso.");
   }
 
+  function saveExame(event: FormEvent) {
+    event.preventDefault();
+    if (!exameNome.trim() || !exameValor.trim()) return;
+
+    const novoExame: ExameEntry = {
+      id: Date.now(),
+      nome: exameNome.trim(),
+      valor: Number(exameValor.replace(",", ".")),
+      unidade: exameUnidade.trim(),
+      data: exameData || localDateKey(),
+    };
+
+    const updated = atualizarDadosLocais((data) => ({
+      ...data,
+      exames: [...(Array.isArray(data.exames) ? data.exames : []), novoExame],
+    }));
+
+    setExames(parseExames(updated.exames));
+    setExameNome("");
+    setExameValor("");
+    setExameUnidade("");
+    setExameData(localDateKey());
+    setShowExameForm(false);
+    setFeedback("Exame adicionado com sucesso.");
+  }
+
+  function saveRemedio(event: FormEvent) {
+    event.preventDefault();
+    if (!remedioNome.trim()) return;
+
+    const novoRemedio: RemedioEntry = {
+      id: Date.now(),
+      nome: remedioNome.trim(),
+      dose: remedioDose.trim(),
+      horarios: remedioHorarios
+        .split(/[,\n]/)
+        .map((h) => h.trim())
+        .filter(Boolean),
+      obs: remedioObs.trim(),
+    };
+
+    const updated = atualizarDadosLocais((data) => ({
+      ...data,
+      remedios: [...(Array.isArray(data.remedios) ? data.remedios : []), novoRemedio],
+    }));
+
+    setRemedios(parseRemedios(updated.remedios));
+    setRemedioNome("");
+    setRemedioDose("");
+    setRemedioHorarios("");
+    setRemedioObs("");
+    setShowRemedioForm(false);
+    setFeedback("Medicamento adicionado com sucesso.");
+  }
+
   function exportBackup() {
     const dados = carregarDadosLocais() || {};
     const blob = new Blob([JSON.stringify(dados, null, 2)], {

@@ -688,13 +688,64 @@ export function PlanHealthView({ healthData, perfil }: PlanHealthViewProps) {
                 </CardDescription>
               </div>
             </div>
-            <Link href="/legacy/index.html">
-              <Button variant="outline" className="rounded-full border-emerald-200 text-emerald-600 hover:bg-emerald-50">
-                <Plus />
-                Adicionar
-              </Button>
-            </Link>
+            <Button
+              type="button"
+              variant="outline"
+              className="rounded-full border-emerald-200 text-emerald-600 hover:bg-emerald-50"
+              onClick={() => setShowRemedioForm((v) => !v)}
+            >
+              {showRemedioForm ? <X /> : <Plus />}
+              {showRemedioForm ? "Cancelar" : "Adicionar"}
+            </Button>
           </div>
+
+          {showRemedioForm && (
+            <form onSubmit={saveRemedio} className="flex flex-col gap-3 rounded-[1.4rem] border border-rose-100 bg-rose-50/60 px-4 py-4">
+              <p className="text-sm font-semibold text-slate-700">Novo medicamento</p>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-medium text-slate-600">Nome do medicamento *</label>
+                  <input
+                    required
+                    value={remedioNome}
+                    onChange={(e) => setRemedioNome(e.target.value)}
+                    placeholder="Ex: Metformina"
+                    className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100"
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-medium text-slate-600">Dose</label>
+                  <input
+                    value={remedioDose}
+                    onChange={(e) => setRemedioDose(e.target.value)}
+                    placeholder="Ex: 500mg"
+                    className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100"
+                  />
+                </div>
+                <div className="flex flex-col gap-1 sm:col-span-2">
+                  <label className="text-xs font-medium text-slate-600">Horarios (separe por virgula)</label>
+                  <input
+                    value={remedioHorarios}
+                    onChange={(e) => setRemedioHorarios(e.target.value)}
+                    placeholder="Ex: 08:00, 12:00, 20:00"
+                    className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100"
+                  />
+                </div>
+                <div className="flex flex-col gap-1 sm:col-span-2">
+                  <label className="text-xs font-medium text-slate-600">Observacoes</label>
+                  <input
+                    value={remedioObs}
+                    onChange={(e) => setRemedioObs(e.target.value)}
+                    placeholder="Ex: Tomar com alimento"
+                    className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100"
+                  />
+                </div>
+              </div>
+              <Button type="submit" className="h-10 rounded-xl text-sm font-semibold">
+                Salvar medicamento
+              </Button>
+            </form>
+          )}
         </CardHeader>
         <CardContent className="flex flex-col gap-3 px-6 pb-6">
           {remedios.length > 0 ? (

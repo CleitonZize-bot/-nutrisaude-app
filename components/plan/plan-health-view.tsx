@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useRef, useState, type ChangeEvent, type FormEvent } from "react";
-import Link from "next/link";
 import {
   Activity,
   ClipboardList,
@@ -13,6 +12,7 @@ import {
   Plus,
   Stethoscope,
   Upload,
+  X,
 } from "lucide-react";
 import { LembreteAgua } from "@/components/plan/lembrete-agua";
 

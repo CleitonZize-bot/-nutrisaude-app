@@ -14,7 +14,6 @@ export function RegisterSW() {
           if (newSW) {
             newSW.addEventListener("statechange", () => {
               if (newSW.state === "installed" && navigator.serviceWorker.controller) {
-                // Nova versão disponível — pode mostrar toast aqui futuramente
                 newSW.postMessage({ type: "SKIP_WAITING" });
               }
             });
@@ -22,6 +21,11 @@ export function RegisterSW() {
         });
       })
       .catch(() => {/* SW não suportado ou bloqueado */});
+
+    // Quando o novo SW assumir o controle, recarrega a página com a versão nova
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      window.location.reload();
+    });
   }, []);
 
   return null;

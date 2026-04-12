@@ -239,6 +239,20 @@ export function PlanHealthView({ healthData, perfil }: PlanHealthViewProps) {
   const [remedios, setRemedios] = useState<RemedioEntry[]>(() => parseRemedios(healthData.remedios));
   const [feedback, setFeedback] = useState("");
 
+  // Formulário de exame
+  const [showExameForm, setShowExameForm] = useState(false);
+  const [exameNome, setExameNome] = useState("");
+  const [exameValor, setExameValor] = useState("");
+  const [exameUnidade, setExameUnidade] = useState("");
+  const [exameData, setExameData] = useState(localDateKey());
+
+  // Formulário de medicamento
+  const [showRemedioForm, setShowRemedioForm] = useState(false);
+  const [remedioNome, setRemedioNome] = useState("");
+  const [remedioDose, setRemedioDose] = useState("");
+  const [remedioHorarios, setRemedioHorarios] = useState("");
+  const [remedioObs, setRemedioObs] = useState("");
+
   // IMC
   const [imcPeso, setImcPeso] = useState(perfil?.peso ? String(perfil.peso) : "");
   const [imcAltura, setImcAltura] = useState(perfil?.altura ? String(perfil.altura) : "");

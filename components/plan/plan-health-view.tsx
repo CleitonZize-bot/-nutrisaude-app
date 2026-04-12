@@ -592,13 +592,65 @@ export function PlanHealthView({ healthData, perfil }: PlanHealthViewProps) {
                 </CardDescription>
               </div>
             </div>
-            <Link href="/legacy/index.html">
-              <Button variant="outline" className="rounded-full border-emerald-200 text-emerald-600 hover:bg-emerald-50">
-                <Plus />
-                Adicionar
-              </Button>
-            </Link>
+            <Button
+              type="button"
+              variant="outline"
+              className="rounded-full border-emerald-200 text-emerald-600 hover:bg-emerald-50"
+              onClick={() => setShowExameForm((v) => !v)}
+            >
+              {showExameForm ? <X /> : <Plus />}
+              {showExameForm ? "Cancelar" : "Adicionar"}
+            </Button>
           </div>
+
+          {showExameForm && (
+            <form onSubmit={saveExame} className="flex flex-col gap-3 rounded-[1.4rem] border border-emerald-100 bg-emerald-50/60 px-4 py-4">
+              <p className="text-sm font-semibold text-slate-700">Novo exame</p>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-medium text-slate-600">Nome do exame *</label>
+                  <input
+                    required
+                    value={exameNome}
+                    onChange={(e) => setExameNome(e.target.value)}
+                    placeholder="Ex: Glicemia em jejum"
+                    className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-medium text-slate-600">Data</label>
+                  <input
+                    type="date"
+                    value={exameData}
+                    onChange={(e) => setExameData(e.target.value)}
+                    className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-medium text-slate-600">Resultado *</label>
+                  <input
+                    required
+                    value={exameValor}
+                    onChange={(e) => setExameValor(e.target.value)}
+                    placeholder="Ex: 95"
+                    className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs font-medium text-slate-600">Unidade</label>
+                  <input
+                    value={exameUnidade}
+                    onChange={(e) => setExameUnidade(e.target.value)}
+                    placeholder="Ex: mg/dL"
+                    className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
+                  />
+                </div>
+              </div>
+              <Button type="submit" className="h-10 rounded-xl text-sm font-semibold">
+                Salvar exame
+              </Button>
+            </form>
+          )}
         </CardHeader>
         <CardContent className="flex flex-col gap-3 px-6 pb-6">
           {exames.length > 0 ? (

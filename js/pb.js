@@ -27,11 +27,11 @@ async function pbRegistrar(email, senha, nome) {
   });
 }
 
-/* Verifica se o e-mail tem assinatura ativa */
+/* Verifica se o e-mail tem acesso (assinatura ativa OU cancelada mas ainda no período pago) */
 async function pbVerificarAssinatura(email) {
   try {
     const lista = await pb.collection('clientes').getList(1, 1, {
-      filter: `email = "${email}" && status = "ativo"`
+      filter: `email = "${email}" && (status = "ativo" || (status = "cancelado" && data_expiracao >= "${new Date().toISOString()}"))`
     });
     return lista.items.length > 0;
   } catch (e) {

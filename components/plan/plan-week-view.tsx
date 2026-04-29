@@ -259,30 +259,57 @@ export function PlanWeekView() {
   const [openDay, setOpenDay] = useState(0);
   const [showShopping, setShowShopping] = useState(false);
   const [checked, setChecked] = useState<Set<string>>(new Set());
+  const [emCasa, setEmCasa] = useState<Set<string>>(new Set());
   const [collapsedCats, setCollapsedCats] = useState<Set<string>>(new Set());
+  const [feedback, setFeedback] = useState<string>("");
 
   // Load checked state from localStorage on mount
   useEffect(() => {
     setChecked(loadChecked());
+    setEmCasa(loadHome());
   }, []);
 
-  const toggleCheck = useCallback(
-    (nome: string) => {
-      setChecked((prev) => {
-        const next = new Set(prev);
-        if (next.has(nome)) next.delete(nome);
-        else next.add(nome);
-        saveChecked(next);
-        return next;
-      });
-    },
-    []
-  );
+  // Auto-clear feedback message
+  useEffect(() => {
+    if (!feedback) return;
+    const t = window.setTimeout(() => setFeedback(""), 2200);
+    return () => window.clearTimeout(t);
+  }, [feedback]);
+
+  const toggleCheck = useCallback((nome: string) => {
+    setChecked((prev) => {
+      const next = new Set(prev);
+      if (next.has(nome)) next.delete(nome);
+      else next.add(nome);
+      saveChecked(next);
+      return next;
+    });
+  }, []);
+
+  const toggleHome = useCallback((nome: string) => {
+    setEmCasa((prev) => {
+      const next = new Set(prev);
+      if (next.has(nome)) next.delete(nome);
+      else next.add(nome);
+      saveHome(next);
+      return next;
+    });
+    // Se marcou "tenho em casa", desmarca de "comprei" (não faz sentido estar nos dois)
+    setChecked((prev) => {
+      if (!prev.has(nome)) return prev;
+      const next = new Set(prev);
+      next.delete(nome);
+      saveChecked(next);
+      return next;
+    });
+  }, []);
 
   const clearChecked = useCallback(() => {
     const empty = new Set<string>();
     setChecked(empty);
     saveChecked(empty);
+    setEmCasa(empty);
+    saveHome(empty);
   }, []);
 
   const toggleCategory = useCallback((cat: string) => {
@@ -294,8 +321,50 @@ export function PlanWeekView() {
     });
   }, []);
 
-  const checkedCount = shoppingList.filter((i) => checked.has(i.nome)).length;
-  const totalCount = shoppingList.length;
+  /* ----- Compartilhar via WhatsApp ----- */
+  const compartilharWhatsApp = useCallback(() => {
+    const texto = formatarListaComoTexto(
+      grouped,
+      CATEGORIAS_ORDEM,
+      emCasa,
+      checked
+    );
+    const url = `https://wa.me/?text=${encodeURIComponent(texto)}`;
+    if (typeof window !== "undefined") window.open(url, "_blank");
+  }, [grouped, emCasa, checked]);
+
+  /* ----- Copiar para área de transferência ----- */
+  const copiarLista = useCallback(async () => {
+    const texto = formatarListaComoTexto(
+      grouped,
+      CATEGORIAS_ORDEM,
+      emCasa,
+      checked
+    );
+    try {
+      await navigator.clipboard.writeText(texto);
+      setFeedback("✅ Lista copiada!");
+    } catch {
+      // Fallback: cria textarea temporária
+      const ta = document.createElement("textarea");
+      ta.value = texto;
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand("copy");
+        setFeedback("✅ Lista copiada!");
+      } catch {
+        setFeedback("❌ Não foi possível copiar");
+      }
+      document.body.removeChild(ta);
+    }
+  }, [grouped, emCasa, checked]);
+
+  // Itens "ativos" = não marcados como em casa
+  const itensAtivos = shoppingList.filter((i) => !emCasa.has(i.nome));
+  const checkedCount = itensAtivos.filter((i) => checked.has(i.nome)).length;
+  const totalCount = itensAtivos.length;
+  const emCasaCount = shoppingList.filter((i) => emCasa.has(i.nome)).length;
 
   return (
     <div className="flex flex-col gap-4">

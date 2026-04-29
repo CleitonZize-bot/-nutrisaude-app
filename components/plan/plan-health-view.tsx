@@ -894,6 +894,23 @@ export function PlanHealthView({ healthData, perfil }: PlanHealthViewProps) {
       <Card className="nutri-surface rounded-[1.9rem] border border-slate-200/80 py-0">
         <CardHeader className="gap-2 px-6 pt-6">
           <div className="flex items-center gap-3">
+            <Bell className="text-emerald-500" />
+            <div>
+              <CardTitle>Lembretes de refeicao e pesagem</CardTitle>
+              <CardDescription>
+                Receba avisos nos horarios das suas refeicoes e da pesagem semanal.
+              </CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="px-6 pb-6">
+          <LembretesRefeicao />
+        </CardContent>
+      </Card>
+
+      <Card className="nutri-surface rounded-[1.9rem] border border-slate-200/80 py-0">
+        <CardHeader className="gap-2 px-6 pt-6">
+          <div className="flex items-center gap-3">
             <HeartPulse className="text-violet-500" />
             <CardTitle>Backup dos seus dados</CardTitle>
           </div>

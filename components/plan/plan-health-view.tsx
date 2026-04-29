@@ -15,6 +15,7 @@ import {
   X,
 } from "lucide-react";
 import { LembreteAgua } from "@/components/plan/lembrete-agua";
+import { LembretesRefeicao } from "@/components/plan/lembretes-refeicao";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";

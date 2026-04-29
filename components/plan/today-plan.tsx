@@ -1121,8 +1121,13 @@ export function TodayPlan({
                                 {/* Painel de receita expandido */}
                                 {isRecipeOpen && receita ? (
                                   <div className="mt-2 rounded-xl border border-amber-200/60 bg-amber-50/40 px-3 py-3">
-                                    {/* Badge recomendado para a condição do usuário */}
-                                    {receita.isRecomendado ? (
+                                    {/* Badge adaptado automaticamente para a condição do usuário */}
+                                    {receita.jaAdaptado ? (
+                                      <div className="mb-2 flex items-center gap-1.5 rounded-lg bg-emerald-100 px-2.5 py-1.5">
+                                        <span className="text-sm">✅</span>
+                                        <span className="text-xs font-semibold text-emerald-700">Receita já adaptada para sua condição de saúde</span>
+                                      </div>
+                                    ) : receita.isRecomendado ? (
                                       <div className="mb-2 flex items-center gap-1.5 rounded-lg bg-emerald-100 px-2.5 py-1.5">
                                         <span className="text-sm">✅</span>
                                         <span className="text-xs font-semibold text-emerald-700">Indicado para sua condição de saúde</span>

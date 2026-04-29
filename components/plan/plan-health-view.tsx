@@ -878,6 +878,25 @@ export function PlanHealthView({ healthData, perfil }: PlanHealthViewProps) {
         </CardContent>
       </Card>
 
+      {/* ── Modo Econômico ── */}
+      <Card className="nutri-surface rounded-[1.9rem] border border-slate-200/80 py-0">
+        <CardHeader className="gap-2 px-6 pt-6">
+          <div className="flex items-center gap-3">
+            <DollarSign className="text-amber-500" />
+            <div>
+              <CardTitle>Modo Economico</CardTitle>
+              <CardDescription>
+                Troca ingredientes caros (salmao, quinoa, amendoas...) por
+                equivalentes acessiveis em todas as receitas, automaticamente.
+              </CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="px-6 pb-6">
+          <ModoEconomicoToggle />
+        </CardContent>
+      </Card>
+
       {/* ── Lembretes de Água ── */}
       <Card className="nutri-surface rounded-[1.9rem] border border-slate-200/80 py-0">
         <CardHeader className="gap-2 px-6 pt-6">

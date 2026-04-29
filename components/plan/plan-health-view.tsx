@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { LembreteAgua } from "@/components/plan/lembrete-agua";
 import { LembretesRefeicao } from "@/components/plan/lembretes-refeicao";
+import { ModoEconomicoToggle } from "@/components/plan/modo-economico-toggle";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";

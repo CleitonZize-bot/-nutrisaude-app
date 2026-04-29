@@ -98,6 +98,15 @@ export function LoginForm() {
         </Field>
       </FieldGroup>
 
+      <div className="flex justify-end -mt-2">
+        <Link
+          href="/recuperar-senha"
+          className="text-sm font-medium text-primary underline-offset-4 hover:underline"
+        >
+          Esqueceu a senha?
+        </Link>
+      </div>
+
       <Button
         type="submit"
         size="lg"

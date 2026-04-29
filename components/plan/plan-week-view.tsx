@@ -184,11 +184,12 @@ function agruparPorCategoria(
 /* ------------------------------------------------------------------ */
 
 const STORAGE_KEY = "nutrisaude_compras";
+const STORAGE_KEY_HOME = "nutrisaude_compras_em_casa";
 
-function loadChecked(): Set<string> {
+function loadSet(key: string): Set<string> {
   if (typeof window === "undefined") return new Set();
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(key);
     if (!raw) return new Set();
     const arr = JSON.parse(raw);
     return new Set(Array.isArray(arr) ? arr : []);
@@ -197,12 +198,53 @@ function loadChecked(): Set<string> {
   }
 }
 
-function saveChecked(checked: Set<string>) {
+function saveSet(key: string, set: Set<string>) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify([...checked]));
+    localStorage.setItem(key, JSON.stringify([...set]));
   } catch {
     /* silently fail */
   }
+}
+
+const loadChecked = () => loadSet(STORAGE_KEY);
+const saveChecked = (s: Set<string>) => saveSet(STORAGE_KEY, s);
+const loadHome = () => loadSet(STORAGE_KEY_HOME);
+const saveHome = (s: Set<string>) => saveSet(STORAGE_KEY_HOME, s);
+
+/* ------------------------------------------------------------------ */
+/*  Export helpers — formata a lista como texto para compartilhar      */
+/* ------------------------------------------------------------------ */
+
+function formatarListaComoTexto(
+  grouped: Record<string, ShoppingItem[]>,
+  ordem: readonly string[],
+  emCasa: Set<string>,
+  comprados: Set<string>
+): string {
+  const linhas: string[] = ["🛒 *Lista de Compras — NutriSaude*", ""];
+  let totalParaComprar = 0;
+
+  for (const cat of ordem) {
+    const items = grouped[cat];
+    if (!items || items.length === 0) continue;
+
+    const itensFiltrados = items.filter((i) => !emCasa.has(i.nome));
+    if (itensFiltrados.length === 0) continue;
+
+    linhas.push(`*${cat.toUpperCase()}*`);
+    for (const item of itensFiltrados) {
+      const marca = comprados.has(item.nome) ? "✅" : "⬜";
+      linhas.push(`${marca} ${item.nome} _(${item.vezes}x na semana)_`);
+      if (!comprados.has(item.nome)) totalParaComprar += 1;
+    }
+    linhas.push("");
+  }
+
+  linhas.push(`📊 ${totalParaComprar} itens para comprar`);
+  linhas.push("");
+  linhas.push("_Gerada por app.nutrisaudeapp.online_");
+
+  return linhas.join("\n");
 }
 
 /* ------------------------------------------------------------------ */

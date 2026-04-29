@@ -5,6 +5,7 @@ import {
   Activity,
   Bell,
   ClipboardList,
+  DollarSign,
   Download,
   Droplet,
   FileText,

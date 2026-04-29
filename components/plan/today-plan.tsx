@@ -53,6 +53,7 @@ import { obterSubstituicoes } from "@/lib/alimentos-data";
 import { gerarCardapioCompleto } from "@/lib/nutricao-data";
 import { obterReceitaPersonalizada } from "@/lib/receitas-db";
 import { verificarAlerta } from "@/lib/receitas-data";
+import { getModoEconomico } from "@/lib/preferences";
 
 type TabKey = "hoje" | "semana" | "progresso" | "ingredientes" | "saude";
 

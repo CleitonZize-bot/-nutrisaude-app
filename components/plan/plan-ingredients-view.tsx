@@ -1,7 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { BookOpen, ShoppingBasket } from "lucide-react";
+
+import {
+  getIngredientesEmCasa,
+  setIngredientesEmCasa,
+} from "@/lib/preferences";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";

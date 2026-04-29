@@ -126,6 +126,15 @@ export async function pbRecuperarSenha(email: string) {
     .requestPasswordReset(normalizeEmail(email));
 }
 
+export async function pbConfirmarRedefinicaoSenha(
+  token: string,
+  novaSenha: string
+) {
+  return getPocketBase()
+    .collection("users")
+    .confirmPasswordReset(token, novaSenha, novaSenha);
+}
+
 export async function pbLogin(email: string, senha: string) {
   return getPocketBase()
     .collection("users")

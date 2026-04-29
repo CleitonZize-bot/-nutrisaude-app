@@ -485,6 +485,18 @@ export function TodayPlan({
   const [showFreePopup, setShowFreePopup] = useState(false);
   const [openRecipes, setOpenRecipes] = useState<Record<string, boolean>>({});
   const [openSubs, setOpenSubs] = useState<Record<string, boolean>>({});
+  const [modoEconomico, setModoEconomicoState] = useState(false);
+
+  // Carrega preferência de modo econômico do localStorage
+  useEffect(() => {
+    setModoEconomicoState(getModoEconomico());
+    function handler(e: Event) {
+      const detail = (e as CustomEvent).detail;
+      if (typeof detail === "boolean") setModoEconomicoState(detail);
+    }
+    window.addEventListener("nutrisaude:modo-economico", handler);
+    return () => window.removeEventListener("nutrisaude:modo-economico", handler);
+  }, []);
 
   useEffect(() => {
     async function carregar() {

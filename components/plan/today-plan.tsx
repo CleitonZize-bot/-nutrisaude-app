@@ -1134,7 +1134,7 @@ export function TodayPlan({
                                 {/* Painel de receita expandido */}
                                 {isRecipeOpen && receita ? (
                                   <div className="mt-2 rounded-xl border border-amber-200/60 bg-amber-50/40 px-3 py-3">
-                                    {/* Badge adaptado automaticamente para a condição do usuário */}
+                                    {/* Badge: receita adaptada para condição */}
                                     {receita.jaAdaptado ? (
                                       <div className="mb-2 flex items-center gap-1.5 rounded-lg bg-emerald-100 px-2.5 py-1.5">
                                         <span className="text-sm">✅</span>
@@ -1144,6 +1144,24 @@ export function TodayPlan({
                                       <div className="mb-2 flex items-center gap-1.5 rounded-lg bg-emerald-100 px-2.5 py-1.5">
                                         <span className="text-sm">✅</span>
                                         <span className="text-xs font-semibold text-emerald-700">Indicado para sua condição de saúde</span>
+                                      </div>
+                                    ) : null}
+
+                                    {/* Badge: modo econômico ativado */}
+                                    {(receita as { modoEconomicoAtivado?: boolean }).modoEconomicoAtivado ? (
+                                      <div className="mb-2 flex items-center gap-1.5 rounded-lg bg-amber-100 px-2.5 py-1.5">
+                                        <span className="text-sm">💰</span>
+                                        <span className="text-xs font-semibold text-amber-800">Receita adaptada para economia</span>
+                                      </div>
+                                    ) : null}
+
+                                    {/* Badge: nível de custo */}
+                                    {(receita as { custo?: { nivel: number; simbolo: string; label: string } }).custo ? (
+                                      <div className="mb-2 inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-2.5 py-1">
+                                        <span className="text-xs">{(receita as { custo: { simbolo: string } }).custo.simbolo}</span>
+                                        <span className="text-[10px] font-semibold uppercase tracking-wide text-slate-600">
+                                          Receita {(receita as { custo: { label: string } }).custo.label.toLowerCase()}
+                                        </span>
                                       </div>
                                     ) : null}
 

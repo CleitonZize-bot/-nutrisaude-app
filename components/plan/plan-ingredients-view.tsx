@@ -54,6 +54,12 @@ export function PlanIngredientsView({ profile }: PlanIngredientsViewProps) {
   const [ingredientInput, setIngredientInput] = useState("");
   const [recipeFilter, setRecipeFilter] = useState("todas");
 
+  // Carrega ingredientes salvos do localStorage (persiste entre sessões)
+  useEffect(() => {
+    const salvos = getIngredientesEmCasa();
+    if (salvos.length > 0) setIngredients(salvos);
+  }, []);
+
   const recipeSuggestions = useMemo(() => {
     if (ingredients.length === 0) return [];
 
@@ -69,12 +75,16 @@ export function PlanIngredientsView({ profile }: PlanIngredientsViewProps) {
   function addIngredient() {
     const normalized = ingredientInput.trim().toLowerCase();
     if (!normalized || ingredients.includes(normalized)) return;
-    setIngredients((current) => [...current, normalized]);
+    const novos = [...ingredients, normalized];
+    setIngredients(novos);
+    setIngredientesEmCasa(novos); // persiste
     setIngredientInput("");
   }
 
   function removeIngredient(name: string) {
-    setIngredients((current) => current.filter((item) => item !== name));
+    const novos = ingredients.filter((item) => item !== name);
+    setIngredients(novos);
+    setIngredientesEmCasa(novos); // persiste
   }
 
   return (

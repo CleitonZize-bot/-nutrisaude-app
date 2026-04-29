@@ -1,7 +1,15 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { ChevronDown, ShoppingBasket, Check, Trash2 } from "lucide-react";
+import {
+  ChevronDown,
+  ShoppingBasket,
+  Check,
+  Trash2,
+  Share2,
+  Copy,
+  Home,
+} from "lucide-react";
 
 import { REFEICOES_MODELO, montarRefeicaoDoDia } from "@/lib/alimentos-data";
 

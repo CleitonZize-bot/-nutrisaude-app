@@ -120,6 +120,12 @@ export function perfilEstaCompleto(
   );
 }
 
+export async function pbRecuperarSenha(email: string) {
+  return getPocketBase()
+    .collection("users")
+    .requestPasswordReset(normalizeEmail(email));
+}
+
 export async function pbLogin(email: string, senha: string) {
   return getPocketBase()
     .collection("users")

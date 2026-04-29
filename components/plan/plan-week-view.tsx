@@ -561,42 +561,66 @@ export function PlanWeekView() {
                     <div className="flex flex-col gap-0 px-4 pb-2">
                       {items.map((item) => {
                         const isChecked = checked.has(item.nome);
+                        const isEmCasa = emCasa.has(item.nome);
+
                         return (
-                          <button
+                          <div
                             key={`compra-${item.nome}`}
-                            type="button"
-                            className={`flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-left transition-colors active:bg-slate-100 ${
-                              isChecked ? "opacity-50" : ""
+                            className={`flex items-center gap-2 rounded-lg px-2 py-1.5 transition-colors ${
+                              isEmCasa
+                                ? "bg-amber-50/60 opacity-60"
+                                : isChecked
+                                  ? "opacity-50"
+                                  : ""
                             }`}
-                            onClick={() => toggleCheck(item.nome)}
                           >
-                            {/* Checkbox */}
-                            <div
+                            {/* Checkbox de "comprei" */}
+                            <button
+                              type="button"
+                              aria-label={
+                                isChecked ? "Desmarcar como comprado" : "Marcar como comprado"
+                              }
+                              onClick={() => toggleCheck(item.nome)}
+                              disabled={isEmCasa}
                               className={`flex h-5 w-5 flex-shrink-0 items-center justify-center rounded border transition-colors ${
                                 isChecked
                                   ? "border-emerald-500 bg-emerald-500"
                                   : "border-slate-300 bg-white"
-                              }`}
+                              } ${isEmCasa ? "cursor-not-allowed" : ""}`}
                             >
-                              {isChecked && (
-                                <Check size={12} className="text-white" />
-                              )}
-                            </div>
+                              {isChecked && <Check size={12} className="text-white" />}
+                            </button>
 
                             {/* Name */}
                             <span
                               className={`flex-1 text-xs text-slate-700 ${
-                                isChecked ? "line-through" : ""
+                                isChecked || isEmCasa ? "line-through" : ""
                               }`}
                             >
                               {item.nome}
                             </span>
 
-                            {/* Frequency badge */}
+                            {/* Frequência */}
                             <span className="rounded bg-emerald-50 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-600">
                               {item.vezes}x
                             </span>
-                          </button>
+
+                            {/* Botão "tenho em casa" */}
+                            <button
+                              type="button"
+                              aria-label={
+                                isEmCasa ? "Tirar de tenho em casa" : "Marcar como tenho em casa"
+                              }
+                              onClick={() => toggleHome(item.nome)}
+                              className={`flex h-6 w-6 flex-shrink-0 items-center justify-center rounded transition-colors ${
+                                isEmCasa
+                                  ? "bg-amber-500 text-white"
+                                  : "bg-slate-100 text-slate-400 active:bg-slate-200"
+                              }`}
+                            >
+                              <Home size={12} />
+                            </button>
+                          </div>
                         );
                       })}
                     </div>

@@ -290,10 +290,10 @@ export function LockedPlanShell() {
                   <LockKeyhole className="size-8" />
                 </div>
                 <CardTitle className="nutri-title text-4xl font-black text-slate-900">
-                  Assine o NutriSaude para ter acesso completo
+                  Garanta seu acesso vitalicio ao NutriSaude
                 </CardTitle>
                 <CardDescription className="max-w-md text-base leading-7 text-slate-500">
-                  Seu perfil e seus dados ja foram salvos. Para liberar cardapios, receitas, progresso e todas as funcoes do app, ative sua assinatura.
+                  Seu perfil e seus dados ja foram salvos. Pague uma vez so e libere para sempre cardapios, receitas, progresso e todas as funcoes do app.
                 </CardDescription>
               </CardHeader>
 

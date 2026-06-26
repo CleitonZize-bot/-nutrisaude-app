@@ -8,7 +8,7 @@ export default function LoginPage() {
       description="Seus dados ficam salvos no servidor"
       footerLabel="Nao tem conta?"
       footerHref="/cadastro"
-      footerLinkText="Criar conta gratis"
+      footerLinkText="Criar conta"
     >
       <LoginForm />
     </AuthShell>

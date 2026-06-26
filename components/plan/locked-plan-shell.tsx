@@ -135,9 +135,8 @@ export function LockedPlanShell() {
     return <TodayPlan acesso="premium" />;
   }
 
-  if (status === "free") {
-    return <TodayPlan acesso="free" />;
-  }
+  // Sem free: quem nao pagou ve a tela de compra (codigo abaixo)
+  // (Removido: nao existe mais plano gratuito)
 
   if (status === "loading") {
     return (

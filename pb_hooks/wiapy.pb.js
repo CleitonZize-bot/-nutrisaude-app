@@ -1,20 +1,11 @@
 /**
- * wiapy.pb.js — Webhook da Wiapy (compra VITALÍCIA) com LOG completo
+ * wiapy.pb.js v3 — Webhook da Wiapy (compra VITALÍCIA) + LOG completo
  *
- * Versão 2.0 — toda chamada (sucesso ou erro) é registrada nos logs do
- * PocketBase ($app.logger().info / .warn / .error). Aparece na janela
- * "Logs" do EasyPanel em tempo real.
- *
- * Endpoint: POST /api/wiapy-webhook
- *
- * Variável de ambiente obrigatória:
- *   WIAPY_WEBHOOK_SECRET — o mesmo token configurado no painel da Wiapy
+ * Corrige o bug onde Wiapy envia o status em `data.payment.status` (não em `event`).
  */
 routerAdd("POST", "/api/wiapy-webhook", (e) => {
   const log = $app.logger();
-  const tStart = new Date().toISOString();
-
-  log.info("=== WIAPY WEBHOOK RECEBIDO ===", "timestamp", tStart);
+  log.info("=== WIAPY WEBHOOK RECEBIDO ===", "ts", new Date().toISOString());
 
   const SECRET = $os.getenv("WIAPY_WEBHOOK_SECRET");
   if (!SECRET) {
@@ -22,153 +13,92 @@ routerAdd("POST", "/api/wiapy-webhook", (e) => {
     return e.json(500, { error: "missing webhook secret on server" });
   }
 
-  // 1) Logar TODOS os headers que chegaram
   const allHeaders = {};
   try {
-    const headerNames = [
-      "authorization", "x-wiapy-secret", "x-wiapy-signature",
-      "x-webhook-token", "x-webhook-secret", "user-agent",
-      "content-type", "x-forwarded-for",
-    ];
-    for (let i = 0; i < headerNames.length; i++) {
-      const v = e.request.header.get(headerNames[i]);
-      if (v) allHeaders[headerNames[i]] = v;
+    const names = ["authorization","x-wiapy-secret","x-wiapy-signature","x-webhook-token","x-webhook-secret","user-agent","content-type","x-forwarded-for"];
+    for (let i = 0; i < names.length; i++) {
+      const v = e.request.header.get(names[i]);
+      if (v) allHeaders[names[i]] = v;
     }
-  } catch (err) { /**/ }
-
+  } catch (err) {}
   log.info("WIAPY: headers", "data", JSON.stringify(allHeaders));
 
-  // 2) Logar o body bruto recebido
   let body = {};
-  try {
-    body = e.requestInfo().body || {};
-  } catch (err) {
+  try { body = e.requestInfo().body || {}; }
+  catch (err) {
     log.error("WIAPY: invalid body", "error", String(err));
     return e.json(400, { error: "invalid body" });
   }
+  log.info("WIAPY: body", "data", JSON.stringify(body));
 
-  log.info("WIAPY: body recebido", "data", JSON.stringify(body));
-
-  // 3) Validação do token
   const headerSecret =
     e.request.header.get("authorization") ||
     e.request.header.get("x-wiapy-secret") ||
     e.request.header.get("x-wiapy-signature") ||
     e.request.header.get("x-webhook-token") ||
-    e.request.header.get("x-webhook-secret") ||
-    "";
+    e.request.header.get("x-webhook-secret") || "";
 
-  const sentSecret =
-    headerSecret ||
-    body.secret ||
-    body.token ||
-    body.authentication_token ||
-    body.auth_token ||
-    "";
-
+  const sentSecret = headerSecret || body.secret || body.token || body.authentication_token || body.auth_token || "";
   const cleanSecret = String(sentSecret).replace(/^Bearer\s+/i, "").trim();
 
   if (cleanSecret !== String(SECRET).trim()) {
-    log.warn("WIAPY: token invalido",
-      "received_token_prefix", cleanSecret.substring(0, 6),
-      "expected_prefix", String(SECRET).substring(0, 6));
-    return e.json(401, {
-      error: "unauthorized",
-      hint: "token does not match WIAPY_WEBHOOK_SECRET",
-      received_token_starts_with: cleanSecret.substring(0, 6),
-    });
+    log.warn("WIAPY: token invalido", "received_prefix", cleanSecret.substring(0, 6));
+    return e.json(401, { error: "unauthorized" });
   }
-
   log.info("WIAPY: token OK");
 
-  // 4) Pesca o e-mail e nome em vários formatos
-  function pickEmail(obj) {
-    if (!obj) return "";
-    const candidates = [
-      obj?.data?.customer?.email,
-      obj?.data?.buyer?.email,
-      obj?.data?.client?.email,
-      obj?.data?.user?.email,
-      obj?.data?.payer?.email,
-      obj?.data?.email,
-      obj?.customer?.email,
-      obj?.buyer?.email,
-      obj?.client?.email,
-      obj?.user?.email,
-      obj?.payer?.email,
-      obj?.transaction?.customer?.email,
-      obj?.order?.customer?.email,
-      obj?.sale?.customer?.email,
-      obj?.payer_email,
-      obj?.customer_email,
-      obj?.buyer_email,
-      obj?.email,
-    ];
-    for (let i = 0; i < candidates.length; i++) {
-      if (candidates[i]) return String(candidates[i]).trim().toLowerCase();
+  function pick(obj, paths) {
+    for (let i = 0; i < paths.length; i++) {
+      const parts = paths[i].split(".");
+      let cur = obj;
+      for (let j = 0; j < parts.length; j++) {
+        if (!cur) break;
+        cur = cur[parts[j]];
+      }
+      if (cur) return String(cur).trim();
     }
     return "";
   }
 
-  function pickName(obj) {
-    if (!obj) return "";
-    const candidates = [
-      obj?.data?.customer?.name,
-      obj?.data?.buyer?.name,
-      obj?.data?.client?.name,
-      obj?.data?.customer?.full_name,
-      obj?.customer?.name,
-      obj?.buyer?.name,
-      obj?.client?.name,
-      obj?.customer?.full_name,
-      obj?.transaction?.customer?.name,
-      obj?.order?.customer?.name,
-      obj?.customer_name,
-      obj?.buyer_name,
-      obj?.name,
-    ];
-    for (let i = 0; i < candidates.length; i++) {
-      if (candidates[i]) return String(candidates[i]).trim();
-    }
-    return "";
-  }
+  const email = pick(body, [
+    "data.customer.email","data.buyer.email","data.client.email","data.user.email","data.payer.email","data.email",
+    "customer.email","buyer.email","client.email","user.email","payer.email",
+    "transaction.customer.email","order.customer.email","sale.customer.email",
+    "payer_email","customer_email","buyer_email","email"
+  ]).toLowerCase();
 
-  const email = pickEmail(body);
-  const nome = pickName(body);
+  const nome = pick(body, [
+    "data.customer.name","data.buyer.name","data.client.name","data.customer.full_name",
+    "customer.name","buyer.name","client.name","customer.full_name",
+    "transaction.customer.name","order.customer.name","customer_name","buyer_name","name"
+  ]);
 
-  log.info("WIAPY: dados extraidos",
-    "email", email || "(NAO ENCONTRADO)",
-    "nome", nome || "(NAO ENCONTRADO)");
+  log.info("WIAPY: dados", "email", email || "(VAZIO)", "nome", nome || "(VAZIO)");
 
   if (!email) {
-    log.error("WIAPY: payload sem email reconhecivel",
-      "body", JSON.stringify(body));
-    return e.json(400, {
-      error: "no email found in payload",
-      hint: "received payload did not contain a customer email in any known field",
-      body_keys: Object.keys(body || {}),
-    });
+    log.error("WIAPY: payload sem email", "body", JSON.stringify(body));
+    return e.json(400, { error: "no email found in payload" });
   }
 
-  // 5) Identifica o evento
-  const rawEvent = String(
-    body.event ||
-      body.event_type ||
-      body.type ||
-      body.status ||
-      body?.data?.event ||
-      body?.data?.status ||
-      ""
-  )
-    .toLowerCase()
-    .trim();
+  // BUG FIX v3: a Wiapy envia status em `data.payment.status` ("paid", "refunded", etc)
+  // Pescamos em multiplos lugares
+  const rawEvent = pick(body, [
+    "event","event_type","type","status",
+    "data.event","data.status","data.type",
+    "data.payment.status","data.payment.type",
+    "data.transaction.status","data.transaction.type",
+    "data.order.status","data.order.type",
+    "data.sale.status","data.sale.type",
+    "payment.status","transaction.status","order.status","sale.status"
+  ]).toLowerCase();
 
-  log.info("WIAPY: evento detectado", "event", rawEvent || "(VAZIO)");
+  log.info("WIAPY: evento", "event", rawEvent || "(VAZIO)");
 
   let novoStatus = "";
   if (rawEvent.indexOf("estorn") !== -1 ||
       rawEvent.indexOf("refund") !== -1 ||
-      rawEvent.indexOf("chargeback") !== -1) {
+      rawEvent.indexOf("chargeback") !== -1 ||
+      rawEvent.indexOf("cancel") !== -1) {
     novoStatus = "cancelado";
   } else if (rawEvent.indexOf("aprov") !== -1 ||
              rawEvent.indexOf("approv") !== -1 ||
@@ -181,39 +111,20 @@ routerAdd("POST", "/api/wiapy-webhook", (e) => {
 
   if (!novoStatus) {
     log.warn("WIAPY: evento nao reconhecido", "event", rawEvent);
-    return e.json(200, {
-      ok: true,
-      ignored: true,
-      event: rawEvent || "(unknown)",
-      hint: "event not in approve/cancel lists — webhook acknowledged but no action taken",
-    });
+    return e.json(200, { ok: true, ignored: true, event: rawEvent || "(unknown)" });
   }
 
-  log.info("WIAPY: vai atualizar status",
-    "email", email, "status", novoStatus);
+  log.info("WIAPY: atualizando", "email", email, "status", novoStatus);
 
-  // 6) Atualiza ou cria registro em "clientes"
   try {
     const escapedEmail = email.replace(/'/g, "");
-    const record = $app.findFirstRecordByFilter(
-      "clientes",
-      "email = '" + escapedEmail + "'"
-    );
+    const record = $app.findFirstRecordByFilter("clientes", "email = '" + escapedEmail + "'");
     record.set("status", novoStatus);
     if (nome && !record.get("nome")) record.set("nome", nome);
     $app.save(record);
-    log.info("WIAPY: registro ATUALIZADO",
-      "email", email, "status", novoStatus, "event", rawEvent);
-    return e.json(200, {
-      ok: true,
-      action: "updated",
-      email: email,
-      status: novoStatus,
-      event: rawEvent,
-    });
+    log.info("WIAPY: ATUALIZADO", "email", email, "status", novoStatus);
+    return e.json(200, { ok: true, action: "updated", email: email, status: novoStatus, event: rawEvent });
   } catch (err) {
-    log.info("WIAPY: registro nao existe, criando novo",
-      "email", email);
     try {
       const collection = $app.findCollectionByNameOrId("clientes");
       const record = new Record(collection);
@@ -221,22 +132,11 @@ routerAdd("POST", "/api/wiapy-webhook", (e) => {
       record.set("nome", nome);
       record.set("status", novoStatus);
       $app.save(record);
-      log.info("WIAPY: registro CRIADO",
-        "email", email, "status", novoStatus, "event", rawEvent);
-      return e.json(200, {
-        ok: true,
-        action: "created",
-        email: email,
-        status: novoStatus,
-        event: rawEvent,
-      });
+      log.info("WIAPY: CRIADO", "email", email, "status", novoStatus);
+      return e.json(200, { ok: true, action: "created", email: email, status: novoStatus, event: rawEvent });
     } catch (err2) {
-      log.error("WIAPY: ERRO ao criar registro",
-        "email", email, "error", String(err2));
-      return e.json(500, {
-        error: "failed to create record",
-        details: String(err2),
-      });
+      log.error("WIAPY: ERRO ao criar", "email", email, "error", String(err2));
+      return e.json(500, { error: "failed to create record", details: String(err2) });
     }
   }
 });

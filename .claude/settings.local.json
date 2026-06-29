@@ -31,7 +31,8 @@
       "Bash(pip install *)",
       "Bash(python scripts/gerar-guia-pdf.py)",
       "Bash(python -c ' *)",
-      "Bash(curl -X POST https://pb.nutrisaudeapp.online/api/wiapy-webhook -H \"Content-Type: application/json\" -H \"Authorization: nutri2026wiapy@SecretKey!9zP\" -d \"{\\\\\"event\\\\\":\\\\\"pagamento_aprovado\\\\\",\\\\\"data\\\\\":{\\\\\"customer\\\\\":{\\\\\"email\\\\\":\\\\\"diagnostico-bot@nutri.test\\\\\",\\\\\"name\\\\\":\\\\\"Teste Bot\\\\\"}}}\" -w \"\\\\n\\\\nHTTP_STATUS: %{http_code}\\\\n\" --max-time 15)"
+      "Bash(curl -X POST https://pb.nutrisaudeapp.online/api/wiapy-webhook -H \"Content-Type: application/json\" -H \"Authorization: nutri2026wiapy@SecretKey!9zP\" -d \"{\\\\\"event\\\\\":\\\\\"pagamento_aprovado\\\\\",\\\\\"data\\\\\":{\\\\\"customer\\\\\":{\\\\\"email\\\\\":\\\\\"diagnostico-bot@nutri.test\\\\\",\\\\\"name\\\\\":\\\\\"Teste Bot\\\\\"}}}\" -w \"\\\\n\\\\nHTTP_STATUS: %{http_code}\\\\n\" --max-time 15)",
+      "Bash(curl -X POST https://pb.nutrisaudeapp.online/api/wiapy-webhook -H \"Content-Type: application/json\" -H \"Authorization: nutri2026wiapy@SecretKey!9zP\" -d \"{\\\\\"event\\\\\":\\\\\"pagamento_aprovado\\\\\",\\\\\"data\\\\\":{\\\\\"customer\\\\\":{\\\\\"email\\\\\":\\\\\"teste-logs@nutri.test\\\\\",\\\\\"name\\\\\":\\\\\"Teste Logs\\\\\"}}}\" -w \"\\\\n\\\\nHTTP_STATUS: %{http_code}\\\\n\" --max-time 15)"
     ]
   },
   "hooks": {
